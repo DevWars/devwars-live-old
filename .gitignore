@@ -1,0 +1,18 @@
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime files
+pids
+*.pid
+*.pid.lock
+*.seed
+
+# Dependencies
+node_modules
+
+# Cache files
+.eslintcache
+
+# Build output
+public/app.js

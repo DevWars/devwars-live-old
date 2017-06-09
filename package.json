@@ -1,0 +1,34 @@
+{
+  "name": "devwars-editor",
+  "version": "0.1.0",
+  "description": "Text editor for DevWars",
+  "main": "src/server/index.js",
+  "author": "Kim Simonsen",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/server/index.js",
+    "build": "npm run build:app",
+    "build:app": "webpack -p",
+    "watch": "concurrently -kr \"npm run watch:app\" \"npm run watch:server\"",
+    "watch:app": "webpack --watch",
+    "watch:server": "onchange -i \"src/server/**/*\" -- node src/server/index.js"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.0.0",
+    "babel-preset-latest": "^6.24.1",
+    "concurrently": "^3.4.0",
+    "onchange": "^3.2.1",
+    "webpack": "^2.6.1"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "monaco-editor": "^0.8.3",
+    "socket.io": "^2.0.2"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ]
+  }
+}
