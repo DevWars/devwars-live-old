@@ -7,10 +7,10 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/server/index.js",
-    "build": "npm run build:app",
-    "build:app": "webpack -p",
-    "watch": "concurrently -kr \"npm run watch:app\" \"npm run watch:server\"",
-    "watch:app": "webpack --watch",
+    "build": "npm run build:client",
+    "build:client": "webpack -p",
+    "watch": "concurrently -kr \"npm run watch:client\" \"npm run watch:server\"",
+    "watch:client": "webpack --watch",
     "watch:server": "onchange -i \"src/server/**/*\" -- node src/server/index.js"
   },
   "devDependencies": {
@@ -18,13 +18,17 @@
     "babel-loader": "^7.0.0",
     "babel-preset-latest": "^6.24.1",
     "concurrently": "^3.4.0",
+    "copy-webpack-plugin": "^4.0.1",
     "onchange": "^3.2.1",
+    "vue": "^2.3.4",
+    "vue-loader": "^12.2.1",
+    "vue-template-compiler": "^2.3.4",
     "webpack": "^2.6.1"
   },
   "dependencies": {
     "express": "^4.15.3",
     "monaco-editor": "^0.8.3",
-    "socket.io": "^2.0.2"
+    "socket.io": "^2.0.3"
   },
   "babel": {
     "presets": [

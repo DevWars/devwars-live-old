@@ -1,8 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-	entry: './src/app/index.js',
+	entry: './src/client/index.js',
 	output: {
 		filename: 'app.js',
 		path: path.resolve(__dirname, 'public'),
@@ -14,6 +15,16 @@ module.exports = {
 				use: 'babel-loader',
 				exclude: /node_modules/,
 			},
+			{
+				test: /\.vue$/,
+				loader: 'vue-loader',
+			},
 		],
 	},
+	plugins: [
+		new CopyWebpackPlugin([{
+			from: 'node_modules/monaco-editor/min/vs',
+			to: 'vendor/vs',
+		}]),
+	],
 };

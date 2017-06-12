@@ -15,4 +15,6 @@ node_modules
 .eslintcache
 
 # Build output
+public/vendor/*
+!public/vendor/.gitkeep
 public/app.js
