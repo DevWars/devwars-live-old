@@ -1,0 +1,48 @@
+.editor {
+	position: relative;
+	display: flex;
+	flex: 1 1;
+	flex-flow: column nowrap;
+
+	background-color: #151515;
+
+	&:not(:first-child) {
+		margin-left: 4px;
+	}
+
+	&__frame {
+		position: relative;
+		flex: 1 1;
+		background-color: #1e1e1e;
+	}
+
+	&__editor {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+	}
+
+	&__title {
+		z-index: 1;
+		position: absolute;
+		margin: 0;
+		top: 8px;
+		right: 24px;
+
+		font-size: 1.25rem;
+		font-weight: 400;
+
+		pointer-events: none;
+	}
+
+	&__status {
+		margin: .5rem;
+	}
+
+	&__debug {
+		margin: .5rem;
+		margin-top: 0;
+	}
+}

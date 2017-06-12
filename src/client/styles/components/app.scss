@@ -1,0 +1,12 @@
+.app {
+	display: flex;
+	height: 100vh;
+	flex-flow: column nowrap;
+	overflow: hidden;
+}
+
+.editor-list {
+	display: flex;
+	flex: 1 1;
+	flex-flow: row nowrap;
+}
