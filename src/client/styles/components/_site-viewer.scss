@@ -1,0 +1,16 @@
+.site-viewer {
+	position: relative;
+	height: 40%;
+
+	&__iframe {
+		width: 100%;
+		height: 100%;
+	}
+
+	&__reload {
+		z-index: 1;
+		position: absolute;
+		right: 16px;
+		bottom: 16px;
+	}
+}

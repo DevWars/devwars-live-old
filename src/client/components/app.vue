@@ -1,5 +1,6 @@
 <template>
 <div class="app">
+	<site-viewer url="/live/index.html"></site-viewer>
 	<div class="editor-list">
 		<live-editor namespace="/1" language="html"></live-editor>
 		<live-editor namespace="/2" language="css"></live-editor>
@@ -11,6 +12,7 @@
 
 <script>
 import LiveEditor from './live-editor.vue';
+import SiteViewer from './site-viewer.vue';
 
 export default {
 	data() {
@@ -19,6 +21,7 @@ export default {
 
 	components: {
 		LiveEditor,
+		SiteViewer,
 	},
 };
 </script>
