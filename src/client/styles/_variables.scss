@@ -15,28 +15,28 @@ $text-font: sans-serif;
 01.1 Brand Colors
 ========================================================================== */
 
-$brand-primary       								: #03a9f4;
-$brand-secondary    								: #e91e63;
-$brand-tertiary        								: mix($brand-primary, $brand-secondary, 50%);
+$brand-primary                                      : #03a9f4;
+$brand-secondary                                    : #e91e63;
+$brand-tertiary                                     : mix($brand-primary, $brand-secondary, 50%);
 
-$bg-color-1                							: #212121;
-$bg-color-2                    						: #303030;
-$bg-color-3                							: #424242;
-$bg-color-4                    						: #4b4b4b;
+$bg-color-1                                         : #212121;
+$bg-color-2                                         : #303030;
+$bg-color-3                                         : #424242;
+$bg-color-4                                         : #4b4b4b;
 
 $text-color-primary                                 : #fff;
 $text-color-secondary                               : rgba(#fff, 0.9);
 $text-color-muted                                   : rgba(#fff, 0.7);
 $text-color-disabled                                : rgba(#fff, 0.5);
-$divider-color										: rgba(#fff, 0.12);
+$divider-color                                      : rgba(#fff, 0.12);
 
-$devbit-color										: #f8bf3f;
+$devbit-color                                       : #f8bf3f;
 $blue-color                                         : $brand-primary;
 $red-color                                          : $brand-secondary;
 $yellow-color                                       : #F8BF3F;
 
-$body-bg         									: #191919;
-$base-font-color 									: #fff;
+$body-bg                                            : #191919;
+$base-font-color                                    : #fff;
 
 
 /* ==========================================================================
@@ -99,6 +99,3 @@ $poll-height                                        : 40px;
 
 $timer-height                                       : 80px;
 $timer-girth                                        : 5px;
-
-
-
