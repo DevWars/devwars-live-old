@@ -10,3 +10,20 @@
 	flex: 1 1;
 	flex-flow: row nowrap;
 }
+
+
+.player-view {
+	display: flex;
+	flex: 1 1;
+	flex-flow: row nowrap;
+	
+	&__slot {
+		width: calc(($frame-width / 2) - 33.33%);
+	}
+	
+	&__player {
+		height: 50%;
+		
+		&.current { height: 100%; }
+	}
+}

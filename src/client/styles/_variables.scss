@@ -9,6 +9,7 @@ $text-font: sans-serif;
 01.1 Brand Colors
 01.2 Base Colors
 01.5 Rank Colors
+01.5 Global Styles
 
 /* ==========================================================================
 01.1 Brand Colors
@@ -71,4 +72,33 @@ $silver-accent: darken($silver, 20%);
 $gold-accent: darken($gold, 20%);
 $platinum-accent: darken($platinum, 20%);
 $diamond-accent: darken($diamond, 20%);
+
+
+/* ==========================================================================
+02. Global
+========================================================================== */
+
+$languages: (
+	html: (
+		color: $html-color
+	),
+	css: (
+		color: $css-color
+	),
+	js: (
+		color: $js-color
+	)
+);
+
+$frame-width                                        : 380px;
+$frame-height                                       : 1020px;
+$frame-gutter                                       : 20px;
+
+$border-width                                       : 5px;
+$poll-height                                        : 40px;
+
+$timer-height                                       : 80px;
+$timer-girth                                        : 5px;
+
+
 
