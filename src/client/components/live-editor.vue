@@ -1,6 +1,14 @@
 <template>
 <div class="editor">
-	<h2 class="editor__title">{{ language === 'javascript' ? 'JS' : language.toUpperCase() }}</h2>
+	<div class="team team--red">
+		<div class="team__slot">
+			<span class="team__position">{{ language === 'javascript' ? 'JS' : language.toUpperCase() }}</span>
+			<div class="player">
+				<div class="player__rank"></div>
+				<span class="player__name">Thierdox</span>
+			</div>
+		</div>
+	</div>
 	<div class="editor__frame">
 		<div ref="mount" class="editor__editor"></div>
 	</div>

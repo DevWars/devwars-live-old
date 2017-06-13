@@ -2,3 +2,73 @@ $bg-color: #050505;
 
 $text-color: #f0f0f0;
 $text-font: sans-serif;
+
+
+/*  Contents:
+01. Colors
+01.1 Brand Colors
+01.2 Base Colors
+01.5 Rank Colors
+
+/* ==========================================================================
+01.1 Brand Colors
+========================================================================== */
+
+$brand-primary       								: #03a9f4;
+$brand-secondary    								: #e91e63;
+$brand-tertiary        								: mix($brand-primary, $brand-secondary, 50%);
+
+$bg-color-1                							: #212121;
+$bg-color-2                    						: #303030;
+$bg-color-3                							: #424242;
+$bg-color-4                    						: #4b4b4b;
+
+$text-color-primary                                 : #fff;
+$text-color-secondary                               : rgba(#fff, 0.9);
+$text-color-muted                                   : rgba(#fff, 0.7);
+$text-color-disabled                                : rgba(#fff, 0.5);
+$divider-color										: rgba(#fff, 0.12);
+
+$devbit-color										: #f8bf3f;
+$blue-color                                         : $brand-primary;
+$red-color                                          : $brand-secondary;
+$yellow-color                                       : #F8BF3F;
+
+$body-bg         									: #191919;
+$base-font-color 									: #fff;
+
+
+/* ==========================================================================
+01.3 Bootstrap Colors
+========================================================================== */
+
+$xd-gray                                            : #373a3c;
+$d-gray                                             : #55595c;
+$gray                                               : #818a91;
+$l-gray                                             : #eceeef;
+$xl-gray                                            : #f7f7f9;
+
+
+/* ==========================================================================
+01.4 Third-Party Colors
+========================================================================== */
+
+$html-color                                         : #f67b35;
+$css-color                                          : #2bb8e6;
+$js-color                                           : #f5ce35;
+
+/* ==========================================================================
+01.5 Rank Colors
+========================================================================== */
+$bronze: #A57E12;
+$silver: #929A9F;
+$gold: #F9D369;
+$platinum: #E5E4E2;
+$diamond: #69CBF9;
+
+$bronze-accent: darken($bronze, 20%);
+$silver-accent: darken($silver, 20%);
+$gold-accent: darken($gold, 20%);
+$platinum-accent: darken($platinum, 20%);
+$diamond-accent: darken($diamond, 20%);
+
