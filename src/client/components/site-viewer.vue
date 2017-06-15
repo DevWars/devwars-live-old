@@ -7,10 +7,26 @@
 
 
 <script>
+import eventBus from '../event-bus';
+
 export default {
-	props: ['url'],
+	props: ['team', 'url'],
+
+	mounted() {
+		eventBus.on('reload', this.onEventBusReload);
+	},
+
+	destroyed() {
+		eventBus.removeListener('reload', this.onEventBusReload);
+	},
 
 	methods: {
+		onEventBusReload(team) {
+			if (team === this.team) {
+				this.reload();
+			}
+		},
+
 		reload() {
 			this.$refs.iframe.contentDocument.location.reload();
 		},

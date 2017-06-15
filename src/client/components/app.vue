@@ -1,6 +1,6 @@
 <template>
 <div class="app">
-	<site-viewer url="/game/index.html"></site-viewer>
+	<site-viewer team="red" url="/game/index.html"></site-viewer>
 	<div class="editor-list">
 		<live-editor namespace="/1" language="html"></live-editor>
 		<live-editor namespace="/2" language="css"></live-editor>
@@ -16,10 +16,6 @@ import SiteViewer from './site-viewer.vue';
 import PlayerView from './player-view.vue';
 
 export default {
-	data() {
-		return { ed: true };
-	},
-
 	components: {
 		LiveEditor,
 		SiteViewer,
