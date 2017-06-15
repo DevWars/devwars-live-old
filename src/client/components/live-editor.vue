@@ -13,13 +13,13 @@
 		<div ref="mount" class="editor__editor"></div>
 	</div>
 	<div class="editor__status">
-		<button v-if="isOwner" @click="release" class="editor__status-button">Release</button>
-		<button v-if="isOwner" @click="commit" class="editor__status-button">Commit</button>
+		<button v-if="hasControl" @click="release" class="editor__status-button">Release</button>
+		<button v-if="hasControl" @click="commit" class="editor__status-button">Commit</button>
 		<button v-else @click="possess" class="editor__status-button">Possess</button>
-		<span class="editor__status-item">Owner: {{ owner ? (isOwner ? 'You' : owner) : 'None' }}</span>,
+		<span class="editor__status-item">User: {{ user ? (hasControl ? 'You' : user) : 'None' }}</span>,
 	</div>
 	<div class="editor__debug">
-		<span class="editor__debug-item">{{ connected ? 'Connected' : 'Disconnected' }}</span>,
+		<span class="editor__debug-item">{{ socketId ? 'Connected' : 'Disconnected' }}</span>,
 		<span class="editor__debug-item">{{ inSync ? 'in-sync' : 'out-of-sync' }}</span>,
 		<span class="editor__debug-item">{{ writable ? 'write-mode' : 'read-mode' }}</span>
 	</div>
@@ -43,15 +43,13 @@ function preventReactivity(object) {
 }
 
 export default {
-	props: ['namespace', 'language', 'readOnly'],
+	props: ['namespace', 'language'],
 
 	data() {
 		return {
-			connected: false,
+			socketId: '',
 			inSync: false,
 			ignoreChanges: false,
-
-			owner: '',
 			user: '',
 
 			socket: null,
@@ -60,17 +58,17 @@ export default {
 	},
 
 	computed: {
-		isOwner() {
-			return this.owner ? this.owner === this.user : false;
+		hasControl() {
+			return this.user ? (this.socketId === this.user) : false;
 		},
 
 		writable() {
-			return (this.isOwner && this.inSync);
+			return (this.hasControl && this.inSync);
 		},
 	},
 
 	watch: {
-		isOwner() {
+		hasControl() {
 			this.inSync = false;
 			this.socket.emit('state');
 		},
@@ -97,7 +95,6 @@ export default {
 
 	methods: {
 		onMonacoLoaded(monaco) {
-			console.log('Monaco Loaded!');
 			const editor = monaco.editor.create(this.$refs.mount, {
 				theme: 'vs-dark',
 				language: this.language,
@@ -105,59 +102,49 @@ export default {
 				readOnly: true,
 			});
 
+			this.editor = preventReactivity(editor);
 			editor.onDidChangeModelContent(this.onChange);
 
-			this.editor = preventReactivity(editor);
+			this.connect();
+		},
 
+		connect() {
 			const socket = io(this.namespace, { transports: ['websocket'] });
-
-			socket.on('connect', this.onSocketConnect);
-			socket.on('disconnect', this.onSocketDisconnect);
-			socket.on('state', this.onSocketState);
-			socket.on('meta', this.onSocketMeta);
-			socket.on('op', this.onSocketOp);
-
 			this.socket = preventReactivity(socket);
-		},
 
-		onSocketConnect(aa) {
-			console.log('socket-connect');
-			this.connected = true;
-			this.socket.emit('state');
-		},
+			socket.on('connect', () => {
+				this.socketId = socket.id;
+				socket.emit('state');
+			});
 
-		onSocketDisconnect() {
-			console.log('socket-disconnect');
-			this.connected = false;
-			this.inSync = false;
-		},
+			socket.on('disconnect', () => {
+				this.socketId = '';
+			});
 
-		onSocketState(state) {
-			console.log('socket-state', state);
-			this.ignoreChanges = true;
-			this.owner = state.owner;
-			this.user = state.user;
-			this.editor.model.setValue(state.text);
-			this.inSync = true;
-			this.ignoreChanges = false;
-		},
+			socket.on('state', (state) => {
+				this.ignoreChanges = true;
 
-		onSocketMeta(meta) {
-			console.log('socket-meta', meta);
-			this.owner = meta.owner;
-		},
+				this.user = state.user;
+				this.editor.model.setValue(state.text);
+				this.inSync = true;
 
-		onSocketOp(op) {
-			console.log('socket-op', op);
-			if (!this.isOwner) {
-				const edit = TextOperation.fromObject(op).toMonacoEdit();
-				this.editor.model.applyEdits([edit]);
-			}
+				this.ignoreChanges = false;
+			});
+
+			socket.on('user', (user) => {
+				this.user = user;
+			});
+
+			socket.on('op', (op) => {
+				if (!this.writable) {
+					const edit = TextOperation.fromObject(op).toMonacoEdit();
+					this.editor.model.applyEdits([edit]);
+				}
+			});
 		},
 
 		onChange(change) {
-			console.log('onChange', change, `Ignore: ${this.ignoreChanges || !this.isOwner}`);
-			if (this.ignoreChanges || !this.isOwner) {
+			if (this.ignoreChanges || !this.hasControl) {
 				return;
 			}
 
@@ -166,17 +153,14 @@ export default {
 		},
 
 		commit() {
-			console.log('commit');
 			this.socket.emit('commit');
 		},
 
 		possess() {
-			console.log('possess');
-			this.socket.emit('possess', this.user);
+			this.socket.emit('possess');
 		},
 
 		release() {
-			console.log('release');
 			this.socket.emit('release');
 		},
 	},
