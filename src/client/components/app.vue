@@ -1,6 +1,6 @@
 <template>
 <div class="app">
-	<site-viewer url="/live/index.html"></site-viewer>
+	<site-viewer url="/game/index.html"></site-viewer>
 	<div class="editor-list">
 		<live-editor namespace="/1" language="html"></live-editor>
 		<live-editor namespace="/2" language="css"></live-editor>
