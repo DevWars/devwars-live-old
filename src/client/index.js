@@ -7,10 +7,10 @@ import './styles/index.scss';
 const socket = io();
 
 socket.on('reload', (team) => {
-	eventBus.emit('reload', team);
+    eventBus.emit('reload', team);
 });
 
 const app = new Vue({
-	el: '#app',
-	render: h => h(App),
+    el: '#app',
+    render: h => h(App),
 });

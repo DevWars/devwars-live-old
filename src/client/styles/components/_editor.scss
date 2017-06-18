@@ -1,80 +1,78 @@
 .editor {
-	position: relative;
-	display: flex;
-	flex: 1 1;
-	flex-flow: column nowrap;
+    position: relative;
+    display: flex;
+    flex: 1 1;
+    flex-flow: column nowrap;
 
-	background-color: #151515;
+    background-color: #151515;
 
-	&:not(:first-child) {
-		margin-left: 4px;
-	}
+    &:not(:first-child) {
+        margin-left: 4px;
+    }
 
-	&__frame {
-		position: relative;
-		flex: 1 1;
-		background-color: #1e1e1e;
-	}
+    &__frame {
+        position: relative;
+        flex: 1 1;
+        background-color: #1e1e1e;
+    }
 
-	&__editor {
-		position: absolute;
-		top: 0;
-		left: 0;
-		bottom: 0;
-		right: 0;
-	}
+    &__editor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
 
-	&__status {
-		margin: .5rem;
-	}
+    &__status {
+        margin: .5rem;
+    }
 
-	&__debug {
-		margin: .5rem;
-		margin-top: 0;
-	}
+    &__debug {
+        margin: .5rem;
+        margin-top: 0;
+    }
 }
 
 .team {
-	display: flex;
-	justify-content: space-between;
-	height: 50px;
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
 
-	&__slot {
-		display: flex;
-		align-items: center;
-		width: 33.33%;
-		text-align: center;
-	}
+    &__slot {
+        display: flex;
+        align-items: center;
+        width: 33.33%;
+        text-align: center;
+    }
 
-	&__position {
-		padding: 0 20px;
-		font-size: 16px;
-		text-transform: uppercase;
-	}
+    &__position {
+        padding: 0 20px;
+        font-size: 16px;
+        text-transform: uppercase;
+    }
 
-	&--blue {
-		color: $blue-color;
-	}
+    &--blue {
+        color: $blue-color;
+    }
 
-	&--red {
-		color: $red-color;
-	}
+    &--red {
+        color: $red-color;
+    }
 }
 
 .player {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-	&__rank {
-		display: flex;
-		margin-right: 5px;
-	}
+    &__rank {
+        display: flex;
+        margin-right: 5px;
+    }
 
-	&__name {
-		color: #fff;
-		font-size: 20px;
-	}
+    &__name {
+        color: #fff;
+        font-size: 20px;
+    }
 }
-
-
