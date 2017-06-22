@@ -13,8 +13,8 @@ function onConnection(socket) {
 }
 
 module.exports = {
-    init: function(io, config) {
-        io = io;
+    init: function(ioConnection, config) {
+        io = ioConnection;
 
         // Setup game files.
         for (const fileConfig of config.files) {
