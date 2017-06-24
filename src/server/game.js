@@ -1,14 +1,32 @@
 const GameFile = require('./game-file');
 
 let io = null;
-const files = new Map();
 let viewers = 0;
+const files = new Map();
+const objectives = [
+    { title: 'Objective A', isBonus: false, redStatus: 0, blueStatus: 0 },
+    { title: 'Objective B', isBonus: false, redStatus: 0, blueStatus: 0 },
+    { title: 'Objective C', isBonus: true, redStatus: 0, blueStatus: 0 },
+];
 
 function onConnection(socket) {
     viewers += 1;
 
     socket.on('disconnect', () => {
         viewers -= 1;
+    });
+
+    socket.on('state', () => {
+        socket.emit('state', { objectives });
+    });
+
+    socket.on('cycle-objective-status', ({ index, team }) => {
+        const objective = objectives[index];
+        const key = `${team}Status`;
+        if (objective && objective[key] !== undefined) {
+            objective[key] = objective[key] < 3 ? objective[key] + 1 : 0;
+            io.emit('state', { objectives });
+        }
     });
 }
 
