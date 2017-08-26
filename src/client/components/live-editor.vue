@@ -98,6 +98,10 @@ export default {
             const editor = monaco.editor.create(this.$refs.mount, {
                 theme: 'vs-dark',
                 language: this.language,
+                lineNumbersMinChars: 3,
+                roundedSelection: false,
+                contextmenu: false,
+                minimap: { enabled: false },
                 automaticLayout: true, // TODO: Handle resize manually.
                 readOnly: true,
             });
@@ -143,13 +147,15 @@ export default {
             });
         },
 
-        onChange(change) {
+        onChange(contentChange) {
             if (this.ignoreChanges || !this.hasControl) {
                 return;
             }
 
-            const op = TextOperation.fromMonacoChange(change).toObject();
-            this.socket.emit('op', op);
+            for (const change of contentChange.changes) {
+                const op = TextOperation.fromMonacoChange(change).toObject();
+                this.socket.emit('op', op);
+            }
         },
 
         commit() {
