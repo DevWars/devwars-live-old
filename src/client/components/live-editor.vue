@@ -30,6 +30,7 @@
 <script>
 import Vue from 'vue';
 import io from 'socket.io-client';
+import monacoLoader from '../monaco-loader';
 import TextOperation from '../../shared/text-operation';
 
 // Grab the Observer constructor function.
@@ -79,14 +80,9 @@ export default {
     },
 
     mounted() {
-        if (window.monaco) {
-            this.onMonacoLoaded(window.monaco);
-        } else {
-            window.require.config({ paths: { 'vs': 'vendor/vs' }});
-            window.require(['vs/editor/editor.main'], () => {
-                this.onMonacoLoaded(window.monaco);
-            });
-        }
+        monacoLoader((monaco) => {
+            this.onMonacoLoaded(monaco);
+        });
     },
 
     destroyed() {
