@@ -92,10 +92,14 @@ export default {
     methods: {
         onMonacoLoaded(monaco) {
             const editor = monaco.editor.create(this.$refs.mount, {
-                theme: 'vs-dark',
+                theme: 'devwars',
                 language: this.language,
+                renderLineHighlight: 'none',
+                selectionHighlight: false,
+                occurrencesHighlight: false,
                 lineNumbersMinChars: 3,
                 roundedSelection: false,
+                renderIndentGuides: false,
                 contextmenu: false,
                 minimap: { enabled: false },
                 automaticLayout: true, // TODO: Handle resize manually.
