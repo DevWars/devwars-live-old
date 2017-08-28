@@ -40,13 +40,11 @@ class TextOperation {
     }
 
     static fromObject(op) {
-        const text = op.t || '';
-        const range = [
-            op.r[0] || 0,
-            op.r[1] || 0,
-            op.r[2] || op.r[0] || 0,
-            op.r[3] || op.r[1] || 0,
-        ];
+        const text = typeof op.t === 'string' ? op.t : '';
+        const range = op.r;
+        if (range.length == 2) {
+            range.push(range[0], range[1]);
+        }
 
         return new TextOperation(range, text);
     }
