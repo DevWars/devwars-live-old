@@ -13,13 +13,11 @@
 <script>
 import LiveEditor from './live-editor.vue';
 import SiteViewer from './site-viewer.vue';
-import PlayerView from './player-view.vue';
 
 export default {
     components: {
         LiveEditor,
         SiteViewer,
-        PlayerView,
     },
 };
 </script>
