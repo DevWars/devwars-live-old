@@ -1,8 +1,8 @@
 <template>
-<div class="editor">
-    <div class="editor-header editor-header--red">
-        <span class="editor-header__username">{{ user ? (hasControl ? 'You' : user) : 'Username' }}</span>
-        <span class="editor-header__language">{{ language === 'javascript' ? 'JS' : language.toUpperCase() }}</span>
+<div :class="`editor editor--${team}${collapsed ? ' editor--collapsed' : ''}`">
+    <div class="editor__header">
+        <span class="editor__username">{{ user ? (hasControl ? 'You' : user) : 'Username' }}</span>
+        <span class="editor__language" @click="collapsed = !collapsed" >{{ language === 'javascript' ? 'JS' : language.toUpperCase() }}</span>
     </div>
     <div class="editor__frame">
         <div ref="mount" class="editor__editor"></div>
@@ -33,10 +33,11 @@ function preventReactivity(object) {
 }
 
 export default {
-    props: ['namespace', 'language'],
+    props: ['team', 'namespace', 'language'],
 
     data() {
         return {
+            collapsed: false,
             socketId: '',
             inSync: false,
             ignoreChanges: false,

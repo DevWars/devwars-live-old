@@ -10,6 +10,24 @@
         border-left: 2px solid $outline-color;
     }
 
+    &__header {
+        display: flex;
+        margin: 0 1rem;
+        height: 2.25rem;
+        align-items: baseline;
+    }
+
+    &__username {
+        margin-right: auto;
+        font-size: 1.125rem;
+        line-height: 2.25rem;
+    }
+
+    &__language {
+        align-self: baseline;
+        cursor: pointer;
+    }
+
     &__frame {
         position: relative;
         flex: 1 1;
@@ -26,29 +44,48 @@
     &__status {
         margin: .5rem;
     }
-}
 
-.editor-header {
-    display: flex;
-    margin: 0 1rem;
-    height: 2.25rem;
-    align-items: baseline;
-
-    &--red {
+    &--red .editor__header {
         color: $red-team-color;
     }
 
-    &--blue {
+    &--blue .editor__header {
         color: $blue-team-color;
     }
 
-    &__username {
-        margin-right: auto;
-        font-size: 1rem;
-        line-height: 2.25rem;
-    }
+    &--collapsed {
+        flex: 0 1;
 
-    &__language {
-        align-self: baseline;
+        .editor__header {
+            flex-flow: column;
+            height: 100%;
+            width: 2.25rem;
+            margin: 1rem 0;
+        }
+
+        .editor__username {
+            order: 1;
+            margin-top: auto;
+
+            transform: rotate(-90deg) translate(0, 100%);
+            transform-origin: bottom left;
+        }
+
+        .editor__language {
+            width: 4rem;
+            height: 4rem;
+            text-align: right;
+            transform: rotate(-90deg) translate(0, -100%);
+            line-height: 2.25rem;
+            transform-origin: top right;
+        }
+
+        .editor__frame {
+            display: none;
+        }
+
+        .editor__status {
+            display: none;
+        }
     }
 }
