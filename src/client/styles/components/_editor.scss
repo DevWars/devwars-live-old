@@ -4,7 +4,7 @@
     flex: 1 1;
     flex-flow: column nowrap;
 
-    background-color: #151515;
+    background-color: #0b0c11;
 
     &:not(:first-child) {
         margin-left: 4px;
@@ -13,7 +13,6 @@
     &__frame {
         position: relative;
         flex: 1 1;
-        background-color: #1e1e1e;
     }
 
     &__editor {
@@ -27,52 +26,29 @@
     &__status {
         margin: .5rem;
     }
-
-    &__debug {
-        margin: .5rem;
-        margin-top: 0;
-    }
 }
 
-.team {
+.editor-header {
     display: flex;
-    justify-content: space-between;
-    height: 50px;
+    margin: 0 1rem;
+    height: 2.25rem;
+    align-items: baseline;
 
-    &__slot {
-        display: flex;
-        align-items: center;
-        width: 33.33%;
-        text-align: center;
-    }
-
-    &__position {
-        padding: 0 20px;
-        font-size: 16px;
-        text-transform: uppercase;
+    &--red {
+        color: #ff007d;
     }
 
     &--blue {
-        color: $blue-color;
+        color: #00c9ff;
     }
 
-    &--red {
-        color: $red-color;
-    }
-}
-
-.player {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &__rank {
-        display: flex;
-        margin-right: 5px;
+    &__username {
+        margin-right: auto;
+        font-size: 1rem;
+        line-height: 2.25rem;
     }
 
-    &__name {
-        color: #fff;
-        font-size: 20px;
+    &__language {
+        align-self: baseline;
     }
 }

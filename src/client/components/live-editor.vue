@@ -1,13 +1,8 @@
 <template>
 <div class="editor">
-    <div class="team team--red">
-        <div class="team__slot">
-            <span class="team__position">{{ language === 'javascript' ? 'JS' : language.toUpperCase() }}</span>
-            <div class="player">
-                <div class="player__rank"></div>
-                <span class="player__name">Thierdox</span>
-            </div>
-        </div>
+    <div class="editor-header editor-header--red">
+        <span class="editor-header__username">{{ user ? (hasControl ? 'You' : user) : 'Username' }}</span>
+        <span class="editor-header__language">{{ language === 'javascript' ? 'JS' : language.toUpperCase() }}</span>
     </div>
     <div class="editor__frame">
         <div ref="mount" class="editor__editor"></div>
@@ -16,12 +11,6 @@
         <button v-if="hasControl" @click="release" class="editor__status-button">Release</button>
         <button v-if="hasControl" @click="commit" class="editor__status-button">Commit</button>
         <button v-else @click="possess" class="editor__status-button">Possess</button>
-        <span class="editor__status-item">User: {{ user ? (hasControl ? 'You' : user) : 'None' }}</span>,
-    </div>
-    <div class="editor__debug">
-        <span class="editor__debug-item">{{ socketId ? 'Connected' : 'Disconnected' }}</span>,
-        <span class="editor__debug-item">{{ inSync ? 'in-sync' : 'out-of-sync' }}</span>,
-        <span class="editor__debug-item">{{ writable ? 'write-mode' : 'read-mode' }}</span>
     </div>
 </div>
 </template>
