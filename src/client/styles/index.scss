@@ -2,5 +2,8 @@
 @import 'base';
 
 @import 'components/app';
+@import 'components/editor-group';
 @import 'components/editor';
 @import 'components/site-viewer';
+
+@import 'utilities/monaco-overrides';

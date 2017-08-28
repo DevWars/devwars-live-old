@@ -1,5 +1,6 @@
 const BG = '0b0c11';
-const COMMENT = '303745';
+// const COMMENT = '303745';
+const COMMENT = '546178';
 const BLUE = '00c9ff';
 const RED = 'ff007d';
 
@@ -42,14 +43,14 @@ const devwarsTheme = {
         'editorCursor.foreground': '#ffffff',
         'editor.lineHighlightBackground': `#${COMMENT}20`,
 
-        'editor.selectionBackground': '#b9cdff20',
-        'editor.inactiveSelectionBackground': '#b9cdff10',
+        'editor.selectionBackground': `#${COMMENT}33`,
+        'editor.inactiveSelectionBackground': `#${COMMENT}20`,
 
-        'editorLineNumber.foreground': `#${COMMENT}`,
+        'editorLineNumber.foreground': `#${COMMENT}80`,
         'editorOverviewRuler.border': '#00000000',
 
         'editorBracketMatch.border': `#${COMMENT}`,
-        'editorIndentGuide.background': `#${COMMENT}40`,
+        'editorIndentGuide.background': `#${COMMENT}80`,
     },
 };
 

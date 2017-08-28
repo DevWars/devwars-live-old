@@ -4,10 +4,10 @@
     flex: 1 1;
     flex-flow: column nowrap;
 
-    background-color: #0b0c11;
+    background-color: $bg-color;
 
     &:not(:first-child) {
-        margin-left: 4px;
+        border-left: 2px solid $outline-color;
     }
 
     &__frame {
@@ -35,11 +35,11 @@
     align-items: baseline;
 
     &--red {
-        color: #ff007d;
+        color: $red-team-color;
     }
 
     &--blue {
-        color: #00c9ff;
+        color: $blue-team-color;
     }
 
     &__username {

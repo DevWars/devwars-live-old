@@ -90,6 +90,7 @@ export default {
                 roundedSelection: false,
                 renderIndentGuides: false,
                 contextmenu: false,
+                scrollbar: { useShadows: false },
                 minimap: { enabled: false },
                 automaticLayout: true, // TODO: Handle resize manually.
                 readOnly: true,

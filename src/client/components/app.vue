@@ -1,7 +1,7 @@
 <template>
 <div class="app">
     <site-viewer team="red" url="/game/index.html"></site-viewer>
-    <div class="editor-list">
+    <div class="editor-group">
         <live-editor namespace="/1" language="html"></live-editor>
         <live-editor namespace="/2" language="css"></live-editor>
         <live-editor namespace="/3" language="javascript"></live-editor>

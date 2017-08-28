@@ -5,6 +5,7 @@
 body {
     margin: 0;
     box-sizing: border-box;
+    overflow: hidden;
 
     font-family: $text-font;
     font-size: 16px;
@@ -12,4 +13,29 @@ body {
 
     color: $text-color;
     background-color: $bg-color;
+}
+
+button {
+    padding: 0.25rem 0.5rem;
+    border: 2px solid $outline-color;
+
+    font-family: $text-font;
+    font-size: 0.875rem;
+
+    color: $text-color;
+    background-color: $bg-color;
+
+    &:focus {
+        outline: none;
+    }
+
+    &:hover {
+        cursor: pointer;
+        border-color: $text-color;
+    }
+
+    &:active {
+        color: $bg-color;
+        background: $text-color;
+    }
 }
