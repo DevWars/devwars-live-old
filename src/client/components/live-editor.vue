@@ -97,6 +97,13 @@ export default {
                 readOnly: true,
             });
 
+            editor.addAction({
+                id: 'save-action',
+                label: 'Save',
+                keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+                run: () => this.save(),
+            });
+
             this.editor = preventReactivity(editor);
             editor.onDidChangeModelContent(this.onChange);
 
@@ -150,6 +157,10 @@ export default {
         },
 
         save() {
+            if (!this.hasControl) {
+                return;
+            }
+
             this.socket.emit('save');
         },
 
