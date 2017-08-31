@@ -9,7 +9,7 @@
     </div>
     <div class="editor__status">
         <button v-if="hasControl" @click="release" class="editor__status-button">Release</button>
-        <button v-if="hasControl" @click="commit" class="editor__status-button">Commit</button>
+        <button v-if="hasControl" @click="save" class="editor__status-button">Save</button>
         <button v-else @click="possess" class="editor__status-button">Possess</button>
     </div>
 </div>
@@ -119,8 +119,8 @@ export default {
             socket.on('state', (state) => {
                 this.ignoreChanges = true;
 
-                this.user = state.user;
-                this.editor.model.setValue(state.text);
+                this.user = state.activeUser;
+                this.editor.model.setValue(state.content);
                 this.inSync = true;
 
                 this.ignoreChanges = false;
@@ -149,8 +149,8 @@ export default {
             }
         },
 
-        commit() {
-            this.socket.emit('commit');
+        save() {
+            this.socket.emit('save');
         },
 
         possess() {

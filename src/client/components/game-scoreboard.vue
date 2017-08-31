@@ -1,9 +1,9 @@
 <template>
 <div>
     <div v-for="(objective, index) in objectives">
-        <p>{{ objective.title }}{{ objective.isBonus ? ' [Bonus]' : '' }}</p>
-        <button @click="cycleObjectiveStatus(index, 'red')">RED: {{ objective.redStatus }}</button>
-        <button @click="cycleObjectiveStatus(index, 'blue')">Blue: {{ objective.blueStatus }}</button>
+        <p>{{ objective.description }}{{ objective.isBonus ? ' [Bonus]' : '' }}</p>
+        <button @click="cycleObjectiveScore(index, 'red')">Red: {{ objective.red }}</button>
+        <button @click="cycleObjectiveScore(index, 'blue')">Blue: {{ objective.blue }}</button>
     </div>
 </div>
 </template>
@@ -31,8 +31,8 @@ export default {
             this.objectives = objectives;
         },
 
-        cycleObjectiveStatus(index, team) {
-            socket.emit('cycle-objective-status', { index, team });
+        cycleObjectiveScore(index, team) {
+            socket.emit('cycle-objective-score', { index, team });
         },
     },
 };

@@ -1,57 +1,55 @@
-const EventEmitter = require('events').EventEmitter;
+const { EventEmitter } = require('events');
 const TextOperation = require('../shared/text-operation');
 
 class GameFile extends EventEmitter {
-    constructor(io, config) {
+    constructor(nsp, options) {
         super();
-        this.io = io;
+        this.nsp = nsp;
         this.buffer = [''];
-        this.commitText = '';
-        this.language = config.language;
+        this.saved = '';
 
-        this.viewers = 0;
-        this.user = '';
+        this.owner = null;
+        this.activeUser = null;
+        this.language = options.language;
 
-        this.io.on('connection', this.onConnection.bind(this));
+        this.onConnection = this.onConnection.bind(this);
+        this.nsp.on('connection', this.onConnection);
     }
 
     onConnection(socket) {
-        this.viewers += 1;
-
         socket.on('disconnect', () => {
-            this.viewers -= 1
-            if (this.user === socket.id) {
-                this.user = '';
-                this.io.emit('user', this.user);
+            if (this.activeUser === socket.id) {
+                this.activeUser = '';
+                this.nsp.emit('user', this.user);
             }
         });
 
         socket.on('state', () => {
-            socket.emit('state', this.getState());
+            socket.emit('state', this.getStateObject());
         });
 
         socket.on('possess', () => {
-            this.user = socket.id;
-            this.io.emit('user', this.user);
+            this.activeUser = socket.id;
+            this.nsp.emit('user', this.activeUser);
         });
 
         socket.on('release', () => {
-            if (socket.id === this.user) {
-                this.user = '';
+            if (socket.id === this.activeUser) {
+                this.activeUser = '';
             }
 
-            this.io.emit('user', this.user);
+            this.nsp.emit('user', this.user);
         });
 
-        socket.on('commit', () => {
-            if (socket.id === this.user) {
-                this.commitText = this.getText();
-                this.emit('commit');
+        socket.on('save', () => {
+            if (socket.id === this.activeUser) {
+                this.saved = this.getContent();
+                this.emit('save');
             }
         });
 
         socket.on('op', (op) => {
-            if (socket.id === this.user) {
+            if (socket.id === this.activeUser) {
                 this.applyOperation(TextOperation.fromObject(op));
                 socket.broadcast.emit('op', op);
             }
@@ -68,19 +66,21 @@ class GameFile extends EventEmitter {
         this.buffer.splice(startRow, (endRow - startRow + 1), ...lines);
     }
 
-    getState() {
-        const { owner, user } = this;
-        const text = this.getText();
-        return { owner, user, text };
+    getStateObject() {
+        return {
+            activeUser: this.activeUser,
+            language: this.language,
+            content: this.getContent(),
+        };
     }
 
-    getText() {
+    getContent() {
         return this.buffer.join('\n');
     }
 
-    getCommitText() {
-        return this.commitText;
+    getSavedContent() {
+        return this.saved;
     }
-};
+}
 
 module.exports = GameFile;
