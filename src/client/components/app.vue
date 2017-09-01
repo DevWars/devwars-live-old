@@ -1,5 +1,6 @@
 <template>
 <div class="app">
+    <app-header></app-header>
     <site-viewer team="red" url="/game/red/index.html"></site-viewer>
     <div class="editor-group">
         <live-editor namespace="/1" team="red" language="html"></live-editor>
@@ -11,11 +12,13 @@
 
 
 <script>
+import AppHeader from './app-header.vue';
 import LiveEditor from './live-editor.vue';
 import SiteViewer from './site-viewer.vue';
 
 export default {
     components: {
+        AppHeader,
         LiveEditor,
         SiteViewer,
     },

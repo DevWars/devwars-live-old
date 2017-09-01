@@ -1,0 +1,34 @@
+.app-header {
+    display: flex;
+    height: 3.5rem;
+
+    text-align: center;
+    border-bottom: 2px solid $outline-color;
+
+    &__game-state {
+        display: flex;
+        margin: auto;
+        align-items: baseline;
+    }
+
+    &__timer {
+        font-size: 2.75rem;
+        font-weight: 300;
+        line-height: 1;
+    }
+
+    &__score {
+        margin: 0 2rem;
+        font-size: 2.25rem;
+        font-weight: 300;
+        line-height: 1;
+
+        &--red {
+            color: $red-team-color;
+        }
+
+        &--blue {
+            color: $blue-team-color;
+        }
+    }
+}
