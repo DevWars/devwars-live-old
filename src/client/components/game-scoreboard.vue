@@ -11,26 +11,14 @@
 
 <script>
 import socket from '../socket';
-import eventBus from '../event-bus';
+import { mapState } from 'vuex';
 
 export default {
-    data() {
-        return { objectives: [] };
-    },
-
-    created() {
-        eventBus.on('objectives', this.setObjectives);
-    },
-
-    destroyed() {
-        eventBus.removeListener('objectives', this.setObjectives);
-    },
+    computed: mapState([
+        'objectives'
+    ]),
 
     methods: {
-        setObjectives(objectives) {
-            this.objectives = objectives;
-        },
-
         cycleObjectiveScore(index, team) {
             socket.emit('cycle-objective-score', { index, team });
         },

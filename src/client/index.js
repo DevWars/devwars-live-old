@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import store from './store';
 import App from './components/app.vue';
 import './socket';
 import './styles/index.scss';
@@ -16,5 +17,6 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router,
+    store,
     render: h => h('router-view'),
 });
