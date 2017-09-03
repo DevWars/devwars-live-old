@@ -10,15 +10,15 @@ const state = {
 };
 
 const getters = {
-    redScore: (state) => {
-        return state.objectives.reduce((score, objective) => {
-            return score + objective.red;
-        }, 0);
-    },
-
     blueScore: (state) => {
         return state.objectives.reduce((score, objective) => {
             return score + objective.blue;
+        }, 0);
+    },
+
+    redScore: (state) => {
+        return state.objectives.reduce((score, objective) => {
+            return score + objective.red;
         }, 0);
     },
 };

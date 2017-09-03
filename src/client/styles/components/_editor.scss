@@ -45,12 +45,12 @@
         margin: .5rem;
     }
 
-    &--red .editor__header {
-        color: $red-team-color;
-    }
-
     &--blue .editor__header {
         color: $blue-team-color;
+    }
+
+    &--red .editor__header {
+        color: $red-team-color;
     }
 
     &--collapsed {

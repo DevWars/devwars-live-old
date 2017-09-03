@@ -2,19 +2,19 @@ const { Router } = require('express');
 const GameFile = require('./game-file');
 
 const FILES_CONFIG = [
-    { namespace: '/1', team: 'red', language: 'html', filename: 'index.html' },
-    { namespace: '/2', team: 'red', language: 'css', filename: 'game.css' },
-    { namespace: '/3', team: 'red', language: 'js', filename: 'game.js' },
-    { namespace: '/4', team: 'blue', language: 'html', filename: 'index.html' },
-    { namespace: '/5', team: 'blue', language: 'css', filename: 'game.css' },
-    { namespace: '/6', team: 'blue', language: 'js', filename: 'game.js' },
+    { namespace: '/1', team: 'blue', language: 'html', filename: 'index.html' },
+    { namespace: '/2', team: 'blue', language: 'css', filename: 'game.css' },
+    { namespace: '/3', team: 'blue', language: 'js', filename: 'game.js' },
+    { namespace: '/4', team: 'red', language: 'html', filename: 'index.html' },
+    { namespace: '/5', team: 'red', language: 'css', filename: 'game.css' },
+    { namespace: '/6', team: 'red', language: 'js', filename: 'game.js' },
 ];
 
 // TODO: Remove.
 const OBJECTIVES = [
-    { description: 'Objective A', isBonus: false, red: 0, blue: 0 },
-    { description: 'Objective B', isBonus: false, red: 0, blue: 0 },
-    { description: 'Objective C', isBonus: true, red: 0, blue: 0 },
+    { description: 'Objective A', isBonus: false, blue: 0, red: 0 },
+    { description: 'Objective B', isBonus: false, blue: 0, red: 0 },
+    { description: 'Objective C', isBonus: true, blue: 0, red: 0 },
 ];
 
 class Game {
@@ -35,11 +35,11 @@ class Game {
     _initRouter() {
         const router = new Router();
 
-        router.get('/:team(red|blue)', (req, res) => {
+        router.get('/:team(blue|red)', (req, res) => {
             res.redirect(`${req.params.team}/index.html`);
         });
 
-        router.get('/:team(red|blue)/:filename', (req, res) => {
+        router.get('/:team(blue|red)/:filename', (req, res) => {
             const { team, filename } = req.params;
             const gameFile = this.gameFiles.get(`${team}/${filename}`);
             if (!gameFile) {

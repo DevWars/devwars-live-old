@@ -1,9 +1,9 @@
 <template>
 <header class="app-header">
     <div class="app-header__game-state">
-        <div class="app-header__score app-header__score--blue">{{ redScore }} xxx</div>
+        <div class="app-header__score app-header__score--blue">{{ blueScore }} xxx</div>
         <div class="app-header__timer">31:48</div>
-        <div class="app-header__score app-header__score--red">xxx {{ blueScore }}</div>
+        <div class="app-header__score app-header__score--red">xxx {{ redScore }}</div>
     </div>
 </header>
 </template>
@@ -17,8 +17,8 @@ export default {
             'stage',
         ]),
         mapGetters([
-            'redScore',
             'blueScore',
+            'redScore',
         ]),
     ),
 };

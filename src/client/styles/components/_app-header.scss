@@ -23,12 +23,12 @@
         font-weight: 300;
         line-height: 1;
 
-        &--red {
-            color: $red-team-color;
-        }
-
         &--blue {
             color: $blue-team-color;
+        }
+
+        &--red {
+            color: $red-team-color;
         }
     }
 }
