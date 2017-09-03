@@ -33,7 +33,7 @@ function preventReactivity(object) {
 }
 
 export default {
-    props: ['team', 'namespace', 'language'],
+    props: ['team', 'language'],
 
     data() {
         return {
@@ -49,6 +49,12 @@ export default {
     },
 
     computed: {
+        namespace() {
+            const map = { html: 1, css: 2, javascript: 3 };
+            let namespace = map[this.$props.language];
+            return this.$props.team === 'blue' ? `/${namespace}` : `/${namespace + 3}`;
+        },
+
         hasControl() {
             return this.user ? (this.socketId === this.user) : false;
         },
