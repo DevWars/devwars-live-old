@@ -1,6 +1,7 @@
 .site-viewer {
     position: relative;
-    height: 40%;
+    flex: 1;
+    overflow: hidden;
 
     &__iframe {
         width: 100%;

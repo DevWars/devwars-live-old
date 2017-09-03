@@ -1,6 +1,13 @@
 .editor-group {
     display: flex;
-    flex: 1 1;
+    flex: 1;
     flex-flow: row nowrap;
-    border-top: 2px solid $outline-color;
+
+    &:not(:last-child) {
+        border-bottom: 2px solid $outline-color;
+    }
+
+    .editor:not(:first-child) {
+        border-left: 2px solid $outline-color;
+    }
 }
