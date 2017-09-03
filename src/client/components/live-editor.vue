@@ -4,9 +4,7 @@
         <span class="editor__username">{{ user ? (hasControl ? 'You' : user) : 'Username' }}</span>
         <span class="editor__language" @click="collapsed = !collapsed" >{{ language === 'javascript' ? 'JS' : language.toUpperCase() }}</span>
     </div>
-    <div class="editor__frame">
-        <div ref="mount" class="editor__editor"></div>
-    </div>
+    <div ref="mount" class="editor__mount"></div>
     <div class="editor__status">
         <button v-if="hasControl" @click="release" class="editor__status-button">Release</button>
         <button v-if="hasControl" @click="save" class="editor__status-button">Save</button>

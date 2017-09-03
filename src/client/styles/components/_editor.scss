@@ -24,17 +24,16 @@
         cursor: pointer;
     }
 
-    &__frame {
+    &__mount {
         position: relative;
-        flex: 1 1;
-    }
+        flex: 1;
+        overflow: hidden;
 
-    &__editor {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
+        .monaco-editor {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
     }
 
     &__status {
