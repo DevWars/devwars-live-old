@@ -1,5 +1,4 @@
 const BG = '0b0c11';
-// const COMMENT = '303745';
 const COMMENT = '546178';
 const BLUE = '00c9ff';
 const RED = 'ff007d';
@@ -58,7 +57,7 @@ export default function loadMonaco(callback) {
     if (window.monaco) {
         callback(window.monaco);
     } else {
-        window.require.config({ paths: { 'vs': 'vendor/vs' }});
+        window.require.config({ paths: { 'vs': '/vendor/vs' }});
         window.require(['vs/editor/editor.main'], () => {
             window.monaco.editor.defineTheme('devwars', devwarsTheme);
             callback(window.monaco);
