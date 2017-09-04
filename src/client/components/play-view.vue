@@ -2,7 +2,7 @@
 <div class="view--split">
     <div class="view__column view__column--editor">
         <app-header></app-header>
-        <live-editor :team="team" :language="language"></live-editor>
+        <live-editor :team="team" :language="language" :controls="true"></live-editor>
     </div>
     <div class="view__column">
         <div class="view__row">
