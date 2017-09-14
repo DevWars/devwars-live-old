@@ -1,0 +1,63 @@
+.objectives {
+    max-width: 36rem;
+
+    &__title {
+        margin: 2rem 0;
+        text-align: center;
+        font-size: 1.75rem;
+        font-weight: 300;
+        text-transform: uppercase;
+    }
+
+    &__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    &__item {
+        display: flex;
+        margin: 2rem 0;
+        align-items: center;
+    }
+
+    &__description {
+        margin: 0 1.5rem;
+        flex: 1;
+        text-align: center;
+    }
+
+    &__score-pins {
+        display: flex;
+        padding: 0 8px;
+        cursor: pointer;
+        transform: skew(-12deg);
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    &__score-pin {
+        width: 3px;
+        height: 1.25rem;
+        opacity: 0.25;
+
+        &:first-child {
+            margin-right: 5px;
+        }
+
+        &--checked {
+            opacity: 1;
+        }
+
+        &--blue {
+            background-color: $blue-team-color;
+        }
+
+        &--red {
+            background-color: $red-team-color;
+        }
+    }
+}

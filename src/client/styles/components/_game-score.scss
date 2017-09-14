@@ -1,0 +1,48 @@
+.game-score {
+    display: flex;
+    margin-bottom: 4rem;
+    justify-content: center;
+    line-height: 1;
+
+    &__timer {
+        margin: 0 2.5rem;
+        font-size: 3.5rem;
+        font-weight: 300;
+    }
+
+    &__score {
+        font-size: 3.5rem;
+
+        &--blue {
+            color: $blue-team-color;
+        }
+
+        &--red {
+            color: $red-team-color;
+        }
+    }
+
+    &__strikes {
+        margin: 0 2rem;
+        margin-top: 10px;
+
+        &--blue {
+            color: $blue-team-color;
+        }
+
+        &--red {
+            color: $red-team-color;
+            text-align: right;
+        }
+    }
+
+    &__strikes-title {
+        font-size: 0.875rem;
+        text-transform: uppercase;
+    }
+
+    &__strikes-marks {
+        font-size: 1.75rem;
+        font-weight: 300;
+    }
+}

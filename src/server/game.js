@@ -12,9 +12,10 @@ const FILES_CONFIG = [
 
 // TODO: Remove.
 const OBJECTIVES = [
-    { description: 'Objective A', isBonus: false, blue: 0, red: 0 },
-    { description: 'Objective B', isBonus: false, blue: 0, red: 0 },
-    { description: 'Objective C', isBonus: true, blue: 0, red: 0 },
+    { description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', isBonus: false, blue: 0, red: 0 },
+    { description: 'Nunc vestibulum finibus odio sollicitudin lacinia. Vivamus sed ultrices augue. Proin varius odio sed enim gravida, id rutrum leo ultrices.', isBonus: false, blue: 0, red: 0 },
+    { description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam interdum sit amet nisi at aliquam. Nullam porta a turpis eget maximus. Maecenas tristique vitae mi eu efficitur.', isBonus: false, blue: 0, red: 0 },
+    { description: 'Mauris libero risus, finibus eget tortor sed, sodales laoreet sapien. Suspendisse et mauris tortor.', isBonus: true, blue: 0, red: 0 },
 ];
 
 class Game {

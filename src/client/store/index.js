@@ -7,6 +7,7 @@ const state = {
     viewers: 0,
     stage: 'pre-start',
     objectives: [],
+    objectivesModalOpen: false,
 };
 
 const getters = {
@@ -28,6 +29,14 @@ const mutations = {
         state.viewers = viewers;
         state.stage = stage;
         state.objectives = objectives;
+    },
+
+    'SHOW_OBJECTIVES_MODAL': (state) => {
+        state.objectivesModalOpen = true;
+    },
+
+    'HIDE_OBJECTIVES_MODAL': (state) => {
+        state.objectivesModalOpen = false;
     },
 };
 
