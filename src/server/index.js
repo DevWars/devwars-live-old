@@ -4,6 +4,8 @@ const express = require('express');
 const socketIO = require('socket.io');
 const Game = require('./game');
 
+const PORT = process.env['PORT'] || 8000;
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
@@ -16,6 +18,6 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../../public/index.html'))
 });
 
-server.listen(8000, () => {
-    console.log('Server listening on port 8000');
+server.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
 });
