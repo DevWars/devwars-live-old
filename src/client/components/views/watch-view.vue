@@ -16,8 +16,8 @@
 
 
 <script>
-import AppHeader from './app-header.vue';
-import LiveEditor from './live-editor.vue';
+import AppHeader from '../app-header.vue';
+import LiveEditor from '../live-editor.vue';
 
 export default {
     components: {

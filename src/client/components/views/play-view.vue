@@ -21,9 +21,9 @@
 
 
 <script>
-import AppHeader from './app-header.vue';
-import LiveEditor from './live-editor.vue';
-import SiteViewer from './site-viewer.vue';
+import AppHeader from '../app-header.vue';
+import LiveEditor from '../live-editor.vue';
+import SiteViewer from '../site-viewer.vue';
 
 export default {
     props: ['team', 'language'],

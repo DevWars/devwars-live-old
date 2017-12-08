@@ -17,17 +17,23 @@
 <script>
 import Vue from 'vue';
 import io from 'socket.io-client';
-import monacoLoader from '../monaco-loader';
+import preventReactivity from '../utils/prevent-reactivity';
 import TextOperation from '../../shared/text-operation';
+import monacoTheme from '../styles/monaco-theme';
 
-// Grab the Observer constructor function.
-const Observer = (new Vue()).$data.__ob__.constructor;
-// Prevent Vue from recursively adding reactivity to the object by
-// attaching a dummy observer on the root object.
-// See: https://github.com/vuejs/vue/issues/2637
-function preventReactivity(object) {
-    object.__ob__ = new Observer({});
-    return object;
+function loadMonaco(callback) {
+    if (window.monaco) {
+        callback(window.monaco);
+    } else if (window.require) {
+        window.require.config({ paths: { 'vs': '/vendor/vs' }});
+        window.require(['vs/editor/editor.main'], () => {
+            window.monaco.editor.defineTheme('devwars', monacoTheme);
+            callback(window.monaco);
+        });
+    } else {
+        console.error('Could not load Monaco editor because \'window.require\' is missing!');
+        callback();
+    }
 }
 
 export default {
@@ -74,12 +80,14 @@ export default {
     },
 
     mounted() {
-        monacoLoader((monaco) => {
-            this.onMonacoLoaded(monaco);
+        loadMonaco((monaco) => {
+            if (monaco) {
+                this.onMonacoLoaded(monaco);
+            }
         });
     },
 
-    destroyed() {
+    beforeDestroy() {
         this.socket.disconnect();
     },
 

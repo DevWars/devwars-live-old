@@ -7,7 +7,7 @@
 
 
 <script>
-import ObjectivesModal from './objectives-modal.vue';
+import ObjectivesModal from './components/objectives-modal.vue';
 import { mapState } from 'vuex';
 
 export default {

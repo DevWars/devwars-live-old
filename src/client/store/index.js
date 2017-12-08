@@ -4,7 +4,6 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const state = {
-    viewers: 0,
     stage: 'pre-start',
     objectives: [],
     objectivesModalOpen: false,

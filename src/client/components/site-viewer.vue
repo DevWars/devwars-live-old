@@ -7,7 +7,7 @@
 
 
 <script>
-import eventBus from '../event-bus';
+import eventBus from '../services/event-bus';
 
 export default {
     props: ['team', 'url'],

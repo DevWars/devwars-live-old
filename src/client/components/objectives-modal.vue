@@ -36,7 +36,7 @@
 
 
 <script>
-import socket from '../socket';
+import socket from '../services/socket';
 import { mapState, mapGetters } from 'vuex';
 
 export default {

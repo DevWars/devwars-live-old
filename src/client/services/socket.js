@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import eventBus from './event-bus';
-import store from './store';
+import store from '../store';
 
 const socket = io();
 
