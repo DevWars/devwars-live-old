@@ -1,6 +1,6 @@
 <template>
 <header class="app-header">
-    <div class="app-header__game-state" @click="showObjectivesModal">
+    <div class="app-header__game-state" @click="openObjectivesModal">
         <div class="app-header__score app-header__score--blue">{{ blueScore }} xxx</div>
         <div class="app-header__timer">00:00</div>
         <div class="app-header__score app-header__score--red">xxx {{ redScore }}</div>
@@ -24,9 +24,9 @@ export default {
     ),
 
     methods: {
-        showObjectivesModal() {
-            this.$store.commit('SHOW_OBJECTIVES_MODAL');
+        openObjectivesModal() {
+            this.$store.commit('OPEN_MODAL', { modal: 'OBJECTIVES_MODAL' });
         }
-    }
+    },
 };
 </script>

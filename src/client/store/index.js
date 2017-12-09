@@ -6,7 +6,7 @@ Vue.use(Vuex);
 const state = {
     stage: 'pre-start',
     objectives: [],
-    objectivesModalOpen: false,
+    currentModal: null,
 };
 
 const getters = {
@@ -30,12 +30,12 @@ const mutations = {
         state.objectives = objectives;
     },
 
-    'SHOW_OBJECTIVES_MODAL': (state) => {
-        state.objectivesModalOpen = true;
+    'OPEN_MODAL': (state, { modal }) => {
+        state.currentModal = modal;
     },
 
-    'HIDE_OBJECTIVES_MODAL': (state) => {
-        state.objectivesModalOpen = false;
+    'CLOSE_MODAL': (state) => {
+        state.currentModal = null;
     },
 };
 

@@ -1,7 +1,7 @@
 <template>
 <div class="app">
     <router-view class="view"></router-view>
-    <objectives-modal v-if="objectivesModalOpen"></objectives-modal>
+    <component :is="currentModal"></component>
 </div>
 </template>
 
@@ -11,10 +11,10 @@ import ObjectivesModal from './components/objectives-modal.vue';
 import { mapState } from 'vuex';
 
 export default {
-    computed: mapState(['objectivesModalOpen']),
+    computed: mapState(['currentModal']),
 
     components: {
-        ObjectivesModal,
+        'OBJECTIVES_MODAL': ObjectivesModal,
     },
 };
 </script>
