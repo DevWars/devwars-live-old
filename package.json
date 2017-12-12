@@ -16,6 +16,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.34",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.34",
+    "@babel/polyfill": "^7.0.0-beta.34",
     "@babel/preset-env": "^7.0.0-beta.34",
     "babel-loader": "^8.0.0-beta.0",
     "concurrently": "^3.5.0",
@@ -38,5 +39,11 @@
   "dependencies": {
     "express": "^4.15.4",
     "socket.io": "^2.0.3"
-  }
+  },
+  "browserslist": [
+    "chrome >= 61",
+    "edge >= 16",
+    "firefox >= 56",
+    "safari >= 11"
+  ]
 }
