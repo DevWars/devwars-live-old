@@ -89,6 +89,9 @@ export default {
 
     beforeDestroy() {
         this.socket.disconnect();
+        if (this.editor) {
+            this.editor.dispose();
+        }
     },
 
     methods: {
