@@ -3,6 +3,7 @@
     display: flex;
     flex: 1;
     flex-flow: column nowrap;
+    overflow: hidden;
 
     background-color: $bg-color;
 
@@ -17,6 +18,8 @@
         margin-right: auto;
         font-size: 1.125rem;
         line-height: 2.25rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &__language {
@@ -49,7 +52,7 @@
     }
 
     &--collapsed {
-        flex: 0 1;
+        flex: 0 0 2.25rem;
 
         .editor__header {
             flex-flow: column;
@@ -67,11 +70,14 @@
         }
 
         .editor__language {
-            width: 4rem;
-            height: 4rem;
+            z-index: 1;
+            width: 3.5rem;
+            height: 3.5rem;
             text-align: right;
-            transform: rotate(-90deg) translate(0, -100%);
             line-height: 2.25rem;
+            background-color: $bg-color;
+
+            transform: rotate(-90deg) translate(0, -100%);
             transform-origin: top right;
         }
 
