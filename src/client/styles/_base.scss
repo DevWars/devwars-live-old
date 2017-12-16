@@ -2,27 +2,30 @@
     box-sizing: inherit;
 }
 
+html {
+    font-size: $unit;
+}
+
 body {
     margin: 0;
     box-sizing: border-box;
     overflow: hidden;
 
-    font-family: $text-font;
-    font-size: 16px;
+    font-family: $base-font;
     line-height: 1.5;
 
-    color: $text-color;
+    color: $base-color;
     background-color: $bg-color;
 }
 
 button {
     padding: 0.25rem 0.5rem;
-    border: 2px solid $outline-color;
+    border: $border;
 
-    font-family: $text-font;
+    font-family: $base-font;
     font-size: 0.875rem;
 
-    color: $text-color;
+    color: $base-color;
     background-color: $bg-color;
 
     &:focus {
@@ -31,11 +34,11 @@ button {
 
     &:hover {
         cursor: pointer;
-        border-color: $text-color;
+        border-color: $base-color;
     }
 
     &:active {
         color: $bg-color;
-        background: $text-color;
+        background: $base-color;
     }
 }

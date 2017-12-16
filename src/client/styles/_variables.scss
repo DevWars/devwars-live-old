@@ -1,8 +1,12 @@
-$bg-color: #0b0c11;
-$outline-color: #303745;
+$unit: 16px;
 
-$text-color: #fff;
-$text-font: 'Roboto', sans-serif;
+$bg-color: #0b0c11;
+
+$border-color: #303745;
+$border: 2px solid $border-color;
+
+$base-color: #fff;
+$base-font: 'Roboto', sans-serif;
 
 $blue-team-color: #00c9ff;
 $red-team-color: #ff007d;

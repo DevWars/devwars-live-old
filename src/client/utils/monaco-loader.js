@@ -3,8 +3,7 @@ const COMMENT = '546178';
 const BLUE = '00c9ff';
 const RED = 'ff007d';
 
-// NOTE: This is required from the live-editor component.
-export default {
+const devwarsTheme = {
     base: 'vs-dark',
     inherit: false,
     rules: [
@@ -53,3 +52,27 @@ export default {
         'editorIndentGuide.background': `#${COMMENT}80`,
     },
 };
+
+let isLoading = false;
+const callbackQueue = [];
+
+export default function monacoLoader(callback) {
+    if (window.monaco) {
+        callback(window.monaco);
+    } else if (window.require) {
+        callbackQueue.push(callback);
+
+        if (!isLoading) {
+            isLoading = true;
+            window.require.config({ paths: { 'vs': '/vendor/vs' }});
+            window.require(['vs/editor/editor.main'], () => {
+                isLoading = false;
+                window.monaco.editor.defineTheme('devwars', devwarsTheme);
+                callbackQueue.forEach(cb => cb(window.monaco));
+            });
+        }
+    } else {
+        console.error('Could not load Monaco editor because \'window.require\' is missing!');
+        callback();
+    }
+}

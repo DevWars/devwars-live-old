@@ -12,3 +12,4 @@ node_modules/
 public/vendor/*
 !public/vendor/.gitkeep
 public/app.js
+public/styles.css

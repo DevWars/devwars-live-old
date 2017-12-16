@@ -1,7 +1,5 @@
-const webpack = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const commonConfig = require('./webpack.common');
 
 const extractScss = new ExtractTextPlugin('styles.css');
@@ -15,10 +13,7 @@ module.exports = merge(commonConfig, {
                 options: { loaders: {
                     scss: extractScss.extract({
                         fallback: 'vue-style-loader',
-                        use: [
-                            { loader: 'css-loader', options: { minimize: true } },
-                            'sass-loader',
-                        ],
+                        use: ['css-loader', 'sass-loader'],
                     }),
                 }},
             },
@@ -26,9 +21,5 @@ module.exports = merge(commonConfig, {
     },
     plugins: [
         extractScss,
-        new UglifyJsPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production'),
-        }),
     ],
 });
