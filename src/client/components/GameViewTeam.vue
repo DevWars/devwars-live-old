@@ -1,6 +1,8 @@
 <template>
     <div class="game-view-team">
         <GameViewTeamMenu
+            :team="team"
+            :viewSite="viewSite"
             :expanded="expanded"
             @onViewCode="viewSite = false"
             @onViewSite="viewSite = true"
