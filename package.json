@@ -27,7 +27,6 @@
     "node-sass": "^4.5.3",
     "onchange": "^3.2.1",
     "sass-loader": "^6.0.6",
-    "style-loader": "^0.19.1",
     "uglifyjs-webpack-plugin": "^1.1.4",
     "vue": "^2.5.11",
     "vue-loader": "^13.6.0",
