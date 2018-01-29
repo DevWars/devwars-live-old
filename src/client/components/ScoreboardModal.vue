@@ -17,14 +17,14 @@
             <div class="title">Objectives</div>
             <ul class="list">
                 <li v-for="(objective, index) in objectives" class="item">
-                    <div class="score-pins blue" @click="cycleObjectiveScore('blue', index)">
-                        <div :class="`pin ${objective.blue > 0 ? 'marked' : ''}`"></div>
-                        <div :class="`pin ${objective.blue > 1 ? 'marked' : ''}`"></div>
+                    <div class="score-pins blue">
+                        <div :class="`pin ${objective.blueStatus === 'complete' ? 'marked' : ''}`"></div>
+                        <div :class="`pin ${objective.blueStatus === 'complete' ? 'marked' : ''}`"></div>
                     </div>
                     <div class="description">{{ objective.description }}</div>
-                    <div class="score-pins red" @click="cycleObjectiveScore('red', index)">
-                        <div :class="`pin ${objective.red > 0 ? 'marked' : ''}`"></div>
-                        <div :class="`pin ${objective.red > 1 ? 'marked' : ''}`"></div>
+                    <div class="score-pins red">
+                        <div :class="`pin ${objective.redStatus === 'complete' ? 'marked' : ''}`"></div>
+                        <div :class="`pin ${objective.redStatus === 'complete' ? 'marked' : ''}`"></div>
                     </div>
                 </li>
             </ul>
@@ -41,12 +41,6 @@ export default {
     computed: {
         ...mapState(['objectives']),
         ...mapGetters(['blueScore', 'redScore']),
-    },
-
-    methods: {
-        cycleObjectiveScore(team, index) {
-            socket.emit('cycle-objective-score', { team, index });
-        },
     },
 };
 </script>

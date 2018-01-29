@@ -3,20 +3,24 @@
         <div class="panel editor">
             <AppHeader/>
             <EditorPlayer
-                :team="team"
-                :language="language"
+                v-if="playerEditor"
+                :key="playerEditor.namespace"
+                :namespace="playerEditor.namespace"
+                :team="playerEditor.team"
+                :language="playerEditor.language"
                 :editable="true"
             />
         </div>
         <div class="panel team">
             <WebViewer :team="team"/>
-            <EditorGroup :team="team" :editors="teamEditors"/>
+            <EditorGroup :editors="teamEditors"/>
         </div>
     </div>
 </template>
 
 
 <script>
+import { mapState } from 'vuex';
 import AppHeader from '../AppHeader';
 import EditorGroup from '../EditorGroup';
 import EditorPlayer from '../EditorPlayer';
@@ -33,9 +37,17 @@ export default {
     props: ['team', 'language'],
 
     computed: {
+        ...mapState(['editors']),
+
+        playerEditor() {
+            return this.editors.find((editor) => {
+                return (editor.team === this.team && editor.language === this.language);
+            });
+        },
+
         teamEditors() {
-            return ['html', 'css', 'javascript'].filter((lang) => {
-                return lang !== this.language;
+            return this.editors.filter((editor) => {
+                return (editor.team === this.team && editor.language !== this.language);
             });
         },
     },

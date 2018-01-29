@@ -4,17 +4,17 @@
 
 
 <script>
-import eventBus from "../services/event-bus";
+import eventBus from "../services/eventBus";
 
 export default {
     props: ['team'],
 
     mounted() {
-        eventBus.on('reload', this.onReload);
+        eventBus.on('reload-site', this.onReload);
     },
 
     beforeDestroy() {
-        eventBus.removeListener('reload', this.onReload);
+        eventBus.removeListener('reload-site', this.onReload);
     },
 
     methods: {

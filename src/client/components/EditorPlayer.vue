@@ -1,14 +1,14 @@
 <template>
     <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
-            <div class="username">{{ owner ? (hasControl ? 'You' : owner) : 'Username' }}</div>
+            <div class="username">{{ curUser ? (hasControl ? 'You' : curUser.username) : 'Username' }}</div>
             <div @click="toggleCollapse" class="language">{{ languageTitle }}</div>
         </div>
         <div ref="mount" class="monaco-mount"></div>
         <div v-if="editable" class="controls">
             <button v-if="hasControl" @click="release" class="button">Release</button>
             <button v-if="hasControl" @click="save" class="button">Save</button>
-            <button v-else @click="possess" class="button">Possess</button>
+            <button v-else @click="control" class="button">Control</button>
         </div>
     </div>
 </template>
@@ -16,26 +16,19 @@
 
 <script>
 import io from 'socket.io-client';
-import TextOperation from '../../shared/text-operation';
-import preventReactivity from '../utils/prevent-reactivity';
-import monacoLoader from '../utils/monaco-loader';
-
-const NAMESPACES = {
-    blue_html: '/1',
-    blue_css: '/2',
-    blue_javascript: '/3',
-    red_html: '/4',
-    red_css: '/5',
-    red_javascript: '/6',
-};
+import { mapState } from 'vuex';
+import TextOperation from '../../shared/TextOperation';
+import monacoLoader from '../utils/monacoLoader';
+import { preventReactivity } from '../utils/utils';
 
 export default {
-    props: ['team', 'language', 'editable', 'collapsible'],
+    props: ['namespace', 'team', 'language', 'editable', 'collapsible'],
 
     data() {
         return {
-            owner: '',
             socketId: '',
+
+            curUser: null,
             inSync: false,
             ignoreChanges: false,
 
@@ -47,12 +40,10 @@ export default {
     },
 
     computed: {
-        namespace() {
-            return NAMESPACES[`${this.team}_${this.language}`];
-        },
+        ...mapState(['user']),
 
         hasControl() {
-            return this.editable && this.socketId && this.socketId === this.owner;
+            return this.curUser && this.socketId === this.curUser.socketId;
         },
 
         readOnly() {
@@ -67,7 +58,7 @@ export default {
     watch: {
         hasControl() {
             this.inSync = false;
-            this.socket.emit('state');
+            this.socket.emit('init');
         },
 
         readOnly() {
@@ -129,7 +120,7 @@ export default {
 
             socket.on('connect', () => {
                 this.socketId = socket.id;
-                socket.emit('state');
+                socket.emit('init');
             });
 
             socket.on('disconnect', () => {
@@ -139,15 +130,15 @@ export default {
             socket.on('state', (state) => {
                 this.ignoreChanges = true;
 
-                this.owner = state.activeUser;
-                this.editor.model.setValue(state.content);
+                this.curUser = state.curUser;
+                this.editor.model.setValue(state.text);
 
                 this.inSync = true;
                 this.ignoreChanges = false;
             });
 
-            socket.on('user', (user) => {
-                this.owner = user;
+            socket.on('cur-user', (user) => {
+                this.curUser = user;
             });
 
             socket.on('op', (op) => {
@@ -175,8 +166,8 @@ export default {
             }
         },
 
-        possess() {
-            this.socket.emit('possess');
+        control() {
+            this.socket.emit('control');
         },
 
         release() {

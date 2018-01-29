@@ -1,10 +1,11 @@
 <template>
     <div class="editor-group">
         <EditorPlayer
-            v-for="language in editors"
-            :key="language"
-            :team="team"
-            :language="language"
+            v-for="editor in editors"
+            :key="editor.namespace"
+            :namespace="editor.namespace"
+            :team="editor.team"
+            :language="editor.language"
             :collapsible="true"
         />
     </div>
@@ -16,7 +17,7 @@ import EditorPlayer from "./EditorPlayer";
 
 export default {
     components: { EditorPlayer },
-    props: ['team', 'editors'],
+    props: ['editors'],
 };
 </script>
 

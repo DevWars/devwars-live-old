@@ -8,15 +8,17 @@
             @onViewSite="viewSite = true"
             @onToggleExpanded="$emit('toggleExpanded')"
         />
-        <EditorGroup :team="team" :editors="editors" :class="`editor-group ${viewSite ? 'hidden' : ''}`"/>
+        <EditorGroup :editors="teamEditors" :class="`editor-group ${viewSite ? 'hidden' : ''}`"/>
         <WebViewer v-if="viewSite" :team="team"/>
     </div>
 </template>
 
 
 <script>
+import { mapState } from 'vuex';
 import GameViewTeamMenu from "./GameViewTeamMenu";
 import EditorGroup from "./EditorGroup";
+import EditorPlayer from "./EditorPlayer";
 import WebViewer from "./WebViewer";
 
 export default {
@@ -26,10 +28,18 @@ export default {
         WebViewer,
     },
 
-    props: ['team', 'editors', 'expanded'],
+    props: ['team', 'expanded'],
 
     data() {
         return { viewSite: false };
+    },
+
+    computed: {
+        ...mapState(['editors']),
+
+        teamEditors() {
+            return this.editors.filter(e => e.team === this.team);
+        },
     },
 };
 </script>
