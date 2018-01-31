@@ -4,12 +4,20 @@
             <div class="score blue">{{ blueScore }}</div>
             <div class="strikes blue">
                 <div class="title">Strikes</div>
-                <div class="strike-marks">X X X</div>
+                <div class="marks">
+                    <div class="mark" :class="blueStrikes > 0 ? 'marked' : ''">X</div>
+                    <div class="mark" :class="blueStrikes > 1 ? 'marked' : ''">X</div>
+                    <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
+                </div>
             </div>
             <div class="timer">00:00</div>
             <div class="strikes red">
                 <div class="title">Strikes</div>
-                <div class="strike-marks">X X X</div>
+                <div class="marks">
+                    <div class="mark" :class="redStrikes > 2 ? 'marked' : ''">X</div>
+                    <div class="mark" :class="redStrikes > 1 ? 'marked' : ''">X</div>
+                    <div class="mark" :class="redStrikes > 0 ? 'marked' : ''">X</div>
+                </div>
             </div>
             <div class="score red">{{ redScore }}</div>
         </div>
@@ -17,15 +25,9 @@
             <div class="title">Objectives</div>
             <ul class="list">
                 <li v-for="(objective, index) in objectives" class="item">
-                    <div class="score-pins blue">
-                        <div :class="`pin ${objective.blueStatus === 'complete' ? 'marked' : ''}`"></div>
-                        <div :class="`pin ${objective.blueStatus === 'complete' ? 'marked' : ''}`"></div>
-                    </div>
+                    <CheckIcon class="checkmark blue" :class="objective.blueStatus"/>
                     <div class="description">{{ objective.description }}</div>
-                    <div class="score-pins red">
-                        <div :class="`pin ${objective.redStatus === 'complete' ? 'marked' : ''}`"></div>
-                        <div :class="`pin ${objective.redStatus === 'complete' ? 'marked' : ''}`"></div>
-                    </div>
+                    <CheckIcon class="checkmark red" :class="objective.redStatus"/>
                 </li>
             </ul>
         </div>
@@ -35,12 +37,23 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import CheckIcon from 'vue-material-design-icons/check';
+import CloseIcon from 'vue-material-design-icons/close';
 import socket from "../services/socket";
 
 export default {
+    components: { CheckIcon, CloseIcon },
     computed: {
         ...mapState(['objectives']),
         ...mapGetters(['blueScore', 'redScore']),
+
+        blueStrikes() {
+            return this.$store.state.game.blueStrikes;
+        },
+
+        redStrikes() {
+            return this.$store.state.game.redStrikes;
+        },
     },
 };
 </script>
@@ -63,13 +76,14 @@ export default {
 
 .scoreboard-modal .score-header {
     display: flex;
-    margin-bottom: 3.5rem;
+    margin: auto;
+    margin-bottom: 3rem;
     justify-content: center;
     white-space: nowrap;
     line-height: 1;
 
     .timer {
-        margin: 0 3rem;
+        margin: 0 auto;
         font-size: 3.5rem;
         font-weight: 300;
     }
@@ -80,7 +94,7 @@ export default {
 
     .strikes {
         margin: 0 1.5rem;
-        margin-top: 10px;
+        margin-top: 5px;
 
         &.red {
             .title {
@@ -89,23 +103,38 @@ export default {
         }
 
         .title {
-            font-size: .875rem;
+            font-size: 0.875rem;
             text-transform: uppercase;
-            line-height: 1;
+            line-height: 1.2;
         }
 
-        .strike-marks {
-            font-size: 1.75rem;
-            font-weight: 300;
+        .marks {
+            display: flex;
+
+            .mark {
+                font-size: 2rem;
+                font-weight: 300;
+                display: block;
+                opacity: 0.25;
+
+                &:not(:first-child):not(:last-child) {
+                    margin: 0 0.5rem;
+                }
+
+                &.marked {
+                    opacity: 1;
+                }
+            }
         }
     }
 }
 
 .scoreboard-modal .objectives {
+    margin: auto;
     max-width: 36rem;
 
     .title {
-        margin: 1.75rem 0;
+        margin-bottom: 1.75rem;
         text-align: center;
         text-transform: uppercase;
         font-size: 1.75rem;
@@ -113,47 +142,50 @@ export default {
     }
 
     .list {
+        margin: 0;
         padding: 0;
         list-style: none;
     }
 
     .item {
         display: flex;
-        margin: 1.75rem 0;
+        margin-top: 1.5rem;
         align-items: center;
 
         .description {
             margin: 0 1.5rem;
             flex: 1;
             text-align: center;
+            word-break: break-word;
         }
 
-        .score-pins {
-            display: flex;
-            padding: 0 8px;
-            cursor: pointer;
-            transform: skew(-12deg);
+        .checkmark {
+            opacity: 0.25;
 
-            &.blue .pin {
-                background-color: $blue-team-color;
+            &.blue {
+                fill: $blue-team-color;
             }
 
-            &.red .pin {
-                background-color: $red-team-color;
+            &.red {
+                fill: $red-team-color;
             }
 
-            .pin {
-                width: 3px;
-                height: 1.25rem;
-                opacity: 0.25;
-
-                &:first-child {
-                    margin-right: 5px;
+            &.pending {
+                @keyframes blink {
+                    from { opacity: 0.25 }
+                    to { opacity: 1 }
                 }
 
-                &.marked {
-                    opacity: 1;
-                }
+                animation: blink 750ms infinite alternate ease-in-out;
+            }
+
+            &.complete {
+                opacity: 1;
+            }
+
+            /deep/ svg {
+                width: 1.75rem;
+                height: 1.75rem;
             }
         }
     }
