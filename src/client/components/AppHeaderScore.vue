@@ -1,8 +1,18 @@
 <template>
     <div class="app-header-score" @click="openScoreModal">
-        <div class="score blue">{{ blueScore }} xxx</div>
+        <div class="score blue">{{ blueScore }}</div>
+        <div class="strikes blue">
+            <div class="mark" :class="blueStrikes > 0 ? 'marked' : ''">X</div>
+            <div class="mark" :class="blueStrikes > 1? 'marked' : ''">X</div>
+            <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
+        </div>
         <div class="timer">00:00</div>
-        <div class="score red">xxx {{ redScore }}</div>
+        <div class="strikes red">
+            <div class="mark" :class="redStrikes > 2 ? 'marked' : ''">X</div>
+            <div class="mark" :class="redStrikes > 1 ? 'marked' : ''">X</div>
+            <div class="mark" :class="redStrikes > 0 ? 'marked' : ''">X</div>
+        </div>
+        <div class="score red">{{ redScore }}</div>
     </div>
 </template>
 
@@ -11,7 +21,17 @@
 import { mapGetters } from "vuex";
 
 export default {
-    computed: mapGetters(['blueScore', 'redScore']),
+    computed: {
+        ...mapGetters(['blueScore', 'redScore']),
+
+        blueStrikes() {
+            return this.$store.state.game.blueStrikes;
+        },
+
+        redStrikes() {
+            return this.$store.state.game.redStrikes;
+        },
+    },
 
     methods: {
         openScoreModal() {
@@ -38,9 +58,13 @@ export default {
         font-size: 2.75rem;
     }
 
-    .score {
+    .team {
         margin: 0 2rem;
-        font-size: 2.25rem;
+    }
+
+    .score {
+        margin: 0 0.5rem;
+        font-size: 2.75rem;
 
         &.blue {
             color: $blue-team-color;
@@ -48,6 +72,33 @@ export default {
 
         &.red {
             color: $red-team-color;
+        }
+    }
+
+    .strikes {
+        display: flex;
+        font-size: 1.75rem;
+
+        &.blue {
+            margin-right: 2rem;
+            color: $blue-team-color;
+        }
+
+        &.red {
+            margin-left: 2rem;
+            color: $red-team-color;
+        }
+
+        .mark {
+            opacity: 0.25;
+
+            &:not(:first-child):not(:last-child) {
+                margin: 0 0.3rem;
+            }
+
+            &.marked {
+                opacity: 1;
+            }
         }
     }
 }
