@@ -23,6 +23,7 @@
     "copy-webpack-plugin": "^4.3.0",
     "css-loader": "^0.28.5",
     "extract-text-webpack-plugin": "^3.0.2",
+    "lodash-es": "^4.17.4",
     "monaco-editor": "^0.10.0",
     "node-sass": "^4.5.3",
     "onchange": "^3.2.1",

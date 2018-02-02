@@ -9,7 +9,7 @@
             @onToggleExpanded="$emit('toggleExpanded')"
         />
         <EditorGroup :editors="teamEditors" :class="`editor-group ${viewSite ? 'hidden' : ''}`"/>
-        <WebViewer v-if="viewSite" :team="team"/>
+        <WebViewer v-if="viewSite" :team="team" :delay="5000"/>
     </div>
 </template>
 
