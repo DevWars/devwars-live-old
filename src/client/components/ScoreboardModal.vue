@@ -38,11 +38,10 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import CheckIcon from 'vue-material-design-icons/check';
-import CloseIcon from 'vue-material-design-icons/close';
 import socket from "../services/socket";
 
 export default {
-    components: { CheckIcon, CloseIcon },
+    components: { CheckIcon },
     computed: {
         ...mapState(['objectives']),
         ...mapGetters(['blueScore', 'redScore']),
