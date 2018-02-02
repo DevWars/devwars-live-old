@@ -155,7 +155,7 @@ export default {
             margin: 0 1.5rem;
             flex: 1;
             text-align: center;
-            word-break: break-word;
+            word-break: break-all;
         }
 
         .checkmark {
