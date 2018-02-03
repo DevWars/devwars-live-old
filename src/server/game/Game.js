@@ -112,6 +112,7 @@ class Game {
     onSocketConnection(socket) {
         socket.on('init', this.onSocketInit.bind(this, socket));
         socket.on('auth', this.onSocketAuth.bind(this, socket));
+        socket.on('notify-objective-complete', this.onSocketNotifyObjectiveComplete.bind(this, socket));
     }
 
     onSocketInit(socket) {
@@ -137,6 +138,41 @@ class Game {
 
         socket.client.user = user;
         callback(user);
+    }
+
+    onSocketNotifyObjectiveComplete(socket, { team, id }) {
+        if (!this.isUserOnTeam(socket, team)) {
+            return;
+        }
+
+        const objective = this.objectives[id];
+        if (!objective) {
+            return;
+        }
+
+        this.firebase.database().ref(`liveGame/objectives/${id}`).transaction((objective) => {
+            if (!objective) {
+                return;
+            }
+
+            const key = `${team}Status`;
+            if (objective[key] === 'incomplete') {
+                objective[key] = 'pending';
+            }
+
+            return objective;
+        });
+    }
+
+    isUserOnTeam(socket, team) {
+        const { user } = socket.client;
+        if (!user) {
+            return;
+        }
+
+        return this.players.some((player) => {
+            return (player.id === user.id && player.team === team);
+        });
     }
 }
 

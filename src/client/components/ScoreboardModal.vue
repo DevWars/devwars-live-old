@@ -25,9 +25,17 @@
             <div class="title">Objectives</div>
             <ul class="list">
                 <li v-for="(objective, index) in objectives" class="item">
-                    <CheckIcon class="checkmark blue" :class="objective.blueStatus"/>
+                    <CheckIcon
+                        class="checkmark blue"
+                        :class="objective.blueStatus"
+                        @click.native="togglePending('blue', index)"
+                    />
                     <div class="description">{{ objective.description }}</div>
-                    <CheckIcon class="checkmark red" :class="objective.redStatus"/>
+                    <CheckIcon
+                        class="checkmark red"
+                        :class="objective.redStatus"
+                        @click.native="togglePending('red', index)"
+                    />
                 </li>
             </ul>
         </div>
@@ -42,9 +50,10 @@ import socket from "../services/socket";
 
 export default {
     components: { CheckIcon },
+
     computed: {
         ...mapState(['objectives']),
-        ...mapGetters(['blueScore', 'redScore']),
+        ...mapGetters(['userTeam', 'blueScore', 'redScore']),
 
         blueStrikes() {
             return this.$store.state.game.blueStrikes;
@@ -52,6 +61,14 @@ export default {
 
         redStrikes() {
             return this.$store.state.game.redStrikes;
+        },
+    },
+
+    methods: {
+        togglePending(team, id) {
+            if (this.userTeam === team) {
+                socket.emit('notify-objective-complete', { team, id });
+            }
         },
     },
 };
@@ -160,6 +177,7 @@ export default {
 
         .checkmark {
             opacity: 0.25;
+            cursor: pointer;
 
             &.blue {
                 fill: $blue-team-color;
@@ -171,8 +189,8 @@ export default {
 
             &.pending {
                 @keyframes blink {
-                    from { opacity: 0.25 }
-                    to { opacity: 1 }
+                    from { opacity: 1 }
+                    to { opacity: 0.25 }
                 }
 
                 animation: blink 750ms infinite alternate ease-in-out;

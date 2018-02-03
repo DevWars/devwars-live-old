@@ -30,6 +30,21 @@ const state = {
 };
 
 const getters = {
+    userTeam: ({ user, players }) => {
+        if (!user) {
+            return null;
+        }
+
+        for (const player of players) {
+            if (player.id === user.id) {
+                return player.team;
+            }
+        }
+
+        const player = players.find(p => p.id === user.id);
+        return player ? player.team : null;
+    },
+
     blueScore: (state) => {
         return state.objectives.reduce((score, objective) => {
             return objective.blueStatus === 'complete' ? score + 1 : score;
