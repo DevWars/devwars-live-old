@@ -10,7 +10,7 @@
     "build": "npm run build:client",
     "build:client": "webpack --config webpack.prod.js",
     "watch": "concurrently -kr \"npm run watch:client\" \"npm run watch:server\"",
-    "watch:client": "webpack -w --config webpack.dev.js",
+    "watch:client": "webpack -w --config webpack.base.js",
     "watch:server": "onchange -i \"src/server/**/*\" -- node src/server/index.js"
   },
   "devDependencies": {
