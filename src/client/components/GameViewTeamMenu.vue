@@ -4,12 +4,12 @@
             <CodeTagsIcon class="icon"/>
         </button>
         <button @click="$emit('onViewSite')" :class="`button ${viewSite ? '' : 'fade'}`">
-            <ApplicationIcon class="icon"/>
+            <ApplicationIcon/>
         </button>
         <div class="fill"></div>
         <button @click="$emit('onToggleExpanded')" class="button">
-            <ArrowCollapseIcon v-if="expanded" class="icon"/>
-            <ArrowExpandIcon v-else class="icon"/>
+            <ArrowCollapseIcon v-if="expanded"/>
+            <ArrowExpandIcon v-else/>
         </button>
     </div>
 </template>
@@ -41,20 +41,21 @@ export default {
     display: flex;
     flex-flow: column nowrap;
 
-    &.blue .icon {
-        fill: $blue-team-color;
+    &.blue .material-design-icon {
+        color: $blue-team-color;
     }
 
-    &.red .icon {
-        fill: $red-team-color;
+    &.red .material-design-icon {
+        color: $red-team-color;
     }
 
     .button {
         width: 3rem;
         height: 3rem;
         border: none;
+        font-size: 1.375rem;
 
-        &.fade .icon {
+        &.fade .material-design-icon {
             opacity: .25;
         }
     }

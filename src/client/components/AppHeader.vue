@@ -53,10 +53,12 @@ export default {
 
     .connection-icon {
         display: flex;
-        padding: 1rem;
+        margin: 0 1rem;
         justify-content: center;
         align-items: center;
-        fill: #ff2b2b;
+
+        font-size: 1.375rem;
+        color: #ff2b2b;
 
         animation: blink 750ms infinite alternate ease-in-out;
     }

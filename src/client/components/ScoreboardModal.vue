@@ -179,6 +179,7 @@ export default {
         .checkmark {
             opacity: 0.25;
             cursor: pointer;
+            font-size: 1.75rem;
 
             user-select: none;
 
@@ -196,11 +197,6 @@ export default {
 
             &.complete {
                 opacity: 1;
-            }
-
-            /deep/ svg {
-                width: 1.75rem;
-                height: 1.75rem;
             }
         }
     }

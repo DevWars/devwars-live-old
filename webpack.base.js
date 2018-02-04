@@ -2,6 +2,8 @@ const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const extractStyles = new ExtractTextPlugin('styles.css');
+
 module.exports = {
     entry: './src/client/index.js',
     output: {
@@ -11,6 +13,12 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.css$/,
+                use: extractStyles.extract({
+                    use: 'css-loader',
+                }),
+            },
+            {
                 test: /\.js$/,
                 use: 'babel-loader',
                 exclude: /node_modules/,
@@ -19,7 +27,7 @@ module.exports = {
                 test: /\.vue$/,
                 loader: 'vue-loader',
                 options: {
-                    extractCSS: true,
+                    extractCSS: extractStyles,
                 },
             },
         ],
@@ -28,7 +36,7 @@ module.exports = {
         extensions: ['.vue', '.js', '.json'],
     },
     plugins: [
-        new ExtractTextPlugin('styles.css'),
+        extractStyles,
         new CopyWebpackPlugin([{
             from: 'node_modules/monaco-editor/min/vs',
             to: 'vendor/vs',

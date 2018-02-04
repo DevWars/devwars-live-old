@@ -16,6 +16,7 @@ export default {
 
 
 <style lang="scss">
+@import './styles/material-design-icons';
 @import './styles/variables';
 @import './styles/animations';
 @import './styles/base';
