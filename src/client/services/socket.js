@@ -9,6 +9,7 @@ const socket = io({
 });
 
 socket.on('connect', () => {
+    store.commit('SOCKET_CONNECT');
     socket.emit('init');
 
     const token = getCookieValue('token');
@@ -19,6 +20,10 @@ socket.on('connect', () => {
             }
         });
     }
+});
+
+socket.on('disconnect', () => {
+    store.commit('SOCKET_DISCONNECT');
 });
 
 socket.on('state', (state) => {

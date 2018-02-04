@@ -6,6 +6,7 @@ Vue.use(Vuex);
 const state = {
     user: null,
     currentModal: null,
+    connected: false,
 
     game: {
         id: 0,
@@ -59,6 +60,14 @@ const getters = {
 };
 
 const mutations = {
+    'SOCKET_CONNECT': (state) => {
+        state.connected = true;
+    },
+
+    'SOCKET_DISCONNECT': (state) => {
+        state.connected = false;
+    },
+
     'RECEIVE_GAMESTATE': (state, gameState) => {
         state.game = gameState;
     },
