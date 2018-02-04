@@ -96,6 +96,7 @@ export default {
     margin-bottom: 3rem;
     justify-content: center;
     white-space: nowrap;
+    user-select: none;
     line-height: 1;
 
     .timer {
@@ -178,6 +179,8 @@ export default {
         .checkmark {
             opacity: 0.25;
             cursor: pointer;
+
+            user-select: none;
 
             &.blue {
                 fill: $blue-team-color;

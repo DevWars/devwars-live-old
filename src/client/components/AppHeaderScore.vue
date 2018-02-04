@@ -50,6 +50,7 @@ export default {
     align-items: baseline;
     white-space: nowrap;
     cursor: pointer;
+    user-select: none;
 
     line-height: 1;
     font-weight: 300;

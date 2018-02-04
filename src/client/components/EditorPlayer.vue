@@ -279,6 +279,7 @@ export default {
         margin-left: auto;
         text-transform: uppercase;
         cursor: pointer;
+        user-select: none;
     }
 
     .username {
