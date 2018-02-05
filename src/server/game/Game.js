@@ -113,6 +113,7 @@ class Game {
         socket.on('init', this.onSocketInit.bind(this, socket));
         socket.on('auth', this.onSocketAuth.bind(this, socket));
         socket.on('notify-objective-complete', this.onSocketNotifyObjectiveComplete.bind(this, socket));
+        socket.on('set-objective-status', this.onSocketSetObjectiveStatus.bind(this, socket));
     }
 
     onSocketInit(socket) {
@@ -164,10 +165,39 @@ class Game {
         });
     }
 
+    onSocketSetObjectiveStatus(socket, { team, id, status }) {
+        if (!this.isUserModerator(socket)) {
+            return;
+        }
+
+        const objective = this.objectives[id];
+        if (!objective) {
+            return;
+        }
+
+        this.firebase.database().ref(`liveGame/objectives/${id}`).transaction((objective) => {
+            if (!objective) {
+                return;
+            }
+
+            objective[`${team}Status`] = status;
+            return objective;
+        });
+    }
+
+    isUserModerator(socket) {
+        const { user } = socket.client;
+        if (!user) {
+            return false;
+        }
+
+        return (user.role === 'ADMIN' || user.role === 'MODERATOR');
+    }
+
     isUserOnTeam(socket, team) {
         const { user } = socket.client;
         if (!user) {
-            return;
+            return false;
         }
 
         return this.players.some((player) => {

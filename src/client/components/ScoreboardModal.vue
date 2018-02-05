@@ -30,7 +30,7 @@
                         :class="objective.blueStatus"
                         @click.native="togglePending('blue', index)"
                     />
-                    <div class="description">{{ objective.description }}</div>
+                    <div class="description" :class="objective.isBonus ? 'bonus' : ''">{{ objective.description }}</div>
                     <CheckIcon
                         class="checkmark red"
                         :class="objective.redStatus"

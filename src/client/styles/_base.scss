@@ -18,27 +18,30 @@ body {
     background-color: $bg-color;
 }
 
+select,
 button {
-    padding: 0.25rem 0.5rem;
-    border: $border;
-
     font-family: $base-font;
     font-size: 0.875rem;
+    border: 2px solid $border-color;
 
     color: $base-color;
     background-color: $bg-color;
 
-    &:focus {
-        outline: none;
-    }
-
     &:hover {
-        cursor: pointer;
         border-color: $base-color;
     }
 
+    &:focus {
+        outline: none;
+    }
+}
+
+button {
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+
     &:active {
         color: $bg-color;
-        background: $base-color;
+        background-color: $base-color;
     }
 }

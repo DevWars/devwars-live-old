@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import WatchPage from '../components/pages/WatchPage';
+import BroadcastPage from '../components/pages/BroadcastPage';
 import PlayPage from '../components/pages/PlayPage';
+import WatchPage from '../components/pages/WatchPage';
 
 Vue.use(VueRouter);
 
@@ -21,5 +22,9 @@ export default new VueRouter({
             path: '/play/:team(blue|red)/js',
             redirect: '/play/:team/javascript',
         },
+        {
+            path: '/broadcast',
+            component: BroadcastPage,
+        }
     ],
 });
