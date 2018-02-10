@@ -10,7 +10,7 @@
                     <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
                 </div>
             </div>
-            <div class="timer">00:00</div>
+            <CountdownTimer :end="endTime"/>
             <div class="strikes red">
                 <div class="title">Strikes</div>
                 <div class="marks">
@@ -47,13 +47,18 @@
 import { mapState, mapGetters } from "vuex";
 import CheckIcon from 'vue-material-design-icons/check';
 import socket from "../services/socket";
+import CountdownTimer from './CountdownTimer';
 
 export default {
-    components: { CheckIcon },
+    components: { CountdownTimer, CheckIcon },
 
     computed: {
         ...mapState(['objectives']),
         ...mapGetters(['userTeam', 'blueScore', 'redScore']),
+
+        endTime() {
+            return this.$store.state.game.endTime;
+        },
 
         blueStrikes() {
             return this.$store.state.game.blueStrikes;
@@ -99,7 +104,7 @@ export default {
     user-select: none;
     line-height: 1;
 
-    .timer {
+    .countdown-timer {
         margin: 0 auto;
         font-size: 3.5rem;
         font-weight: 300;
@@ -154,7 +159,7 @@ export default {
         margin-bottom: 1.75rem;
         text-align: center;
         text-transform: uppercase;
-        font-size: 1.75rem;
+        font-size: 2rem;
         font-weight: 300;
     }
 

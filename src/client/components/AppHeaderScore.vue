@@ -6,7 +6,10 @@
             <div class="mark" :class="blueStrikes > 1? 'marked' : ''">X</div>
             <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
         </div>
-        <div class="timer">00:00</div>
+
+        <CountdownTimer v-if="stage === 'running'" :end="endTime"/>
+        <div v-else class="title">{{ title }}</div>
+
         <div class="strikes red">
             <div class="mark" :class="redStrikes > 2 ? 'marked' : ''">X</div>
             <div class="mark" :class="redStrikes > 1 ? 'marked' : ''">X</div>
@@ -19,10 +22,32 @@
 
 <script>
 import { mapGetters } from "vuex";
+import CountdownTimer from './CountdownTimer';
 
 export default {
+    components: { CountdownTimer },
+
     computed: {
         ...mapGetters(['blueScore', 'redScore']),
+
+        stage() {
+            return this.$store.state.game.stage;
+        },
+
+        endTime() {
+            return this.$store.state.game.endTime;
+        },
+
+        title() {
+            switch (this.stage) {
+            case 'setup':
+                return 'STARTING...';
+            case 'ended':
+                return 'GAME OVER';
+            default:
+                return '...';
+            }
+        },
 
         blueStrikes() {
             return this.$store.state.game.blueStrikes;
@@ -55,8 +80,12 @@ export default {
     line-height: 1;
     font-weight: 300;
 
-    .timer {
+    .countdown-timer {
         font-size: 2.75rem;
+    }
+
+    .title {
+        font-size: 2.5rem;
     }
 
     .team {
