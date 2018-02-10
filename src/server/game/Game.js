@@ -13,6 +13,7 @@ class Game {
             id: 0,
             stage: 'setup',
             startTime: 0,
+            endTime: 0,
             blueStrikes: 0,
             redStrikes: 0,
         };
@@ -113,6 +114,9 @@ class Game {
         socket.on('init', this.onSocketInit.bind(this, socket));
         socket.on('auth', this.onSocketAuth.bind(this, socket));
         socket.on('notify-objective-complete', this.onSocketNotifyObjectiveComplete.bind(this, socket));
+
+        socket.on('start-game', this.onSocketStartGame.bind(this, socket));
+        socket.on('end-game', this.onSocketEndGame.bind(this, socket));
         socket.on('set-objective-status', this.onSocketSetObjectiveStatus.bind(this, socket));
     }
 
@@ -162,6 +166,30 @@ class Game {
             }
 
             return objective;
+        });
+    }
+
+    onSocketStartGame(socket) {
+        if (!this.isUserModerator(socket)) {
+            return;
+        }
+
+        const startTime = Date.now();
+        this.firebase.database().ref('liveGame/state').update({
+            stage: 'running',
+            startTime,
+            endTime: startTime + (1000 * 60 * 60),
+        });
+    }
+
+    onSocketEndGame(socket) {
+        if (!this.isUserModerator(socket)) {
+            return;
+        }
+
+        this.firebase.database().ref('liveGame/state').update({
+            stage: 'ended',
+            endTime: Date.now(),
         });
     }
 

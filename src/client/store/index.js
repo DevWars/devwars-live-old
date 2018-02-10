@@ -12,6 +12,7 @@ const state = {
         id: 0,
         stage: 'setup',
         startTime: 0,
+        endTime: 0,
         blueStrikes: 0,
         redStrikes: 0,
     },
