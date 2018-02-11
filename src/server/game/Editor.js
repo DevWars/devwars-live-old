@@ -63,10 +63,20 @@ class Editor extends EventEmitter {
 
     onSocketControl(socket) {
         if (this.userIsOwner(socket)) {
+            // Prevent users from taking control from moderators and admins.
+            if (
+                this.curUser &&
+                socket.client.user.role === 'USER' &&
+                (this.curUser.role === 'MODERATOR' || this.curUser.role === 'ADMIN')
+            ) {
+                return;
+            }
+
             this.curUser = {
                 ...socket.client.user,
                 socketId: socket.id,
             };
+
             this.ioNsp.emit('cur-user', this.curUser);
         }
     }
