@@ -1,4 +1,5 @@
 const { EventEmitter } = require('events');
+const firebase = require('../services/firebase');
 const EditorDocument = require('./EditorDocument');
 const TextOperation = require('../../shared/TextOperation');
 
@@ -8,6 +9,7 @@ class Editor extends EventEmitter {
         this.io = io;
         this.ioNsp = this.io.of(`/${id}`);
 
+        this.id = id;
         this.document = new EditorDocument();
 
         this.team = opt.team;
@@ -16,8 +18,18 @@ class Editor extends EventEmitter {
 
         this.ownerId = null;
         this.curUser = null;
+        this.locked = false;
+
+        firebase.database().ref(`liveGame/editors/${id}/locked`).on('value', (locked) => {
+            this.onFirebaseLocked(locked.val());
+        });
 
         this.ioNsp.on('connection', this.onSocketConnection.bind(this));
+    }
+
+    onFirebaseLocked(locked) {
+        this.locked = locked;
+        this.ioNsp.emit('locked', locked);
     }
 
     onSocketConnection(socket) {
@@ -42,6 +54,7 @@ class Editor extends EventEmitter {
             team: this.team,
             language: this.team,
             filename: this.team,
+            locked: this.locked,
 
             curUser: this.curUser,
             text: this.document.getText(),
@@ -73,7 +86,7 @@ class Editor extends EventEmitter {
     }
 
     onSocketOp(socket, op) {
-        if (this.userIsCurUser(socket)) {
+        if (!this.locked && this.userIsCurUser(socket)) {
             this.document.applyOperation(TextOperation.fromObject(op));
             this.ioNsp.emit('op', op);
         }
@@ -108,6 +121,10 @@ class Editor extends EventEmitter {
             this.curUser = null;
             this.ioNsp.emit('cur-user', null);
         }
+    }
+
+    setLocked(locked) {
+        firebase.database().ref(`liveGame/editors/${this.id}/locked`).set(locked);
     }
 
     dispose() {

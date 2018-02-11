@@ -7,8 +7,9 @@
         <div ref="mount" class="monaco-mount"></div>
         <div v-if="editable" class="controls">
             <button v-if="hasControl" @click="release" class="button">Release</button>
-            <button v-if="hasControl" @click="save" class="button">Save</button>
             <button v-else @click="control" class="button">Control</button>
+            <button v-if="hasControl && !readOnly" @click="save" class="button">Save</button>
+            <span v-if="locked">Locked</span>
         </div>
     </div>
 </template>
@@ -29,6 +30,7 @@ export default {
             socketId: '',
 
             curUser: null,
+            locked: false,
             inSync: false,
             ignoreChanges: false,
 
@@ -47,7 +49,7 @@ export default {
         },
 
         readOnly() {
-            return !this.hasControl || !this.inSync;
+            return !this.hasControl || !this.inSync || this.locked;
         },
 
         languageTitle() {
@@ -59,6 +61,13 @@ export default {
         hasControl() {
             this.inSync = false;
             this.socket.emit('init');
+        },
+
+        locked() {
+            if (this.hasControl) {
+                this.inSync = false;
+                this.socket.emit('init');
+            }
         },
 
         readOnly() {
@@ -131,6 +140,8 @@ export default {
                 this.ignoreChanges = true;
 
                 this.curUser = state.curUser;
+                this.locked = state.locked;
+
                 this.editor.model.setValue(state.text);
 
                 this.inSync = true;
@@ -141,8 +152,12 @@ export default {
                 this.curUser = user;
             });
 
+            socket.on('locked', (locked) => {
+                this.locked = locked;
+            });
+
             socket.on('op', (op) => {
-                if (this.readOnly) {
+                if (this.readOnly && !this.hasControl) {
                     const edit = TextOperation.fromObject(op).toMonacoEdit();
                     this.editor.model.applyEdits([edit]);
                 }
@@ -150,7 +165,7 @@ export default {
         },
 
         onChange(contentChange) {
-            if (this.ignoreChanges || !this.hasControl) {
+            if (this.ignoreChanges || !this.hasControl || this.locked) {
                 return;
             }
 

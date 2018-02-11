@@ -181,6 +181,8 @@ class Game {
             startTime,
             endTime: startTime + (1000 * 60 * 60),
         });
+
+        this.editors.forEach(editor => editor.setLocked(false));
     }
 
     onSocketEndGame(socket) {
@@ -192,6 +194,8 @@ class Game {
             stage: 'ended',
             endTime: Date.now(),
         });
+
+        this.editors.forEach(editor => editor.setLocked(true));
     }
 
     onSocketSetObjectiveStatus(socket, { team, id, status }) {
@@ -220,7 +224,7 @@ class Game {
         }
 
         this.firebase.database().ref(`liveGame/state/${team}Strikes`).transaction((strikes) => {
-            if (strikes === undefined) {
+            if (strikes === null) {
                 return;
             }
 
