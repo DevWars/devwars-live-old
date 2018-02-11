@@ -118,6 +118,7 @@ class Game {
         socket.on('start-game', this.onSocketStartGame.bind(this, socket));
         socket.on('end-game', this.onSocketEndGame.bind(this, socket));
         socket.on('set-objective-status', this.onSocketSetObjectiveStatus.bind(this, socket));
+        socket.on('add-strike', this.onSocketAddStrike.bind(this, socket));
     }
 
     onSocketInit(socket) {
@@ -210,6 +211,20 @@ class Game {
 
             objective[`${team}Status`] = status;
             return objective;
+        });
+    }
+
+    onSocketAddStrike(socket, team) {
+        if (!this.isUserModerator(socket)) {
+            return;
+        }
+
+        this.firebase.database().ref(`liveGame/state/${team}Strikes`).transaction((strikes) => {
+            if (strikes === undefined) {
+                return;
+            }
+
+            return strikes < 3 ? strikes + 1 : 0;
         });
     }
 

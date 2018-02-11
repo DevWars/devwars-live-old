@@ -1,24 +1,35 @@
 <template>
     <div class="admin-controls">
-        <div class="game-controls">
-            <button @click="onStartGame">Start Game</button>
-            <button @click="onEndGame">End Game</button>
+        <div class="controls">
+            <div class="row">
+                <button @click="onStartGame">Start Game</button>
+                <button @click="onEndGame">End Game</button>
+            </div>
         </div>
-        <div v-for="(objective, id) in objectives" class="objective-controls">
-            <select
-                v-for="team in ['blue', 'red']"
-                :class="`${team} ${objective[`${team}Status`]}`"
-                :value="objective[`${team}Status`]"
-                @input="onObjectiveStatusChange($event, team, id)"
-            >
-                <option value="incomplete">Incomplete</option>
-                <option value="pending">Pending</option>
-                <option value="complete">Complete</option>
-            </select>
-            <h2>{{ id + 1 }}</h2>
+        <div class="controls">
+            <div v-for="(objective, id) in objectives" class="row">
+                <select
+                    v-for="team in ['blue', 'red']"
+                    :class="`${team} ${objective[`${team}Status`]}`"
+                    :value="objective[`${team}Status`]"
+                    @input="onObjectiveStatusChange($event, team, id)"
+                >
+                    <option value="incomplete">Incomplete</option>
+                    <option value="pending">Pending</option>
+                    <option value="complete">Complete</option>
+                </select>
+                <h2>{{ id + 1 }}</h2>
+            </div>
+        </div>
+        <div class="controls">
+            <div class="row">
+                <button class="blue" @click="onAddStrike('blue')">Strike Blue</button>
+                <button class="red" @click="onAddStrike('red')">Strike Red</button>
+            </div>
         </div>
     </div>
 </template>
+
 
 <script>
 import { mapState } from 'vuex';
@@ -42,8 +53,12 @@ export default {
 
             // Resets the selected value and wait for the backend to update it instead.
             this.$forceUpdate();
-        }
-    }
+        },
+
+        onAddStrike(team) {
+            socket.emit('add-strike', team);
+        },
+    },
 };
 </script>
 
@@ -54,28 +69,28 @@ export default {
     padding: 1rem 0.5rem;
     width: 24rem;
 
-    .game-controls {
-        display: flex;
-        margin-bottom: 1rem;
+    .controls {
+        margin-bottom: 2rem;
 
-        button {
-            margin: 0 0.5rem;
+        .row {
+            display: flex;
+            flex-flow: row nowrap;
+            align-items: center;
+
+            &:not(:last-child) {
+                margin-bottom: 1rem;
+            }
         }
-    }
-
-    .objective-controls {
-        display: flex;
-        margin-bottom: 1rem;
-        flex-flow: row nowrap;
-        align-items: center;
 
         h2 {
             margin: 0 0.5rem;
+            line-height: 1;
         }
 
+        button,
         select {
             margin: 0 0.5rem;
-            width: 5.5rem;
+            width: 6rem;
             height: 1.75rem;
 
             -moz-appearance: none;
