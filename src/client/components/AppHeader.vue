@@ -58,7 +58,7 @@ export default {
         align-items: center;
 
         font-size: 1.375rem;
-        color: #ff2b2b;
+        color: $warrning-color;
 
         animation: blink 750ms infinite alternate ease-in-out;
     }

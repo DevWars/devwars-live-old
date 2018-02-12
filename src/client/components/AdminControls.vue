@@ -10,15 +10,15 @@
             <div v-for="(objective, id) in objectives" class="row">
                 <select
                     v-for="team in ['blue', 'red']"
-                    :class="`${team} ${objective[`${team}Status`]}`"
-                    :value="objective[`${team}Status`]"
-                    @input="onObjectiveStatusChange($event, team, id)"
+                    :class="`${team} ${objective[`${team}State`]}`"
+                    :value="objective[`${team}State`]"
+                    @input="onObjectiveStateChange($event, team, id)"
                 >
                     <option value="incomplete">Incomplete</option>
                     <option value="pending">Pending</option>
                     <option value="complete">Complete</option>
                 </select>
-                <h2>{{ id + 1 }}</h2>
+                <h2 :class="objective.isBonus ? 'bonus' : ''">{{ id + 1 }}</h2>
             </div>
         </div>
         <div class="controls">
@@ -47,9 +47,9 @@ export default {
             socket.emit('end-game');
         },
 
-        onObjectiveStatusChange(event, team, id) {
-            const status = event.target.value;
-            socket.emit('set-objective-status', { team, id, status });
+        onObjectiveStateChange(event, team, id) {
+            const state = event.target.value;
+            socket.emit('set-objective-state', { team, id, state });
 
             // Resets the selected value and wait for the backend to update it instead.
             this.$forceUpdate();
@@ -65,6 +65,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/variables';
+
 .admin-controls {
     padding: 1rem 0.5rem;
     width: 24rem;
@@ -85,6 +86,11 @@ export default {
         h2 {
             margin: 0 0.5rem;
             line-height: 1;
+            font-weight: 400;
+
+            &.bonus {
+                color: $bonus-color;
+            }
         }
 
         button,

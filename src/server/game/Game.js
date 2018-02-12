@@ -136,9 +136,9 @@ class Game {
             this.onSocketEndGame(socket);
         });
 
-        socket.on('set-objective-status', (payload) => {
-            if (socketValidator.validateSetObjectiveStatus(payload)) {
-                this.onSocketSetObjectiveStatus(socket, payload);
+        socket.on('set-objective-state', (payload) => {
+            if (socketValidator.validateSetObjectiveState(payload)) {
+                this.onSocketSetObjectiveState(socket, payload);
             }
         });
 
@@ -189,7 +189,7 @@ class Game {
                 return;
             }
 
-            const key = `${team}Status`;
+            const key = `${team}State`;
             if (objective[key] === 'incomplete') {
                 objective[key] = 'pending';
             }
@@ -226,7 +226,7 @@ class Game {
         this.editors.forEach(editor => editor.setLocked(true));
     }
 
-    onSocketSetObjectiveStatus(socket, { team, id, status }) {
+    onSocketSetObjectiveState(socket, { team, id, state }) {
         if (!this.isUserModerator(socket)) {
             return;
         }
@@ -241,7 +241,7 @@ class Game {
                 return;
             }
 
-            objective[`${team}Status`] = status;
+            objective[`${team}State`] = state;
             return objective;
         });
     }

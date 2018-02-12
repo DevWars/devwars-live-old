@@ -22,7 +22,7 @@ module.exports = {
         required: ['team', 'id'],
     }),
 
-    validateSetObjectiveStatus: ajv.compile({
+    validateSetObjectiveState: ajv.compile({
         type: 'object',
         properties: {
             team: {
@@ -33,12 +33,12 @@ module.exports = {
                 type: 'number',
                 minimum: 0,
             },
-            status: {
+            state: {
                 type: 'string',
                 pattern: '^(incomplete|pending|complete)$',
             },
         },
-        required: ['team', 'id', 'status'],
+        required: ['team', 'id', 'state'],
     }),
 
     validateAddStrike: ajv.compile({

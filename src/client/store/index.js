@@ -49,13 +49,21 @@ const getters = {
 
     blueScore: (state) => {
         return state.objectives.reduce((score, objective) => {
-            return objective.blueStatus === 'complete' ? score + 1 : score;
+            if (objective.blueState === 'complete') {
+                score += objective.isBonus ? 2 : 1;
+            }
+
+            return score;
         }, 0);
     },
 
     redScore: (state) => {
         return state.objectives.reduce((score, objective) => {
-            return objective.redStatus === 'complete' ? score + 1 : score;
+            if (objective.redState === 'complete') {
+                score += objective.isBonus ? 2 : 1;
+            }
+
+            return score;
         }, 0);
     },
 };

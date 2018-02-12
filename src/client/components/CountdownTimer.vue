@@ -63,9 +63,11 @@ export default {
 
 
 <style lang="scss" scoped>
+@import '../styles/variables';
+
 .countdown-timer {
     .warn {
-        color: #ff2b2b;
+        color: $warrning-color;
     }
 }
 </style>

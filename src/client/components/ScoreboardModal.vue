@@ -27,13 +27,13 @@
                 <li v-for="(objective, index) in objectives" class="item">
                     <CheckIcon
                         class="checkmark blue"
-                        :class="objective.blueStatus"
+                        :class="objective.blueState"
                         @click.native="togglePending('blue', index)"
                     />
                     <div class="description" :class="objective.isBonus ? 'bonus' : ''">{{ objective.description }}</div>
                     <CheckIcon
                         class="checkmark red"
-                        :class="objective.redStatus"
+                        :class="objective.redState"
                         @click.native="togglePending('red', index)"
                     />
                 </li>
@@ -179,6 +179,10 @@ export default {
             flex: 1;
             text-align: center;
             word-break: break-all;
+
+            &.bonus {
+                color: $bonus-color;
+            }
         }
 
         .checkmark {
