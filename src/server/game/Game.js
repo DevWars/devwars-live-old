@@ -2,6 +2,7 @@ const config = require('config');
 const { Router } = require('express');
 const devwars = require('../services/devwars');
 const firebase = require('../services/firebase');
+const socketValidator = require('../validation/socketValidator');
 const Editor = require('./Editor');
 
 class Game {
@@ -111,14 +112,41 @@ class Game {
     }
 
     onSocketConnection(socket) {
-        socket.on('init', this.onSocketInit.bind(this, socket));
-        socket.on('auth', this.onSocketAuth.bind(this, socket));
-        socket.on('notify-objective-complete', this.onSocketNotifyObjectiveComplete.bind(this, socket));
+        socket.on('init', () => {
+            this.onSocketInit(socket);
+        });
 
-        socket.on('start-game', this.onSocketStartGame.bind(this, socket));
-        socket.on('end-game', this.onSocketEndGame.bind(this, socket));
-        socket.on('set-objective-status', this.onSocketSetObjectiveStatus.bind(this, socket));
-        socket.on('add-strike', this.onSocketAddStrike.bind(this, socket));
+        socket.on('auth', (payload, callback) => {
+            if (socketValidator.validateAuth(payload)) {
+                this.onSocketAuth(socket, payload, callback);
+            }
+        });
+
+        socket.on('notify-objective-complete', (payload) => {
+            if (socketValidator.validateNotifyObjectiveComplete(payload)) {
+                this.onSocketNotifyObjectiveComplete(socket, payload);
+            }
+        });
+
+        socket.on('start-game', () => {
+            this.onSocketStartGame(socket);
+        });
+
+        socket.on('end-game', () => {
+            this.onSocketEndGame(socket);
+        });
+
+        socket.on('set-objective-status', (payload) => {
+            if (socketValidator.validateSetObjectiveStatus(payload)) {
+                this.onSocketSetObjectiveStatus(socket, payload);
+            }
+        });
+
+        socket.on('add-strike', (payload) => {
+            if (socketValidator.validateAddStrike(payload)) {
+                this.onSocketAddStrike(socket, payload);
+            }
+        });
     }
 
     onSocketInit(socket) {

@@ -1,6 +1,7 @@
 const { EventEmitter } = require('events');
 const throttle = require('lodash/throttle');
 const firebase = require('../services/firebase');
+const socketValidator = require('../validation/socketValidator');
 const EditorDocument = require('./EditorDocument');
 const TextOperation = require('../../shared/TextOperation');
 
@@ -46,12 +47,31 @@ class Editor extends EventEmitter {
     }
 
     onSocketConnection(socket) {
-        socket.on('disconnect', this.onSocketDisconnect.bind(this, socket));
-        socket.on('init', this.onSocketInit.bind(this, socket));
-        socket.on('control', this.onSocketControl.bind(this, socket));
-        socket.on('release', this.onSocketRelease.bind(this, socket));
-        socket.on('save', this.onSocketSave.bind(this, socket));
-        socket.on('op', this.onSocketOp.bind(this, socket));
+        socket.on('disconnect', () => {
+            this.onSocketDisconnect(socket);
+        });
+
+        socket.on('init', () => {
+            this.onSocketInit(socket);
+        });
+
+        socket.on('control', () => {
+            this.onSocketControl(socket);
+        });
+
+        socket.on('release', () => {
+            this.onSocketRelease(socket);
+        });
+
+        socket.on('save', () => {
+            this.onSocketSave(socket);
+        });
+
+        socket.on('op', (payload) => {
+            if (socketValidator.validateOp(payload)) {
+                this.onSocketOp(socket, payload);
+            }
+        });
     }
 
     onSocketDisconnect(socket) {
