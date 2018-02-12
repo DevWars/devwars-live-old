@@ -139,25 +139,19 @@ class Editor extends EventEmitter {
 
     userIsOwner(socket) {
         const { user } = socket.client;
-        if (user) {
-            if (
-                user.role === 'ADMIN' ||
-                user.role === 'MODERATOR' ||
-                user.id === this.ownerId
-            ) {
-                return true;
-            }
+        if (!user) {
+            return false;
         }
 
-        return false;
-    }
-
-    userIsCurUser(socket) {
-        if (this.curUser && this.curUser.socketId === socket.id) {
+        if (user.role === 'ADMIN' || user.role === 'MODERATOR') {
             return true;
         }
 
-        return false;
+        return user.id === this.ownerId;
+    }
+
+    userIsCurUser(socket) {
+        return this.curUser && this.curUser.socketId === socket.id;
     }
 
     setOwner(user) {

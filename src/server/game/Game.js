@@ -122,9 +122,9 @@ class Game {
             }
         });
 
-        socket.on('notify-objective-complete', (payload) => {
-            if (socketValidator.validateNotifyObjectiveComplete(payload)) {
-                this.onSocketNotifyObjectiveComplete(socket, payload);
+        socket.on('objective-notify', (payload) => {
+            if (socketValidator.validateObjectiveNotify(payload)) {
+                this.onSocketObjectiveNotify(socket, payload);
             }
         });
 
@@ -155,15 +155,6 @@ class Game {
         socket.emit('players', this.players);
     }
 
-    assignPlayersToEditors() {
-        for (const player of this.players) {
-            const editor = this.editors[player.editorId];
-            if (editor && editor.ownerId !== player.id) {
-                editor.setOwner(player);
-            }
-        }
-    }
-
     async onSocketAuth(socket, token, callback) {
         const user = await devwars.authenticate(token);
         if (!user) {
@@ -174,7 +165,7 @@ class Game {
         callback(user);
     }
 
-    onSocketNotifyObjectiveComplete(socket, { team, id }) {
+    onSocketObjectiveNotify(socket, { team, id }) {
         if (!this.isUserOnTeam(socket, team)) {
             return;
         }
@@ -258,6 +249,15 @@ class Game {
 
             return strikes < 3 ? strikes + 1 : 0;
         });
+    }
+
+    assignPlayersToEditors() {
+        for (const player of this.players) {
+            const editor = this.editors[player.editorId];
+            if (editor && editor.ownerId !== player.id) {
+                editor.setOwner(player);
+            }
+        }
     }
 
     isUserModerator(socket) {

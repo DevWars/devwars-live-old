@@ -7,7 +7,7 @@ module.exports = {
         type: 'string',
     }),
 
-    validateNotifyObjectiveComplete: ajv.compile({
+    validateObjectiveNotify: ajv.compile({
         type: 'object',
         properties: {
             team: {

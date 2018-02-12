@@ -72,7 +72,7 @@ export default {
     methods: {
         togglePending(team, id) {
             if (this.userTeam === team) {
-                socket.emit('notify-objective-complete', { team, id });
+                socket.emit('objective-notify', { team, id });
             }
         },
     },
