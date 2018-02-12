@@ -1,7 +1,7 @@
 <template>
     <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
-            <div class="username">{{ curUser ? (hasControl ? 'You' : curUser.username) : 'Username' }}</div>
+            <div class="username">{{ curUser ? (hasControl ? 'You' : curUser.username) : '' }}</div>
             <div @click="toggleCollapse" class="language">{{ languageTitle }}</div>
         </div>
         <div ref="mount" class="monaco-mount"></div>
