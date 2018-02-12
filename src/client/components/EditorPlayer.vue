@@ -148,6 +148,15 @@ export default {
                 this.ignoreChanges = false;
             });
 
+            socket.on('text', (text) => {
+                this.ignoreChanges = true;
+
+                this.editor.model.setValue(text);
+
+                this.inSync = true;
+                this.ignoreChanges = false;
+            });
+
             socket.on('cur-user', (user) => {
                 this.curUser = user;
             });

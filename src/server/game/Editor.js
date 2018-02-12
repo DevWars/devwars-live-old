@@ -1,4 +1,5 @@
 const { EventEmitter } = require('events');
+const throttle = require('lodash/throttle');
 const firebase = require('../services/firebase');
 const EditorDocument = require('./EditorDocument');
 const TextOperation = require('../../shared/TextOperation');
@@ -20,8 +21,20 @@ class Editor extends EventEmitter {
         this.curUser = null;
         this.locked = false;
 
-        firebase.database().ref(`liveGame/editors/${id}/locked`).on('value', (locked) => {
-            this.onFirebaseLocked(locked.val());
+        this.saveToFirebase = throttle(this.saveToFirebase, 1000 * 60);
+
+        firebase.database().ref(`liveGame/editors/${id}/text`).once('value', (snap) => {
+            const text = snap.val();
+            if (typeof text === 'string') {
+                this.document.setText(text);
+                this.document.save();
+
+                this.ioNsp.emit('text', this.document.getText());
+            }
+        });
+
+        firebase.database().ref(`liveGame/editors/${id}/locked`).on('value', (snap) => {
+            this.onFirebaseLocked(snap.val());
         });
 
         this.ioNsp.on('connection', this.onSocketConnection.bind(this));
@@ -92,6 +105,8 @@ class Editor extends EventEmitter {
         if (this.userIsCurUser(socket)) {
             this.document.save();
             this.emit('save');
+
+            this.saveToFirebase();
         }
     }
 
@@ -135,6 +150,11 @@ class Editor extends EventEmitter {
 
     setLocked(locked) {
         firebase.database().ref(`liveGame/editors/${this.id}/locked`).set(locked);
+    }
+
+    saveToFirebase() {
+        const text = this.document.getSavedText();
+        firebase.database().ref(`liveGame/editors/${this.id}/text`).set(text);
     }
 
     dispose() {

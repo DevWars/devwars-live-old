@@ -30,6 +30,11 @@ class EditorDocument {
         return this._bufferCache;
     }
 
+    setText(text) {
+        this.buffer = text.replace('\r\n', '\n').split('\n');
+        this._bufferCache = null;
+    }
+
     getSavedText() {
         return this.savedText;
     }
