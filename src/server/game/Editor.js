@@ -128,7 +128,7 @@ class Editor extends EventEmitter {
     }
 
     onSocketSave(socket) {
-        if (this.userIsCurUser(socket)) {
+        if (!this.locked && this.userIsCurUser(socket)) {
             this.document.save();
             this.emit('save');
 
