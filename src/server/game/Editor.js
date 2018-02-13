@@ -72,12 +72,18 @@ class Editor extends EventEmitter {
                 this.onSocketOp(socket, payload);
             }
         });
+
+        socket.on('sel', (payload) => {
+            if (socketValidator.validateSel(payload)) {
+                this.onSocketSel(socket, payload);
+            }
+        });
     }
 
     onSocketDisconnect(socket) {
         if (this.userIsCurUser(socket)) {
             this.curUser = null;
-            this.ioNsp.emit('curUser', this.curUser);
+            this.ioNsp.emit('cur-user', this.curUser);
         }
     }
 
@@ -134,6 +140,12 @@ class Editor extends EventEmitter {
         if (!this.locked && this.userIsCurUser(socket)) {
             this.document.applyOperation(TextOperation.fromObject(op));
             this.ioNsp.emit('op', op);
+        }
+    }
+
+    onSocketSel(socket, sel) {
+        if (this.userIsCurUser(socket)) {
+            this.ioNsp.emit('sel', sel);
         }
     }
 

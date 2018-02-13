@@ -42,7 +42,7 @@ class TextOperation {
     static fromObject(op) {
         const text = typeof op.t === 'string' ? op.t : '';
         const range = op.r;
-        if (range.length == 2) {
+        if (range.length === 2) {
             range.push(range[0], range[1]);
         }
 

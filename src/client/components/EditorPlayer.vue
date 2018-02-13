@@ -18,9 +18,10 @@
 <script>
 import io from 'socket.io-client';
 import { mapState } from 'vuex';
-import TextOperation from '../../shared/TextOperation';
 import monacoLoader from '../utils/monacoLoader';
 import { preventReactivity } from '../utils/utils';
+import EditorSelection from '../../shared/EditorSelection';
+import TextOperation from '../../shared/TextOperation';
 
 export default {
     props: ['namespace', 'team', 'language', 'editable', 'collapsible'],
@@ -34,6 +35,9 @@ export default {
             inSync: false,
             ignoreChanges: false,
 
+            decorations: [],
+
+            inFocus: false,
             isCollapsed: false,
 
             socket: null,
@@ -118,7 +122,12 @@ export default {
             });
 
             this.editor = preventReactivity(editor);
+
+            editor.onDidFocusEditor(() => this.inFocus = true);
+            editor.onDidBlurEditor(() => this.inFocus = false);
+
             editor.onDidChangeModelContent(this.onChange);
+            editor.onDidChangeCursorSelection(this.onChangeSelection);
 
             this.initSocket();
         },
@@ -171,6 +180,32 @@ export default {
                     this.editor.model.applyEdits([edit]);
                 }
             });
+
+            socket.on('sel', (sel) => {
+                if (this.hasControl) {
+                    return;
+                }
+
+                const editorSel = EditorSelection.fromObject(sel);
+                const ranges = editorSel.toMonacoRanges();
+
+                const newDecorations = [
+                    { range: ranges.cursor, options: { className: `cursor-${this.team}` } },
+                ];
+
+                if (editorSel.hasSelection()) {
+                    newDecorations.push(
+                        { range: ranges.selection, options: { className: `selection-${this.team}` } },
+                    );
+                }
+
+                this.decorations = this.editor.deltaDecorations(this.decorations, newDecorations);
+
+                if (!this.inFocus) {
+                    const pos = new monaco.Position(editorSel.cursorRow, editorSel.cursorCol);
+                    this.editor.revealPositionInCenterIfOutsideViewport(pos);
+                }
+            });
         },
 
         onChange(contentChange) {
@@ -182,6 +217,15 @@ export default {
                 const op = TextOperation.fromMonacoChange(change).toObject();
                 this.socket.emit('op', op);
             }
+        },
+
+        onChangeSelection(selectionChange) {
+            if (!this.hasControl) {
+                return;
+            }
+
+            const sel = EditorSelection.fromMonacoChange(selectionChange.selection);
+            this.socket.emit('sel', sel.toObject());
         },
 
         save() {
@@ -209,6 +253,8 @@ export default {
 
 
 <style lang="scss">
+@import '../styles/variables';
+
 // Global monaco overrides for styles that are not exposed through the API.
 .editor-player .monaco-editor {
     position: absolute;
@@ -231,6 +277,34 @@ export default {
         > .invisible.fade {
             transition: opacity 150ms linear !important;
         }
+    }
+
+    .cursor-blue:after,
+    .cursor-red:after {
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 100%;
+
+        animation: blink 1s steps(2, start) infinite;
+    }
+
+    .cursor-blue:after {
+        background-color: $blue-team-color;
+    }
+
+    .cursor-red:after {
+        background-color: $red-team-color;
+    }
+
+    .selection-blue, {
+        opacity: 0.15;
+        background-color: $blue-team-color;
+    }
+
+    .selection-red {
+        opacity: 0.15;
+        background-color: $red-team-color;
     }
 }
 </style>

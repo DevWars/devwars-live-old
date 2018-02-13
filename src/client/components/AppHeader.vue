@@ -60,7 +60,7 @@ export default {
         font-size: 1.375rem;
         color: $warrning-color;
 
-        animation: blink 750ms infinite alternate ease-in-out;
+        animation: pulse 750ms infinite alternate ease-in-out;
     }
 }
 </style>

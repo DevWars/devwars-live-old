@@ -201,7 +201,7 @@ export default {
             }
 
             &.pending {
-                animation: blink 750ms infinite alternate ease-in-out;
+                animation: pulse 750ms infinite alternate ease-in-out;
             }
 
             &.complete {

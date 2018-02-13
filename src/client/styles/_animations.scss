@@ -1,4 +1,8 @@
-@keyframes blink {
+@keyframes pulse {
     from { opacity: 1; }
     to { opacity: 0.25; }
+}
+
+@keyframes blink {
+    to { visibility: hidden; }
 }
