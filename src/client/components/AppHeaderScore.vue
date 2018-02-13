@@ -7,7 +7,7 @@
             <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
         </div>
 
-        <CountdownTimer v-if="stage === 'running'" :end="endTime"/>
+        <CountdownTimer v-if="stage === 'running'" :end="endTime" :warnTime="1000 * 60"/>
         <div v-else class="title">{{ title }}</div>
 
         <div class="strikes red">
@@ -39,14 +39,11 @@ export default {
         },
 
         title() {
-            switch (this.stage) {
-            case 'setup':
-                return 'STARTING...';
-            case 'ended':
+            if (this.stage === 'ended') {
                 return 'GAME OVER';
-            default:
-                return '...';
             }
+
+            return 'DEVWARS';
         },
 
         blueStrikes() {

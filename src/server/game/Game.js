@@ -128,6 +128,10 @@ class Game {
             }
         });
 
+        socket.on('reset-game', () => {
+            this.onSocketResetGame(socket);
+        });
+
         socket.on('start-game', () => {
             this.onSocketStartGame(socket);
         });
@@ -187,6 +191,23 @@ class Game {
 
             return objective;
         });
+    }
+
+    onSocketResetGame(socket) {
+        if (!this.isUserModerator(socket)) {
+            return;
+        }
+
+        this.firebase.database().ref('liveGame/state').update({
+            stage: 'setup',
+            startTime: 0,
+            endTime: 0,
+
+            blueStrikes: 0,
+            redStrikes: 0,
+        });
+
+        this.editors.forEach(editor => editor.setLocked(true));
     }
 
     onSocketStartGame(socket) {

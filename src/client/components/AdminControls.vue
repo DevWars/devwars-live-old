@@ -2,6 +2,7 @@
     <div class="admin-controls">
         <div class="controls">
             <div class="row">
+                <button @click="onResetGame">Reset Game</button>
                 <button @click="onStartGame">Start Game</button>
                 <button @click="onEndGame">End Game</button>
             </div>
@@ -39,6 +40,10 @@ export default {
     computed: mapState(['game', 'objectives']),
 
     methods: {
+        onResetGame() {
+            socket.emit('reset-game');
+        },
+
         onStartGame() {
             socket.emit('start-game');
         },

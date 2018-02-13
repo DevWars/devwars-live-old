@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    props: ['end'],
+    props: ['end', 'warnTime'],
 
     data() {
         return {
@@ -36,7 +36,9 @@ export default {
         },
 
         warn() {
-            return (this.end - this.now) < (1000 * 60);
+            if (typeof this.warnTime === 'number') {
+                return (this.end - this.now) < this.warnTime;
+            }
         },
     },
 
