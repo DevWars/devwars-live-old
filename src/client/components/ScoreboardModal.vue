@@ -25,15 +25,23 @@
             <div class="title">Objectives</div>
             <ul class="list">
                 <li v-for="(objective, index) in objectives" class="item">
+                    <LockOutlineIcon
+                        v-if="objective.isBonus && blueBonusLocked"
+                        :class="`lock blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                    />
                     <CheckIcon
-                        class="checkmark blue"
-                        :class="objective.blueState"
+                        v-else
+                        :class="`check blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
                         @click.native="togglePending('blue', index)"
                     />
                     <div class="description" :class="objective.isBonus ? 'bonus' : ''">{{ objective.description }}</div>
+                    <LockOutlineIcon
+                        v-if="objective.isBonus && redBonusLocked"
+                        :class="`lock red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                    />
                     <CheckIcon
-                        class="checkmark red"
-                        :class="objective.redState"
+                        v-else
+                        :class="`check red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
                         @click.native="togglePending('red', index)"
                     />
                 </li>
@@ -46,15 +54,22 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import CheckIcon from 'vue-material-design-icons/check';
+import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
 import socket from "../services/socket";
 import CountdownTimer from './CountdownTimer';
 
 export default {
-    components: { CountdownTimer, CheckIcon },
+    components: { CountdownTimer, CheckIcon, LockOutlineIcon },
 
     computed: {
         ...mapState(['objectives']),
-        ...mapGetters(['userTeam', 'blueScore', 'redScore']),
+        ...mapGetters([
+            'userTeam',
+            'blueScore',
+            'redScore',
+            'blueBonusLocked',
+            'redBonusLocked',
+        ]),
 
         endTime() {
             return this.$store.state.game.endTime;
@@ -185,19 +200,25 @@ export default {
             }
         }
 
-        .checkmark {
+        .material-design-icon {
             opacity: 0.25;
-            cursor: pointer;
             font-size: 1.75rem;
-
             user-select: none;
 
+            &.check {
+                cursor: pointer;
+            }
+
             &.blue {
-                fill: $blue-team-color;
+               color: $blue-team-color;
             }
 
             &.red {
-                fill: $red-team-color;
+                color: $red-team-color;
+            }
+
+            &.bonus {
+                color: $bonus-color !important;
             }
 
             &.pending {

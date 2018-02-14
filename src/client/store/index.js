@@ -66,6 +66,18 @@ const getters = {
             return score;
         }, 0);
     },
+
+    blueBonusLocked: (state) => {
+        return state.objectives.some((objective) => {
+            return !objective.isBonus && objective.blueState !== 'complete';
+        });
+    },
+
+    redBonusLocked: (state) => {
+        return state.objectives.some((objective) => {
+            return !objective.isBonus && objective.redState !== 'complete';
+        });
+    },
 };
 
 const mutations = {
