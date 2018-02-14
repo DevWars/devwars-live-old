@@ -3,6 +3,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 8000;
 const DEVWARS_URL = process.env.DEVWARS_URL;
 const FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL;
+const SOCKET_URL = process.env.SOCKET_URL || '';
 
 module.exports = {
     port: PORT,
@@ -15,6 +16,8 @@ module.exports = {
         serviceAccount: require('./serviceAccountKey.json'),
         databaseURL: FIREBASE_DATABASE_URL,
     },
+
+    socketUrl: SOCKET_URL,
 
     editors: [
         { team: 'blue', language: 'html', filename: 'index.html' },

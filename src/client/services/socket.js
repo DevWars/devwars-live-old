@@ -3,7 +3,8 @@ import eventBus from './eventBus';
 import store from '../store';
 import { getCookieValue } from '../utils/utils';
 
-const socket = io({
+const socketUrl = process.env.SOCKET_URL || undefined;
+const socket = io(socketUrl, {
     transports: ['websocket'],
     upgrade: false,
 });
