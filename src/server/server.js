@@ -2,6 +2,7 @@ const config = require('config');
 const path = require('path');
 const http = require('http');
 const express = require('express');
+const helmet = require('helmet');
 const socketIo = require('socket.io');
 
 const app = express();
@@ -16,6 +17,7 @@ function init() {
 
     const game = new Game(io);
 
+    app.use(helmet());
     app.use(express.static(path.resolve(__dirname, '../../public')));
     app.use(routes);
     app.use('/game', game.router);
