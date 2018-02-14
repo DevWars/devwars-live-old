@@ -139,7 +139,12 @@ export default {
         },
 
         initSocket() {
-            const socket = io(this.namespace, { transport: ['websocket'] });
+            const socketUrl = process.env.SOCKET_URL || '';
+            const socket = io(`${socketUrl}${this.namespace}`, {
+                transport: ['websocket'],
+                upgrade: false,
+            });
+
             this.socket = preventReactivity(socket);
 
             socket.on('connect', () => {
