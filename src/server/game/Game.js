@@ -57,24 +57,6 @@ class Game {
     _initRoutes() {
         this.router = new Router();
 
-        this.router.get('/state', (req, res) => {
-            res.send({
-                state: this.state,
-                objectives: this.objectives,
-                players: this.players,
-                editors: this.editors.map((editor) => {
-                    return {
-                        namespace: editor.ioNsp.name,
-                        team: editor.team,
-                        language: editor.language,
-                        filename: editor.filename,
-                        ownerId: editor.ownerId,
-                        curUser: editor.curUser,
-                    };
-                }),
-            });
-        });
-
         this.router.get('/:team(blue|red)', (req, res) => {
             res.redirect(`${req.params.team}/index.html`);
         });
