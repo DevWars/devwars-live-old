@@ -76,7 +76,10 @@ export default {
 
         readOnly() {
             if (this.editor) {
-                this.editor.updateOptions({ readOnly: this.readOnly });
+                this.editor.updateOptions({
+                    readOnly: this.readOnly,
+                    hideCursorInOverviewRuler: this.readOnly,
+                });
             }
         },
     },
@@ -103,6 +106,8 @@ export default {
                 readOnly: true,
                 automaticLayout: true, // TODO: Handle resize manually.
 
+                lineNumbers: !!this.editable,
+                hideCursorInOverviewRuler: true,
                 renderLineHighlight: 'none',
                 selectionHighlight: false,
                 occurrencesHighlight: false,
@@ -110,6 +115,7 @@ export default {
                 roundedSelection: false,
                 renderIndentGuides: false,
                 contextmenu: false,
+                dragAndDrop: false,
                 scrollbar: { useShadows: false },
                 minimap: { enabled: false },
             });
@@ -252,64 +258,6 @@ export default {
 </script>
 
 
-<style lang="scss">
-@import '../styles/variables';
-
-// Global monaco overrides for styles that are not exposed through the API.
-.editor-player .monaco-editor {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    .monaco-scrollable-element {
-        > .scrollbar > .slider {
-            background: rgba(#546178, 0.10) !important;
-
-            &:hover {
-                background: rgba(#546178, 0.20) !important;
-            }
-
-            &.active {
-                background: rgba(#546178, 0.5) !important;
-            }
-        }
-
-        > .invisible.fade {
-            transition: opacity 150ms linear !important;
-        }
-    }
-
-    .cursor-blue:after,
-    .cursor-red:after {
-        content: "";
-        position: absolute;
-        width: 2px;
-        height: 100%;
-
-        animation: blink 1s steps(2, start) infinite;
-    }
-
-    .cursor-blue:after {
-        background-color: $blue-team-color;
-    }
-
-    .cursor-red:after {
-        background-color: $red-team-color;
-    }
-
-    .selection-blue, {
-        opacity: 0.15;
-        background-color: $blue-team-color;
-    }
-
-    .selection-red {
-        opacity: 0.15;
-        background-color: $red-team-color;
-    }
-}
-</style>
-
-
 <style lang="scss" scoped>
 @import '../styles/variables';
 
@@ -394,6 +342,60 @@ export default {
         position: relative;
         flex: 1 1 100%;
         overflow: hidden;
+
+        /deep/ {
+            .monaco-editor {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            .monaco-scrollable-element {
+                > .scrollbar > .slider {
+                    background: rgba(#546178, 0.15) !important;
+
+                    &:hover {
+                        background: rgba(#546178, 0.25) !important;
+                    }
+
+                    &.active {
+                        background: rgba(#546178, 0.5) !important;
+                    }
+                }
+
+                > .invisible.fade {
+                    transition: opacity 150ms linear !important;
+                }
+            }
+
+            .cursor-blue:after,
+            .cursor-red:after {
+                content: "";
+                position: absolute;
+                width: 2px;
+                height: 100%;
+
+                animation: blink 1s steps(2, start) infinite;
+            }
+
+            .cursor-blue:after {
+                background-color: $blue-team-color;
+            }
+
+            .cursor-red:after {
+                background-color: $red-team-color;
+            }
+
+            .selection-blue, {
+                opacity: 0.15;
+                background-color: $blue-team-color;
+            }
+
+            .selection-red {
+                opacity: 0.15;
+                background-color: $red-team-color;
+            }
+        }
     }
 }
 </style>

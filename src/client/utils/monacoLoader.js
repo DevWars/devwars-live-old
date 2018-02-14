@@ -40,10 +40,10 @@ const devwarsTheme = {
         'editor.background': `#${BG}`,
 
         'editorCursor.foreground': '#ffffff',
-        'editor.lineHighlightBackground': `#${COMMENT}20`,
+        'editor.lineHighlightBackground': `#${COMMENT}26`,
 
-        'editor.selectionBackground': `#${COMMENT}33`,
-        'editor.inactiveSelectionBackground': `#${COMMENT}20`,
+        'editor.selectionBackground': `#${COMMENT}40`,
+        'editor.inactiveSelectionBackground': `#${COMMENT}26`,
 
         'editorLineNumber.foreground': `#${COMMENT}80`,
         'editorOverviewRuler.border': '#00000000',
