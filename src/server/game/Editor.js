@@ -22,7 +22,7 @@ class Editor extends EventEmitter {
         this.curUser = null;
         this.locked = false;
 
-        this.saveToFirebase = throttle(this.saveToFirebase, 1000 * 60);
+        this.saveToFirebase = throttle(this.saveToFirebase, 1000 * 30);
 
         firebase.database().ref(`liveGame/editors/${id}/text`).once('value', (snap) => {
             const text = snap.val();

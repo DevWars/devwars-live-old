@@ -18,6 +18,7 @@
                     <option value="incomplete">Incomplete</option>
                     <option value="pending">Pending</option>
                     <option value="complete">Complete</option>
+                    <option value="dropped">Dropped</option>
                 </select>
                 <h2 :class="objective.isBonus ? 'bonus' : ''">{{ id + 1 }}</h2>
             </div>

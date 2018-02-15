@@ -25,8 +25,12 @@
             <div class="title">Objectives</div>
             <ul class="list">
                 <li v-for="(objective, index) in objectives" class="item">
+                    <CloseIcon
+                        v-if="objective.blueState === 'dropped'"
+                        :class="`check blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                    />
                     <LockOutlineIcon
-                        v-if="objective.isBonus && blueBonusLocked"
+                        v-else-if="objective.isBonus && blueBonusLocked"
                         :class="`lock blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
                     />
                     <CheckIcon
@@ -35,8 +39,12 @@
                         @click.native="togglePending('blue', index)"
                     />
                     <div class="description" :class="objective.isBonus ? 'bonus' : ''">{{ objective.description }}</div>
+                    <CloseIcon
+                        v-if="objective.redState === 'dropped'"
+                        :class="`check red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                    />
                     <LockOutlineIcon
-                        v-if="objective.isBonus && redBonusLocked"
+                        v-else-if="objective.isBonus && redBonusLocked"
                         :class="`lock red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
                     />
                     <CheckIcon
@@ -54,12 +62,13 @@
 <script>
 import { mapState, mapGetters } from "vuex";
 import CheckIcon from 'vue-material-design-icons/check';
+import CloseIcon from 'vue-material-design-icons/close';
 import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
 import socket from "../services/socket";
 import CountdownTimer from './CountdownTimer';
 
 export default {
-    components: { CountdownTimer, CheckIcon, LockOutlineIcon },
+    components: { CountdownTimer, CheckIcon, CloseIcon, LockOutlineIcon },
 
     computed: {
         ...mapState(['objectives']),

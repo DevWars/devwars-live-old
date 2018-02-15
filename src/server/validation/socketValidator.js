@@ -35,7 +35,7 @@ module.exports = {
             },
             state: {
                 type: 'string',
-                pattern: '^(incomplete|pending|complete)$',
+                pattern: '^(incomplete|pending|complete|dropped)$',
             },
         },
         required: ['team', 'id', 'state'],
