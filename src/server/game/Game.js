@@ -37,6 +37,14 @@ class Game {
             this.onFirebasePlayers(snap.val());
         });
 
+        this.firebase.database().ref('game/teams').on('value', (snap) => {
+            this.onFirebaseGameTeams(snap.val());
+        });
+
+        this.firebase.database().ref('game/objectives').on('value', (snap) => {
+            this.onFirebaseGameObjectives(snap.val());
+        });
+
         this.io.on('connection', this.onSocketConnection.bind(this));
     }
 
@@ -91,6 +99,42 @@ class Game {
         this.io.emit('players', this.players);
 
         this.assignPlayersToEditors();
+    }
+
+    onFirebaseGameTeams(gameTeams) {
+        const players = [];
+        for (const team of ['blue', 'red']) {
+            for (const gamePlayer of gameTeams[team].players) {
+                let editorId = team === 'blue' ? 0 : 3;
+                const language = gamePlayer.language.toLowerCase();
+                if (language === 'css') {
+                    editorId += 1;
+                } else if (language === 'js') {
+                    editorId += 2;
+                }
+
+                const { id, username } = gamePlayer.user;
+                players.push({ editorId, id, username });
+            }
+        }
+
+        this.firebase.database().ref('liveGame/players').set(players);
+    }
+
+    onFirebaseGameObjectives(gameObjectives) {
+        const objectives = gameObjectives
+            .sort((a, b) => a.orderID - b.orderID)
+            .map((gameObjective) => {
+                return {
+                    isBonus: false,
+                    description: gameObjective.objectiveText,
+                    blueState: 'incomplete',
+                    redState: 'incomplete',
+                }
+            });
+
+        objectives[objectives.length - 1].isBonus = true;
+        this.firebase.database().ref('liveGame/objectives').set(objectives);
     }
 
     onSocketConnection(socket) {
