@@ -50,13 +50,19 @@ export default {
     }
 
     .button {
+        display: flex;
         width: 3rem;
         height: 3rem;
+        justify-content: center;
         border: none;
-        font-size: 1.375rem;
+        font-size: 1.5rem;
+
+        &:active {
+            background-color: transparent;
+        }
 
         &.fade .material-design-icon {
-            opacity: .25;
+            opacity: 0.25;
         }
     }
 

@@ -35,7 +35,7 @@ export default {
     }
 
     .broadcast-panel {
-        border-right: 2px solid $border-color;
+        border-right: $border;
     }
 }
 </style>

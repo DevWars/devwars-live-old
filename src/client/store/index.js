@@ -69,13 +69,19 @@ const getters = {
 
     blueBonusLocked: (state) => {
         return state.objectives.some((objective) => {
-            return !objective.isBonus && objective.blueState !== 'complete';
+            if (!objective.isBonus) {
+                const state = objective.blueState;
+                return state !== 'complete' && state !== 'dropped';
+            }
         });
     },
 
     redBonusLocked: (state) => {
         return state.objectives.some((objective) => {
-            return !objective.isBonus && objective.redState !== 'complete';
+            if (!objective.isBonus) {
+                const state = objective.redState;
+                return state !== 'complete' && state !== 'dropped';
+            }
         });
     },
 };

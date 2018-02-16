@@ -74,7 +74,7 @@ export default {
 
 .admin-controls {
     padding: 1rem 0.5rem;
-    width: 24rem;
+    width: 22rem;
 
     .controls {
         margin-bottom: 2rem;
@@ -90,7 +90,7 @@ export default {
         }
 
         h2 {
-            margin: 0 0.5rem;
+            margin: 0 0.25rem;
             line-height: 1;
             font-weight: 400;
 
@@ -101,10 +101,8 @@ export default {
 
         button,
         select {
-            margin: 0 0.5rem;
+            margin-right: 0.5rem;
             width: 6rem;
-            height: 1.75rem;
-
             -moz-appearance: none;
 
             &.blue {

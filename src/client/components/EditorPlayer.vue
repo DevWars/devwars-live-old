@@ -9,7 +9,10 @@
             <button v-if="hasControl" @click="release" class="button">Release</button>
             <button v-else @click="control" class="button">Control</button>
             <button v-if="hasControl && !readOnly" @click="save" class="button">Save</button>
-            <span v-if="locked">Locked</span>
+            <div v-if="locked" class="status">
+                <LockOutlineIcon title="locked"/>
+                <span>Locked</span>
+            </div>
         </div>
     </div>
 </template>
@@ -18,12 +21,15 @@
 <script>
 import io from 'socket.io-client';
 import { mapState } from 'vuex';
+import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
 import monacoLoader from '../utils/monacoLoader';
 import { preventReactivity } from '../utils/utils';
 import EditorSelection from '../../shared/EditorSelection';
 import TextOperation from '../../shared/TextOperation';
 
 export default {
+    components: { LockOutlineIcon },
+
     props: ['namespace', 'team', 'language', 'editable', 'collapsible'],
 
     data() {
@@ -340,7 +346,24 @@ export default {
     }
 
     .controls {
+        display: flex;
         margin: .5rem;
+        flex-flow: row nowrap;
+
+        button {
+            margin-right: 0.5rem;
+        }
+
+        .status {
+            display: flex;
+            margin-right: 0.5rem;
+            align-items: center;
+
+            .material-design-icon {
+                font-size: 1.5rem;
+                margin-right: 0.25rem;
+            }
+        }
     }
 
     .monaco-mount {

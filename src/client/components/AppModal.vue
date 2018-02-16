@@ -60,6 +60,7 @@ export default {
     background-color: rgba($bg-color, 0.75);
 
     .container {
+        width: 40rem;
         overflow: hidden;
         cursor: default;
         border: $border;

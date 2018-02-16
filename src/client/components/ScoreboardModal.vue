@@ -28,28 +28,34 @@
                     <CloseIcon
                         v-if="objective.blueState === 'dropped'"
                         :class="`check blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                        :title="objective.blueState"
                     />
                     <LockOutlineIcon
                         v-else-if="objective.isBonus && blueBonusLocked"
                         :class="`lock blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                        title="locked"
                     />
                     <CheckIcon
                         v-else
                         :class="`check blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                        :title="objective.blueState"
                         @click.native="togglePending('blue', index)"
                     />
                     <div class="description" :class="objective.isBonus ? 'bonus' : ''">{{ objective.description }}</div>
                     <CloseIcon
                         v-if="objective.redState === 'dropped'"
                         :class="`check red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                        :title="objective.redState"
                     />
                     <LockOutlineIcon
                         v-else-if="objective.isBonus && redBonusLocked"
                         :class="`lock red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                        :title="objective.redState"
                     />
                     <CheckIcon
                         v-else
                         :class="`check red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                        :title="objective.redState"
                         @click.native="togglePending('red', index)"
                     />
                 </li>
@@ -142,10 +148,8 @@ export default {
         margin: 0 1.5rem;
         margin-top: 5px;
 
-        &.red {
-            .title {
-                text-align: right;
-            }
+        &.red .title {
+            text-align: right;
         }
 
         .title {
