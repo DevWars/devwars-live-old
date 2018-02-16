@@ -206,7 +206,8 @@ export default {
             margin: 0 1.5rem;
             flex: 1;
             text-align: center;
-            word-break: break-all;
+            hyphens: auto;
+            word-break: break-word;
 
             &.bonus {
                 color: $bonus-color;
