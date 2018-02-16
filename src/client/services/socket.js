@@ -39,6 +39,10 @@ socket.on('players', (players) => {
     store.commit('RECEIVE_PLAYERS', players);
 });
 
+socket.on('votes', (votes) => {
+    store.commit('RECEIVE_VOTES', votes);
+});
+
 socket.on('reload-site', (team) => {
     eventBus.emit('reload-site', team);
 });

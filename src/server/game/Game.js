@@ -19,6 +19,15 @@ class Game {
             redStrikes: 0,
         };
 
+        this.votes = {
+            blueDesign: 0,
+            redDesign: 0,
+            blueFunc: 0,
+            redFunc: 0,
+            blueTiebreaker: 0,
+            redTiebreaker: 0,
+        };
+
         this.players = [];
         this.objectives = [];
 
@@ -43,6 +52,10 @@ class Game {
 
         this.firebase.database().ref('game/objectives').on('value', (snap) => {
             this.onFirebaseGameObjectives(snap.val());
+        });
+
+        this.firebase.database().ref('frame/liveVoting').on('value', (snap) => {
+            this.onFirebaseFrameVotes(snap.val());
         });
 
         this.io.on('connection', this.onSocketConnection.bind(this));
@@ -137,6 +150,19 @@ class Game {
         this.firebase.database().ref('liveGame/objectives').set(objectives);
     }
 
+    onFirebaseFrameVotes(votes) {
+        this.votes = {
+            blueDesign: votes.design.blue,
+            redDesign: votes.design.red,
+            blueFunc: votes.func.blue,
+            redFunc: votes.func.red,
+            blueTiebreaker: votes.tiebreaker.blue,
+            redTiebreaker: votes.tiebreaker.red,
+        };
+
+        this.io.emit('votes', this.votes);
+    }
+
     onSocketConnection(socket) {
         socket.on('init', () => {
             this.onSocketInit(socket);
@@ -183,6 +209,7 @@ class Game {
         socket.emit('state', this.state);
         socket.emit('objectives', this.objectives);
         socket.emit('players', this.players);
+        socket.emit('votes', this.votes);
     }
 
     async onSocketAuth(socket, token, callback) {

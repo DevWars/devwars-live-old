@@ -20,3 +20,13 @@ export function getCookieValue(key) {
         }
     }
 }
+
+export function scoreFromVotes(votes, competingVotes) {
+    const total = votes + competingVotes;
+    const percentage = (votes / total) * 100;
+    if (percentage > 60) {
+        return percentage > 85 ? 2 : 1;
+    }
+
+    return 0;
+}

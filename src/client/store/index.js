@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { scoreFromVotes } from '../utils/utils';
 
 Vue.use(Vuex);
 
@@ -20,6 +21,15 @@ const state = {
     objectives: [],
 
     players: [],
+
+    votes: {
+        blueDesign: 0,
+        redDesign: 0,
+        blueFunc: 0,
+        redFunc: 0,
+        blueTiebreaker: 0,
+        redTiebreaker: 0,
+    },
 
     editors: [
         { namespace: '/0', team: 'blue', language: 'html', filename: 'index.html' },
@@ -47,24 +57,46 @@ const getters = {
         return player ? player.team : null;
     },
 
-    blueScore: (state) => {
-        return state.objectives.reduce((score, objective) => {
+    blueScore: (state, getters) => {
+        let score = state.objectives.reduce((score, objective) => {
             if (objective.blueState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
             }
 
             return score;
         }, 0);
+
+        return score + getters.blueVoteScore;
     },
 
-    redScore: (state) => {
-        return state.objectives.reduce((score, objective) => {
+    blueVoteScore: (state) => {
+        const { votes } = state;
+        const design = scoreFromVotes(votes.blueDesign, votes.redDesign);
+        const func = scoreFromVotes(votes.blueFunc, votes.redFunc);
+        const tiebreaker = votes.blueTiebreaker > votes.redTiebreaker ? 1 : 0;
+
+        return design + func + tiebreaker;
+    },
+
+    redScore: (state, getters) => {
+        let score = state.objectives.reduce((score, objective) => {
             if (objective.redState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
             }
 
             return score;
         }, 0);
+
+        return score + getters.redVoteScore;
+    },
+
+    redVoteScore: (state) => {
+        const { votes } = state;
+        const design = scoreFromVotes(votes.redDesign, votes.blueDesign);
+        const func = scoreFromVotes(votes.redFunc, votes.blueFunc);
+        const tiebreaker = votes.redTiebreaker > votes.blueTiebreaker ? 1 : 0;
+
+        return design + func + tiebreaker;
     },
 
     blueBonusLocked: (state) => {
@@ -105,6 +137,10 @@ const mutations = {
 
     'RECEIVE_PLAYERS': (state, players) => {
         state.players = players;
+    },
+
+    'RECEIVE_VOTES': (state, votes) => {
+        state.votes = votes;
     },
 
     'RECIEVE_USER': (state, user) => {

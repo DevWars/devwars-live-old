@@ -77,7 +77,7 @@ export default {
     components: { CountdownTimer, CheckIcon, CloseIcon, LockOutlineIcon },
 
     computed: {
-        ...mapState(['objectives']),
+        ...mapState(['objectives', 'votes']),
         ...mapGetters([
             'userTeam',
             'blueScore',
