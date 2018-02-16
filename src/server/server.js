@@ -17,7 +17,7 @@ function init() {
 
     const game = new Game(io);
 
-    app.use(helmet());
+    app.use(helmet({ frameguard: false }));
     app.use(express.static(path.resolve(__dirname, '../../public')));
     app.use(routes);
     app.use('/game', game.router);
