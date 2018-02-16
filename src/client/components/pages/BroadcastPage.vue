@@ -35,7 +35,10 @@ export default {
     }
 
     .broadcast-panel {
+        width: 350px;
+        // flex: 0 0 auto;
         border-right: $border;
+        overflow: hidden;
     }
 }
 </style>

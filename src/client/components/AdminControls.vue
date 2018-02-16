@@ -74,7 +74,6 @@ export default {
 
 .admin-controls {
     padding: 1rem 0.5rem;
-    width: 22rem;
 
     .controls {
         margin-bottom: 2rem;
