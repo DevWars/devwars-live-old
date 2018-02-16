@@ -79,7 +79,7 @@ class Game {
         this.router = new Router();
 
         this.router.get('/:team(blue|red)', (req, res) => {
-            res.redirect(`${req.params.team}/index.html`);
+            res.redirect(`/${req.params.team}/index.html`);
         });
 
         this.router.get('/:team(blue|red)/:filename', (req, res) => {

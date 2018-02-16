@@ -4,6 +4,7 @@
 
 # Editors
 .vscode/
+.idea/
 
 # Dependencies
 node_modules/
