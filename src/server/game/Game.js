@@ -120,9 +120,9 @@ class Game {
             for (const gamePlayer of gameTeams[team].players) {
                 let editorId = team === 'blue' ? 0 : 3;
                 const language = gamePlayer.language.toLowerCase();
-                if (language === 'css') {
+                if (language === 'CSS') {
                     editorId += 1;
-                } else if (language === 'js') {
+                } else if (language === 'JS') {
                     editorId += 2;
                 }
 
