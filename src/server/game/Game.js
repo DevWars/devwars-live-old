@@ -1,5 +1,5 @@
 const config = require('config');
-const {Router} = require('express');
+const { Router } = require('express');
 const devwars = require('../services/devwars');
 const firebase = require('../services/firebase');
 const socketValidator = require('../validation/socketValidator');
@@ -83,7 +83,7 @@ class Game {
         });
 
         this.router.get('/:team(blue|red)/:filename', (req, res) => {
-            const {team, filename} = req.params;
+            const { team, filename } = req.params;
             const editor = this.editors.find((editor) => {
                 return (editor.team === team && editor.filename === filename);
             });
@@ -118,8 +118,7 @@ class Game {
         const players = [];
         for (const team of ['blue', 'red']) {
             let players = gameTeams[team].players;
-            console.log(typeof players);
-            players.forEach(gamePlayer => {
+            for (const gamePlayer of gameTeams[team].players || []) {
                 let editorId = team === 'blue' ? 0 : 3;
                 const language = gamePlayer.language.toLowerCase();
                 if (language === 'css') {
@@ -128,9 +127,9 @@ class Game {
                     editorId += 2;
                 }
 
-                const {id, username} = gamePlayer.user;
-                players.push({editorId, id, username});
-            });
+                const { id, username } = gamePlayer.user;
+                players.push({ editorId, id, username });
+            }
         }
 
         this.firebase.database().ref('liveGame/players').set(players);
@@ -224,7 +223,7 @@ class Game {
         callback(user);
     }
 
-    onSocketObjectiveNotify(socket, {team, id}) {
+    onSocketObjectiveNotify(socket, { team, id }) {
         if (!this.isUserOnTeam(socket, team)) {
             return;
         }
@@ -293,7 +292,7 @@ class Game {
         this.editors.forEach(editor => editor.setLocked(true));
     }
 
-    onSocketSetObjectiveState(socket, {team, id, state}) {
+    onSocketSetObjectiveState(socket, { team, id, state }) {
         if (!this.isUserModerator(socket)) {
             return;
         }
@@ -337,7 +336,7 @@ class Game {
     }
 
     isUserModerator(socket) {
-        const {user} = socket.client;
+        const { user } = socket.client;
         if (!user) {
             return false;
         }
@@ -346,7 +345,7 @@ class Game {
     }
 
     isUserOnTeam(socket, team) {
-        const {user} = socket.client;
+        const { user } = socket.client;
         if (!user) {
             return false;
         }
