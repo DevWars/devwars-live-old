@@ -117,7 +117,11 @@ class Game {
     onFirebaseGameTeams(gameTeams) {
         const players = [];
         for (const team of ['blue', 'red']) {
-            for (const gamePlayer of gameTeams[team].players || []) {
+            if (!gameTeams[team].players) {
+                continue;
+            }
+
+            for (const gamePlayer of gameTeams[team].players) {
                 let editorId = team === 'blue' ? 0 : 3;
                 const language = gamePlayer.language.toLowerCase();
                 if (language === 'css') {
@@ -127,7 +131,7 @@ class Game {
                 }
 
                 const { id, username } = gamePlayer.user;
-                players.push({ editorId, id, username });
+                players.push({ editorId, id, username, team });
             }
         }
 
