@@ -1,7 +1,7 @@
 import io from 'socket.io-client';
+import cookie from 'cookie';
 import eventBus from './eventBus';
 import store from '../store';
-import { getCookieValue } from '../utils/utils';
 
 const socketUrl = process.env.SOCKET_URL || undefined;
 const socket = io(socketUrl, {
@@ -13,7 +13,7 @@ socket.on('connect', () => {
     store.commit('SOCKET_CONNECT');
     socket.emit('init');
 
-    const token = getCookieValue('token');
+    const token = cookie.parse(document.cookie).token;
     if (token) {
         socket.emit('auth', token, (user) => {
             if (user) {

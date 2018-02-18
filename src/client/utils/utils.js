@@ -11,16 +11,6 @@ export function preventReactivity(object) {
     return object;
 }
 
-export function getCookieValue(key) {
-    for (const cookie of document.cookie.split(';')) {
-        const s = cookie.indexOf('=');
-        const cookieKey = decodeURIComponent(cookie.slice(0, s));
-        if (cookieKey === key) {
-            return decodeURIComponent(cookie.slice(s + 1));
-        }
-    }
-}
-
 export function scoreFromVotes(votes, competingVotes) {
     const total = votes + competingVotes;
     const percentage = (votes / total) * 100;
