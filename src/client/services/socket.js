@@ -18,6 +18,7 @@ socket.on('connect', () => {
         socket.emit('auth', token, (user) => {
             if (user) {
                 store.commit('RECIEVE_USER', user);
+                console.info('%cAUTH:', 'color: #00ff00', { ...user });
             }
         });
     }
