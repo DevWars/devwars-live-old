@@ -14,13 +14,13 @@ export default new VueRouter({
             component: WatchPage,
         },
         {
-            path: '/play/:team(blue|red)/:language(html|css|javascript)',
+            path: '/play/:team(blue|red)/:language(html|css|js)',
             component: PlayPage,
             props: true,
         },
         {
-            path: '/play/:team(blue|red)/js',
-            redirect: '/play/:team/javascript',
+            path: '/play/:team(blue|red)/javascript',
+            redirect: '/play/:team/js',
         },
         {
             path: '/broadcast',

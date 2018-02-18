@@ -34,10 +34,10 @@ const state = {
     editors: [
         { namespace: '/0', team: 'blue', language: 'html', filename: 'index.html' },
         { namespace: '/1', team: 'blue', language: 'css', filename: 'game.css' },
-        { namespace: '/2', team: 'blue', language: 'javascript', filename: 'game.js' },
+        { namespace: '/2', team: 'blue', language: 'js', filename: 'game.js' },
         { namespace: '/3', team: 'red', language: 'html', filename: 'index.html' },
         { namespace: '/4', team: 'red', language: 'css', filename: 'game.css' },
-        { namespace: '/5', team: 'red', language: 'javascript', filename: 'game.js' },
+        { namespace: '/5', team: 'red', language: 'js', filename: 'game.js' },
     ],
 };
 

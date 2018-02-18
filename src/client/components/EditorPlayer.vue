@@ -2,7 +2,7 @@
     <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
             <div class="username">{{ curUser ? (hasControl ? 'You' : curUser.username) : '' }}</div>
-            <div @click="toggleCollapse" class="language">{{ languageTitle }}</div>
+            <div @click="toggleCollapse" class="language">{{ this.language }}</div>
         </div>
         <div ref="mount" class="monaco-mount"></div>
         <div v-if="editable" class="controls">
@@ -61,10 +61,6 @@ export default {
         readOnly() {
             return !this.hasControl || !this.inSync || this.locked;
         },
-
-        languageTitle() {
-            return this.language === 'javascript' ? 'js' : this.language;
-        },
     },
 
     watch: {
@@ -107,7 +103,7 @@ export default {
         initMonaco(monaco) {
             const editor = monaco.editor.create(this.$refs.mount, {
                 theme: 'devwars',
-                language: this.language,
+                language: this.language === 'js' ? 'javascript' : this.language,
 
                 readOnly: true,
                 automaticLayout: true, // TODO: Handle resize manually.

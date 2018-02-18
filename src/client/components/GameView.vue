@@ -2,14 +2,14 @@
     <div class="game-view">
         <GameViewTeam
             team="blue"
-            :editors="['html', 'css', 'javascript']"
+            :editors="['html', 'css', 'js']"
             :expanded="expandedTeam === 'blue'"
             @toggleExpanded="toggleExpanded('blue')"
             :class="blueClassModifier"
         />
         <GameViewTeam
             team="red"
-            :editors="['html', 'css', 'javascript']"
+            :editors="['html', 'css', 'js']"
             :expanded="expandedTeam === 'red'"
             @toggleExpanded="toggleExpanded('red')"
             :class="redClassModifier"

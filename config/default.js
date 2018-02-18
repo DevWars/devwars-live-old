@@ -22,9 +22,9 @@ module.exports = {
     editors: [
         { team: 'blue', language: 'html', filename: 'index.html' },
         { team: 'blue', language: 'css', filename: 'game.css' },
-        { team: 'blue', language: 'javascript', filename: 'game.js' },
+        { team: 'blue', language: 'js', filename: 'game.js' },
         { team: 'red', language: 'html', filename: 'index.html' },
         { team: 'red', language: 'css', filename: 'game.css' },
-        { team: 'red', language: 'javascript', filename: 'game.js' },
+        { team: 'red', language: 'js', filename: 'game.js' },
     ],
 };
