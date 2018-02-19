@@ -1,5 +1,5 @@
 const config = require('config');
-const axiso = require('axios');
+const axios = require('axios');
 
 // Trim trailing slash from the API_URL.
 const API_URL = config.get('devwars.url').replace(/\/$/, '');
@@ -16,7 +16,7 @@ async function authenticate(token) {
     }
 
     try {
-        const res = await axiso(`${API_URL}/v1/user/`, {
+        const res = await axios(`${API_URL}/v1/user/`, {
             headers: { cookie: `token=${token}` },
         });
 
