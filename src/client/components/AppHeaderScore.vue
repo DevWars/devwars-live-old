@@ -3,7 +3,7 @@
         <div class="score blue">{{ blueScore }}</div>
         <div class="strikes blue">
             <div class="mark" :class="blueStrikes > 0 ? 'marked' : ''">X</div>
-            <div class="mark" :class="blueStrikes > 1? 'marked' : ''">X</div>
+            <div class="mark" :class="blueStrikes > 1 ? 'marked' : ''">X</div>
             <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
         </div>
 

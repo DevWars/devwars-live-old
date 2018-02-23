@@ -15,12 +15,6 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: extractStyles.extract({
-                    use: 'css-loader',
-                }),
-            },
-            {
                 test: /\.js$/,
                 use: 'babel-loader',
                 exclude: /node_modules/,
