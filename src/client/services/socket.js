@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-import cookie from 'cookie';
 import eventBus from './eventBus';
 import store from '../store';
 
@@ -12,20 +11,15 @@ const socket = io(socketUrl, {
 socket.on('connect', () => {
     store.commit('SOCKET_CONNECT');
     socket.emit('init');
-
-    const token = cookie.parse(document.cookie).token;
-    if (token) {
-        socket.emit('auth', token, (user) => {
-            if (user) {
-                store.commit('RECIEVE_USER', user);
-                console.info('%cAUTH:', 'color: #00ff00', { ...user });
-            }
-        });
-    }
 });
 
 socket.on('disconnect', () => {
     store.commit('SOCKET_DISCONNECT');
+});
+
+socket.on('user', (user) => {
+    store.commit('RECIEVE_USER', user);
+    console.info('%cAUTH:', 'color: #00ff00', { ...user });
 });
 
 socket.on('state', (state) => {

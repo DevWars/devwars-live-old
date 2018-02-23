@@ -18,9 +18,11 @@ class Editor extends EventEmitter {
         this.language = opt.language;
         this.filename = opt.filename;
 
-        this.ownerId = null;
-        this.curUser = null;
         this.locked = false;
+
+        this.ownerId = null;
+        this.currentUser = null;
+        this.currentSocketId = null;
 
         this.saveToFirebase = throttle(this.saveToFirebase, 1000 * 30);
 
@@ -81,9 +83,8 @@ class Editor extends EventEmitter {
     }
 
     onSocketDisconnect(socket) {
-        if (this.userIsCurUser(socket)) {
-            this.curUser = null;
-            this.ioNsp.emit('cur-user', this.curUser);
+        if (this.isSocketCurrentUser(socket)) {
+            this.resetCurrentUser();
         }
     }
 
@@ -94,83 +95,104 @@ class Editor extends EventEmitter {
             language: this.team,
             filename: this.team,
             locked: this.locked,
-
-            curUser: this.curUser,
+            currentUser: this.currentUser,
+            currentSocketId: this.currentSocketId,
             text: this.document.getText(),
         });
     }
 
     onSocketControl(socket) {
-        if (this.userIsOwner(socket)) {
-            // Prevent users from taking control from moderators and admins.
-            if (
-                this.curUser &&
-                socket.client.user.role === 'USER' &&
-                (this.curUser.role === 'MODERATOR' || this.curUser.role === 'ADMIN')
-            ) {
-                return;
-            }
-
-            this.curUser = {
-                ...socket.client.user,
-                socketId: socket.id,
-            };
-
-            this.ioNsp.emit('cur-user', this.curUser);
+        if (!this.isSocketOwner(socket)) {
+            return;
         }
+
+        // Prevent users from taking control from moderators and admins.
+        if (
+            this.currentUser &&
+            !socket.client.user.isModerator() &&
+            this.currentUser.isModerator()
+        ) {
+            return;
+        }
+
+        this.setCurrentUser(socket);
     }
 
     onSocketRelease(socket) {
-        if (this.userIsCurUser(socket)) {
-            this.curUser = null;
-            this.ioNsp.emit('cur-user', this.curUser);
+        if (!this.isSocketCurrentUser(socket)) {
+            return;
         }
+
+        this.resetCurrentUser();
     }
 
     onSocketSave(socket) {
-        if (!this.locked && this.userIsCurUser(socket)) {
-            this.document.save();
-            this.emit('save');
-
-            this.saveToFirebase();
+        if (this.locked || !this.isSocketCurrentUser(socket)) {
+            return;
         }
+
+        this.document.save();
+        this.emit('save');
+
+        this.saveToFirebase();
     }
 
     onSocketOp(socket, op) {
-        if (!this.locked && this.userIsCurUser(socket)) {
-            this.document.applyOperation(TextOperation.fromObject(op));
-            this.ioNsp.emit('op', op);
+        if (this.locked || !this.isSocketCurrentUser(socket)) {
+            return;
         }
+
+        this.document.applyOperation(TextOperation.fromObject(op));
+        this.ioNsp.emit('op', op);
     }
 
     onSocketSel(socket, sel) {
-        if (this.userIsCurUser(socket)) {
-            this.ioNsp.emit('sel', sel);
+        if (!this.isSocketCurrentUser(socket)) {
+            return;
         }
+
+        this.ioNsp.emit('sel', sel);
     }
 
-    userIsOwner(socket) {
+    isSocketOwner(socket) {
         const { user } = socket.client;
         if (!user) {
             return false;
         }
 
-        if (user.role === 'ADMIN' || user.role === 'MODERATOR') {
+        if (user.isModerator()) {
             return true;
         }
 
-        return user.id === this.ownerId;
+        return this.ownerId === user.id;
     }
 
-    userIsCurUser(socket) {
-        return this.curUser && this.curUser.socketId === socket.id;
+    isSocketCurrentUser(socket) {
+        return this.currentSocketId && this.currentSocketId === socket.id;
+    }
+
+    setCurrentUser(socket) {
+        const { user } = socket.client;
+        if (!user) {
+            return;
+        }
+
+        this.currentUser = user;
+        this.currentSocketId = socket.id;
+        this.ioNsp.emit('currentUser', { user, socketId: socket.id });
+    }
+
+    resetCurrentUser() {
+        this.currentUser = null;
+        this.currentSocketId = null;
+        this.ioNsp.emit('currentUser', { user: null, socketId: null });
     }
 
     setOwner(user) {
         this.ownerId = user.id;
-        if (this.curUser) {
-            this.curUser = null;
-            this.ioNsp.emit('cur-user', null);
+
+        if (this.currentUser) {
+            this.resetCurrentUser();
         }
     }
 

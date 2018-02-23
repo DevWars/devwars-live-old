@@ -11,7 +11,7 @@ async function authenticate(token) {
         case 'ADMIN':
         case 'MODERATOR':
         case 'USER':
-            return { id: 1, username: 'DEV', role: token };
+            return { id: 1, username: token, role: token };
         }
     }
 
@@ -20,8 +20,11 @@ async function authenticate(token) {
             headers: { cookie: `token=${token}` },
         });
 
-        const { id, username, role } = res.data;
-        return { id, username, role };
+        if (res.status !== 200) {
+            return null;
+        }
+
+        return res.data;
     } catch (error) {
         return null;
     }

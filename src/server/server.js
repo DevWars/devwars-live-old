@@ -4,12 +4,15 @@ const http = require('http');
 const express = require('express');
 const helmet = require('helmet');
 const socketIo = require('socket.io');
+const socketAuth = require('./middlewares/socketAuth');
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     transports: ['websocket'],
 });
+
+io.use(socketAuth());
 
 function init() {
     const Game = require('./game/Game');

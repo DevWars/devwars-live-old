@@ -1,7 +1,7 @@
 <template>
     <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
-            <div class="username">{{ curUser ? (hasControl ? 'You' : curUser.username) : '' }}</div>
+            <div class="username">{{ currentUser ? (hasControl ? 'You' : currentUser.username) : '' }}</div>
             <div @click="toggleCollapse" class="language">{{ this.language }}</div>
         </div>
         <div ref="mount" class="monaco-mount"></div>
@@ -34,9 +34,11 @@ export default {
 
     data() {
         return {
-            socketId: '',
+            socketId: null,
 
-            curUser: null,
+            currentUser: null,
+            currentSocketId: null,
+
             locked: false,
             inSync: false,
             ignoreChanges: false,
@@ -55,7 +57,7 @@ export default {
         ...mapState(['user']),
 
         hasControl() {
-            return this.curUser && this.socketId === this.curUser.socketId;
+            return this.currentSocketId && this.currentSocketId === this.socketId;
         },
 
         readOnly() {
@@ -155,13 +157,14 @@ export default {
             });
 
             socket.on('disconnect', () => {
-                this.socketId = '';
+                this.socketId = null;
             });
 
             socket.on('state', (state) => {
                 this.ignoreChanges = true;
 
-                this.curUser = state.curUser;
+                this.currentUser = state.currentUser;
+                this.currentSocketId = state.currentSocketId;
                 this.locked = state.locked;
 
                 this.editor.model.setValue(state.text);
@@ -179,8 +182,9 @@ export default {
                 this.ignoreChanges = false;
             });
 
-            socket.on('cur-user', (user) => {
-                this.curUser = user;
+            socket.on('currentUser', ({ user, socketId }) => {
+                this.currentUser = user;
+                this.currentSocketId = socketId;
             });
 
             socket.on('locked', (locked) => {

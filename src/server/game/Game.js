@@ -227,7 +227,7 @@ class Game {
     }
 
     onSocketObjectiveNotify(socket, { team, id }) {
-        if (!this.isUserOnTeam(socket, team)) {
+        if (!socket.client.user || !this.isUserOnTeam(socket.client.user, team)) {
             return;
         }
 
@@ -251,7 +251,7 @@ class Game {
     }
 
     onSocketResetGame(socket) {
-        if (!this.isUserModerator(socket)) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
             return;
         }
 
@@ -268,7 +268,7 @@ class Game {
     }
 
     onSocketStartGame(socket) {
-        if (!this.isUserModerator(socket)) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
             return;
         }
 
@@ -283,7 +283,7 @@ class Game {
     }
 
     onSocketEndGame(socket) {
-        if (!this.isUserModerator(socket)) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
             return;
         }
 
@@ -296,7 +296,7 @@ class Game {
     }
 
     onSocketSetObjectiveState(socket, { team, id, state }) {
-        if (!this.isUserModerator(socket)) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
             return;
         }
 
@@ -316,7 +316,7 @@ class Game {
     }
 
     onSocketAddStrike(socket, team) {
-        if (!this.isUserModerator(socket)) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
             return;
         }
 
@@ -338,21 +338,7 @@ class Game {
         }
     }
 
-    isUserModerator(socket) {
-        const { user } = socket.client;
-        if (!user) {
-            return false;
-        }
-
-        return (user.role === 'ADMIN' || user.role === 'MODERATOR');
-    }
-
-    isUserOnTeam(socket, team) {
-        const { user } = socket.client;
-        if (!user) {
-            return false;
-        }
-
+    isUserOnTeam(user, team) {
         return this.players.some((player) => {
             return (player.id === user.id && player.team === team);
         });
