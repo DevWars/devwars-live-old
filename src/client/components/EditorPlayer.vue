@@ -203,23 +203,34 @@ export default {
                     return;
                 }
 
-                const editorSel = EditorSelection.fromObject(sel);
-                const ranges = editorSel.toMonacoRanges();
+                const newDecorations = [];
+                let primarySelection;
 
-                const newDecorations = [
-                    { range: ranges.cursor, options: { className: `cursor-${this.team}` } },
-                ];
+                for (const [index, s] of sel.entries()) {
+                    const selection = EditorSelection.fromObject(s);
+                    const ranges = selection.toMonacoRanges();
 
-                if (editorSel.hasSelection()) {
-                    newDecorations.push(
-                        { range: ranges.selection, options: { className: `selection-${this.team}` } },
-                    );
+                    if (index === 0) {
+                        primarySelection = selection;
+                    }
+
+                    newDecorations.push({
+                        range: ranges.cursor,
+                        options: { className: `cur-${this.team}` },
+                    });
+
+                    if (selection.hasSelection()) {
+                        newDecorations.push({
+                            range: ranges.selection,
+                            options: { className: `sel-${this.team}` },
+                        });
+                    }
                 }
 
                 this.decorations = this.editor.deltaDecorations(this.decorations, newDecorations);
 
                 if (!this.inFocus) {
-                    const pos = new monaco.Position(editorSel.cursorRow, editorSel.cursorCol);
+                    const pos = new monaco.Position(primarySelection.cursorRow, primarySelection.cursorCol);
                     this.editor.revealPositionInCenterIfOutsideViewport(pos);
                 }
             });
@@ -236,13 +247,17 @@ export default {
             }
         },
 
-        onChangeSelection(selectionChange) {
+        onChangeSelection({ selection, secondarySelections }) {
             if (!this.hasControl) {
                 return;
             }
 
-            const sel = EditorSelection.fromMonacoChange(selectionChange.selection);
-            this.socket.emit('sel', sel.toObject());
+            const sel = [EditorSelection.fromMonacoChange(selection).toObject()];
+            for (const secondarySelection of secondarySelections) {
+                sel.push(EditorSelection.fromMonacoChange(secondarySelection).toObject());
+            }
+
+            this.socket.emit('sel', sel);
         },
 
         save() {
@@ -396,30 +411,30 @@ export default {
                 }
             }
 
-            .cursor-blue:after,
-            .cursor-red:after {
-                content: "";
-                position: absolute;
-                width: 2px;
-                height: 100%;
-
-                animation: blink 1s steps(2, start) infinite;
+            .cur-blue,
+            .cur-red {
+                &:after {
+                    content: "";
+                    position: absolute;
+                    width: 2px;
+                    height: 100%;
+                }
             }
 
-            .cursor-blue:after {
+            .cur-blue:after {
                 background-color: $blue-team-color;
             }
 
-            .cursor-red:after {
+            .cur-red:after {
                 background-color: $red-team-color;
             }
 
-            .selection-blue, {
+            .sel-blue, {
                 opacity: 0.15;
                 background-color: $blue-team-color;
             }
 
-            .selection-red {
+            .sel-red {
                 opacity: 0.15;
                 background-color: $red-team-color;
             }

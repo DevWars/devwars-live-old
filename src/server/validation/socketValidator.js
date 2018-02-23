@@ -71,9 +71,11 @@ module.exports = {
     validateSel: ajv.compile({
         type: 'array',
         items: {
-            type: 'number',
+            type: 'array',
+            minItems: 2,
+            maxItems: 5,
         },
-        minItems: 2,
-        maxItems: 5,
+        minItems: 1,
+        maxItems: 16,
     }),
 };
