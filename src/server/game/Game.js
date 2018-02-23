@@ -8,7 +8,8 @@ const Editor = require('./Editor');
 class Game {
     constructor(io) {
         this.io = io;
-        this.firebase = firebase;
+        this.database = firebase.database();
+        this.gameRef = this.database.ref('liveGame');
 
         this.state = {
             id: 0,
@@ -34,27 +35,27 @@ class Game {
         this._initEditors();
         this._initRoutes();
 
-        this.firebase.database().ref('liveGame/state').on('value', (snap) => {
+        this.gameRef.child('state').on('value', (snap) => {
             this.onFirebaseState(snap.val());
         });
 
-        this.firebase.database().ref('liveGame/objectives').on('value', (snap) => {
+        this.gameRef.child('objectives').on('value', (snap) => {
             this.onFirebaseObjectives(snap.val());
         });
 
-        this.firebase.database().ref('liveGame/players').on('value', (snap) => {
+        this.gameRef.child('players').on('value', (snap) => {
             this.onFirebasePlayers(snap.val());
         });
 
-        this.firebase.database().ref('game/teams').on('value', (snap) => {
+        this.database.ref('game/teams').on('value', (snap) => {
             this.onFirebaseGameTeams(snap.val());
         });
 
-        this.firebase.database().ref('game/objectives').on('value', (snap) => {
+        this.database.ref('game/objectives').on('value', (snap) => {
             this.onFirebaseGameObjectives(snap.val());
         });
 
-        this.firebase.database().ref('frame/liveVoting').on('value', (snap) => {
+        this.database.ref('frame/liveVoting').on('value', (snap) => {
             this.onFirebaseFrameVotes(snap.val());
         });
 
@@ -63,12 +64,13 @@ class Game {
 
     _initEditors() {
         this.editors = config.get('editors').map((opt, index) => {
-            return new Editor(this.io, index, opt);
+            const editorRef = this.gameRef.child(`editors/${index}`);
+            return new Editor(this.io, editorRef, index, opt);
         });
 
         this.editors.forEach((editor) => {
             editor.on('save', () => {
-                this.io.emit('reload-site', editor.team);
+                this.io.emit('reloadSite', editor.team);
             });
         });
 
@@ -135,7 +137,7 @@ class Game {
             }
         }
 
-        this.firebase.database().ref('liveGame/players').set(players);
+        this.gameRef.child('players').set(players);
     }
 
     onFirebaseGameObjectives(gameObjectives) {
@@ -151,7 +153,7 @@ class Game {
             });
 
         objectives[objectives.length - 1].isBonus = true;
-        this.firebase.database().ref('liveGame/objectives').set(objectives);
+        this.gameRef.child('objectives').set(objectives);
     }
 
     onFirebaseFrameVotes(votes) {
@@ -236,7 +238,7 @@ class Game {
             return;
         }
 
-        this.firebase.database().ref(`liveGame/objectives/${id}`).transaction((objective) => {
+        this.gameRef.child(`objectives/${id}`).transaction((objective) => {
             if (!objective) {
                 return;
             }
@@ -255,7 +257,7 @@ class Game {
             return;
         }
 
-        this.firebase.database().ref('liveGame/state').update({
+        this.gameRef.child('state').update({
             stage: 'setup',
             startTime: 0,
             endTime: 0,
@@ -273,7 +275,7 @@ class Game {
         }
 
         const startTime = Date.now();
-        this.firebase.database().ref('liveGame/state').update({
+        this.gameRef.child('state').update({
             stage: 'running',
             startTime,
             endTime: startTime + (1000 * 60 * 60),
@@ -287,7 +289,7 @@ class Game {
             return;
         }
 
-        this.firebase.database().ref('liveGame/state').update({
+        this.gameRef.child('state').update({
             stage: 'ended',
             endTime: Date.now(),
         });
@@ -305,7 +307,7 @@ class Game {
             return;
         }
 
-        this.firebase.database().ref(`liveGame/objectives/${id}`).transaction((objective) => {
+        this.gameRef.child(`objectives/${id}`).transaction((objective) => {
             if (!objective) {
                 return;
             }
@@ -320,7 +322,7 @@ class Game {
             return;
         }
 
-        this.firebase.database().ref(`liveGame/state/${team}Strikes`).transaction((strikes) => {
+        this.gameRef.child(`state/${team}Strikes`).transaction((strikes) => {
             if (strikes === null) {
                 return;
             }
