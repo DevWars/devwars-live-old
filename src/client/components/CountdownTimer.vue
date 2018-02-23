@@ -7,7 +7,10 @@
 
 <script>
 export default {
-    props: ['end', 'warnTime'],
+    props: {
+        end: { type: Number, required: true },
+        warnTime: Number,
+    },
 
     data() {
         return {

@@ -29,7 +29,11 @@ export default {
         CodeTagsIcon,
     },
 
-    props: ['team', 'viewSite', 'expanded'],
+    props: {
+        team: { type: String, required: true },
+        viewSite: { type: Boolean, default: false },
+        expanded: { type: Boolean, default: false },
+    },
 };
 </script>
 

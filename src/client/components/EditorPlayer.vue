@@ -30,7 +30,13 @@ import TextOperation from '../../shared/TextOperation';
 export default {
     components: { LockOutlineIcon },
 
-    props: ['namespace', 'team', 'language', 'editable', 'collapsible'],
+    props: {
+        namespace: { type: String, required: true },
+        team: { type: String, required: true },
+        language: { type: String, required: true },
+        editable: { type: Boolean, defualt: false },
+        collapsible: { type: Boolean, default: true },
+    },
 
     data() {
         return {
@@ -110,7 +116,7 @@ export default {
                 readOnly: true,
                 automaticLayout: true, // TODO: Handle resize manually.
 
-                lineNumbers: !!this.editable,
+                lineNumbers: this.editable,
                 hideCursorInOverviewRuler: true,
                 renderLineHighlight: 'none',
                 selectionHighlight: false,

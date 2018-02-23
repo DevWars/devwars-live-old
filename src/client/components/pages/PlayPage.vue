@@ -34,7 +34,10 @@ export default {
         WebViewer,
     },
 
-    props: ['team', 'language'],
+    props: {
+        team: { type: String, required: true },
+        language: { type: String, required: true },
+    },
 
     computed: {
         ...mapState(['editors']),

@@ -17,7 +17,10 @@ import EditorPlayer from "./EditorPlayer";
 
 export default {
     components: { EditorPlayer },
-    props: ['editors'],
+
+    props: {
+        editors: { type: Array, required: true },
+    },
 };
 </script>
 

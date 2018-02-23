@@ -8,10 +8,13 @@ import eventBus from "../services/eventBus";
 import { debounce } from 'lodash-es';
 
 export default {
-    props: ['team', 'delay'],
+    props: {
+        team: { type: String, required: true },
+        delay: { type: Number, default: 0 },
+    },
 
     mounted() {
-        const delay = this.delay || 0;
+        const delay = this.delay;
         this.onReload = debounce(this.onReload, delay, { maxWait: 10000 });
         eventBus.on('reload-site', this.onReload);
     },

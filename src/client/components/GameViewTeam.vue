@@ -28,7 +28,10 @@ export default {
         WebViewer,
     },
 
-    props: ['team', 'expanded'],
+    props: {
+        team: { type: String, required: true },
+        expanded: { type: Boolean, default: false },
+    },
 
     data() {
         return { viewSite: false };
