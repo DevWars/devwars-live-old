@@ -99,6 +99,14 @@ const getters = {
         return design + func + tiebreaker;
     },
 
+    blueHasPendingObjective(state) {
+        return state.objectives.some(o => o.blueState === 'pending');
+    },
+
+    redHasPendingObjective(state) {
+        return state.objectives.some(o => o.redState === 'pending');
+    },
+
     blueBonusLocked: (state) => {
         return state.objectives.some((objective) => {
             if (!objective.isBonus) {

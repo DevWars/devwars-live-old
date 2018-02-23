@@ -1,21 +1,25 @@
 <template>
     <div class="app-header-score" @click="openScoreModal">
-        <div class="score blue">{{ blueScore }}</div>
-        <div class="strikes blue">
-            <div class="mark" :class="blueStrikes > 0 ? 'marked' : ''">X</div>
-            <div class="mark" :class="blueStrikes > 1 ? 'marked' : ''">X</div>
-            <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
+        <div class="team blue">
+            <span class="notification" :class="blueHasPendingObjective ? 'active' : ''"></span>
+            <div class="score">{{ blueScore }}</div>
+            <div class="strikes">
+                <div class="mark" :class="blueStrikes > 0 ? 'marked' : ''">X</div>
+                <div class="mark" :class="blueStrikes > 1 ? 'marked' : ''">X</div>
+                <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
+            </div>
         </div>
-
         <CountdownTimer v-if="stage === 'running'" :end="endTime" :warnTime="1000 * 60"/>
         <div v-else class="title">{{ title }}</div>
-
-        <div class="strikes red">
-            <div class="mark" :class="redStrikes > 2 ? 'marked' : ''">X</div>
-            <div class="mark" :class="redStrikes > 1 ? 'marked' : ''">X</div>
-            <div class="mark" :class="redStrikes > 0 ? 'marked' : ''">X</div>
+        <div class="team red">
+            <div class="strikes">
+                <div class="mark" :class="redStrikes > 2 ? 'marked' : ''">X</div>
+                <div class="mark" :class="redStrikes > 1 ? 'marked' : ''">X</div>
+                <div class="mark" :class="redStrikes > 0 ? 'marked' : ''">X</div>
+            </div>
+            <div class="score">{{ redScore }}</div>
+            <span class="notification" :class="redHasPendingObjective ? 'active' : ''"></span>
         </div>
-        <div class="score red">{{ redScore }}</div>
     </div>
 </template>
 
@@ -28,7 +32,7 @@ export default {
     components: { CountdownTimer },
 
     computed: {
-        ...mapGetters(['blueScore', 'redScore']),
+        ...mapGetters(['blueScore', 'redScore', 'blueHasPendingObjective', 'redHasPendingObjective']),
 
         stage() {
             return this.$store.state.game.stage;
@@ -86,25 +90,8 @@ export default {
     }
 
     .team {
-        margin: 0 2rem;
-    }
-
-    .score {
-        margin: 0 0.5rem;
-        font-size: 2.75rem;
-
-        &.blue {
-            color: $blue-team-color;
-        }
-
-        &.red {
-            color: $red-team-color;
-        }
-    }
-
-    .strikes {
         display: flex;
-        font-size: 1.75rem;
+        align-items: baseline;
 
         &.blue {
             margin-right: 2rem;
@@ -115,6 +102,16 @@ export default {
             margin-left: 2rem;
             color: $red-team-color;
         }
+    }
+
+    .score {
+        margin: 0 0.5rem;
+        font-size: 2.75rem;
+    }
+
+    .strikes {
+        display: flex;
+        font-size: 1.75rem;
 
         .mark {
             opacity: 0.25;
@@ -126,6 +123,18 @@ export default {
             &.marked {
                 opacity: 1;
             }
+        }
+    }
+
+    .notification {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 100%;
+        align-self: center;
+        margin: 0 .5rem;
+
+        &.active {
+            background-color: #fff;
         }
     }
 }
