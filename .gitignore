@@ -2,6 +2,12 @@
 *.log
 *-debug.log*
 
+# OS Generated Files
+.DS_Store
+.DS_Store?
+desktop.ini
+Thumbs.db
+
 # Editors
 .vscode/
 .idea/
