@@ -6,13 +6,17 @@
     "author": "Kim Simonsen",
     "license": "MIT",
     "scripts": {
-        "start": "node src/server/index.js",
-        "build": "npm run build:client",
+        "start": "node src/server",
+        "build": "concurrently -r \"npm run build:client\" \"npm run lint:server\"",
         "build:client": "webpack --config webpack.prod.js",
         "watch": "concurrently -kr \"npm run watch:client\" \"npm run watch:server\"",
         "watch:client": "webpack -w --config webpack.base.js",
-        "watch:server": "onchange -i \"src/server/**/*\" -- node src/server/index.js",
-        "lint": "eslint --ignore-path .gitignore --ext js,vue src"
+        "watch:server": "onchange -i \"src/(server|shared)/**/*\" -- npm run watch:server:start",
+        "prewatch:server:start": "npm run lint:server",
+        "watch:server:start": "node src/server",
+        "lint": "concurrently -r \"npm run lint:client\" \"npm run lint:server\"",
+        "lint:client": "eslint --ignore-path .gitignore src/client src/shared",
+        "lint:server": "eslint --ignore-path .gitignore src/server src/shared"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0-beta.39",
