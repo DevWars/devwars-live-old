@@ -25,11 +25,13 @@ class TextOperation {
     }
 
     toMonacoEdit() {
-        if (!window.monaco) {
+        // eslint-disable-next-line no-undef
+        const monaco = window ? window.monaco : undefined;
+        if (!monaco) {
             throw new Error('You need to load the monaco editor for this operation!');
         }
 
-        const range = new window.monaco.Range(
+        const range = new monaco.Range(
             this.startRow + 1,
             this.startCol + 1,
             this.endRow + 1,

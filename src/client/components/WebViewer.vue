@@ -1,11 +1,11 @@
 <template>
-    <iframe ref="iframe" class="web-viewer" :src="`/game/${team}/index.html`" frameborder="0"></iframe>
+    <iframe ref="iframe" :src="`/game/${team}/index.html`" class="web-viewer" frameborder="0"></iframe>
 </template>
 
 
 <script>
-import eventBus from "../services/eventBus";
 import { debounce } from 'lodash-es';
+import eventBus from '../services/eventBus';
 
 export default {
     props: {
@@ -14,8 +14,7 @@ export default {
     },
 
     mounted() {
-        const delay = this.delay;
-        this.onReload = debounce(this.onReload, delay, { maxWait: 10000 });
+        this.onReload = debounce(this.onReload, this.delay, { maxWait: 10000 });
         eventBus.on('reload-site', this.onReload);
     },
 

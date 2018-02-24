@@ -1,9 +1,12 @@
 require('dotenv').config();
+const serviceAccountKey = require('./serviceAccountKey.json');
 
-const PORT = process.env.PORT || 8000;
-const DEVWARS_URL = process.env.DEVWARS_URL;
-const FIREBASE_DATABASE_URL = process.env.FIREBASE_DATABASE_URL;
-const SOCKET_URL = process.env.SOCKET_URL || '';
+const {
+    PORT = 8000,
+    SOCKET_URL = '',
+    DEVWARS_URL,
+    FIREBASE_DATABASE_URL,
+} = process.env;
 
 module.exports = {
     port: PORT,
@@ -13,7 +16,7 @@ module.exports = {
     },
 
     firebase: {
-        serviceAccount: require('./serviceAccountKey.json'),
+        serviceAccount: serviceAccountKey,
         databaseURL: FIREBASE_DATABASE_URL,
     },
 

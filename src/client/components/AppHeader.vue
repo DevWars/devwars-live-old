@@ -18,7 +18,7 @@
 <script>
 import { mapState } from 'vuex';
 import CloudOffOutlineIcon from 'vue-material-design-icons/cloud-off-outline';
-import AppHeaderScore from "./AppHeaderScore";
+import AppHeaderScore from './AppHeaderScore';
 
 export default {
     components: { AppHeaderScore, CloudOffOutlineIcon },

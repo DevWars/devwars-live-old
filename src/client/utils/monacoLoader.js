@@ -35,7 +35,7 @@ const devwarsTheme = {
         { token: 'attribute.value.hex.css', foreground: 'ffffff' },
     ],
     colors: {
-        'foreground': '#ffffff',
+        foreground: '#ffffff',
         'editor.foreground': '#ffffff',
         'editor.background': `#${BG}`,
 
@@ -64,7 +64,7 @@ export default function monacoLoader(callback) {
 
         if (!isLoading) {
             isLoading = true;
-            window.require.config({ paths: { 'vs': '/vendor/vs' }});
+            window.require.config({ paths: { vs: '/vendor/vs' } });
             window.require(['vs/editor/editor.main'], () => {
                 isLoading = false;
                 window.monaco.editor.defineTheme('devwars', devwarsTheme);

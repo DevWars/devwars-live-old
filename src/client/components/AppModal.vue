@@ -1,5 +1,5 @@
 <template>
-    <div v-if="currentModal" @click.self="close" class="app-modal">
+    <div v-if="currentModal" class="app-modal" @click.self="close">
         <component :is="currentModal" class="container"/>
     </div>
 </template>
@@ -10,9 +10,7 @@ import { mapState } from 'vuex';
 import ScoreboardModal from './ScoreboardModal';
 
 export default {
-    components: {
-        'ScoreboardModal': ScoreboardModal,
-    },
+    components: { ScoreboardModal },
 
     computed: mapState(['currentModal']),
 

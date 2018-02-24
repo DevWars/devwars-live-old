@@ -143,15 +143,14 @@ class Game {
     onFirebaseGameObjectives(gameObjectives) {
         const objectives = gameObjectives
             .sort((a, b) => a.orderID - b.orderID)
-            .map((gameObjective) => {
-                return {
-                    isBonus: false,
-                    description: gameObjective.objectiveText,
-                    blueState: 'incomplete',
-                    redState: 'incomplete',
-                }
-            });
+            .map(gameObjective => ({
+                isBonus: false,
+                description: gameObjective.objectiveText,
+                blueState: 'incomplete',
+                redState: 'incomplete',
+            }));
 
+        // The last objective is always the bonus objective.
         objectives[objectives.length - 1].isBonus = true;
         this.gameRef.child('objectives').set(objectives);
     }
@@ -218,14 +217,15 @@ class Game {
         socket.emit('votes', this.votes);
     }
 
-    async onSocketAuth(socket, token, callback) {
-        const user = await devwars.authenticate(token);
-        if (!user) {
-            return callback(null);
-        }
+    static onSocketAuth(socket, token, callback) {
+        devwars.authenticate(token).then((user) => {
+            if (user) {
+                socket.client.user = user;
+                callback(user);
+            }
 
-        socket.client.user = user;
-        callback(user);
+            callback(null);
+        });
     }
 
     onSocketObjectiveNotify(socket, { team, id }) {
@@ -239,13 +239,11 @@ class Game {
         }
 
         this.gameRef.child(`objectives/${id}`).transaction((objective) => {
-            if (!objective) {
-                return;
-            }
-
-            const key = `${team}State`;
-            if (objective[key] === 'incomplete') {
-                objective[key] = 'pending';
+            if (objective) {
+                const key = `${team}State`;
+                if (objective[key] === 'incomplete') {
+                    objective[key] = 'pending';
+                }
             }
 
             return objective;
@@ -308,11 +306,10 @@ class Game {
         }
 
         this.gameRef.child(`objectives/${id}`).transaction((objective) => {
-            if (!objective) {
-                return;
+            if (objective) {
+                objective[`${team}State`] = state;
             }
 
-            objective[`${team}State`] = state;
             return objective;
         });
     }
@@ -323,11 +320,11 @@ class Game {
         }
 
         this.gameRef.child(`state/${team}Strikes`).transaction((strikes) => {
-            if (strikes === null) {
-                return;
+            if (typeof strikes === 'number') {
+                strikes = strikes < 3 ? strikes + 1 : 0;
             }
 
-            return strikes < 3 ? strikes + 1 : 0;
+            return strikes;
         });
     }
 

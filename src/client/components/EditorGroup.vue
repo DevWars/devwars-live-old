@@ -13,7 +13,7 @@
 
 
 <script>
-import EditorPlayer from "./EditorPlayer";
+import EditorPlayer from './EditorPlayer';
 
 export default {
     components: { EditorPlayer },

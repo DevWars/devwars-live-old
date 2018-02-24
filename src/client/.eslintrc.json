@@ -1,0 +1,32 @@
+{
+    "extends": [
+        "../../.eslintrc.json",
+        "plugin:vue/recommended"
+    ],
+    "globals": {
+        "monaco": true
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".vue", ".js", ".json"]
+            }
+        }
+    },
+    "rules": {
+        "import/no-extraneous-dependencies": "off",
+        "import/extensions": ["error", "always", {
+            "vue": "never",
+            "js": "never"
+        }],
+        "vue/html-indent": ["error", 4],
+        "vue/html-self-closing": ["error", {
+            "html": {
+                "void": "never",
+                "normal": "never",
+                "component": "always"
+            }
+        }],
+        "vue/max-attributes-per-line": "off"
+    }
+}

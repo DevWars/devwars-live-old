@@ -12,6 +12,7 @@ async function authenticate(token) {
         case 'MODERATOR':
         case 'USER':
             return { id: 1, username: token, role: token };
+        default:
         }
     }
 

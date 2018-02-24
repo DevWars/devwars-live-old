@@ -5,18 +5,18 @@
             <div class="strikes blue">
                 <div class="title">Strikes</div>
                 <div class="marks">
-                    <div class="mark" :class="blueStrikes > 0 ? 'marked' : ''">X</div>
-                    <div class="mark" :class="blueStrikes > 1 ? 'marked' : ''">X</div>
-                    <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
+                    <span :class="`mark ${blueStrikes > 0 ? 'marked' : ''}`">X</span>
+                    <span :class="`mark ${blueStrikes > 1 ? 'marked' : ''}`">X</span>
+                    <span :class="`mark ${blueStrikes > 2 ? 'marked' : ''}`">X</span>
                 </div>
             </div>
             <CountdownTimer :end="endTime"/>
             <div class="strikes red">
                 <div class="title">Strikes</div>
                 <div class="marks">
-                    <div class="mark" :class="redStrikes > 2 ? 'marked' : ''">X</div>
-                    <div class="mark" :class="redStrikes > 1 ? 'marked' : ''">X</div>
-                    <div class="mark" :class="redStrikes > 0 ? 'marked' : ''">X</div>
+                    <span :class="`mark ${redStrikes > 2 ? 'marked' : ''}`">X</span>
+                    <span :class="`mark ${redStrikes > 1 ? 'marked' : ''}`">X</span>
+                    <span :class="`mark ${redStrikes > 0 ? 'marked' : ''}`">X</span>
                 </div>
             </div>
             <div class="score red">{{ redScore }}</div>
@@ -24,37 +24,37 @@
         <div class="objectives">
             <div class="title">Objectives</div>
             <ul class="list">
-                <li v-for="(objective, index) in objectives" class="item">
+                <li v-for="(objective, index) in objectives" :key="index" class="item">
                     <CloseIcon
                         v-if="objective.blueState === 'dropped'"
-                        :class="`check blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                        :class="`check blue ${objective.blueState} ${objective.isBonus ? 'bonus' : ''}`"
                         :title="objective.blueState"
                     />
                     <LockOutlineIcon
                         v-else-if="objective.isBonus && blueBonusLocked"
-                        :class="`lock blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                        :class="`lock blue ${objective.blueState} ${objective.isBonus ? 'bonus' : ''}`"
                         title="locked"
                     />
                     <CheckIcon
                         v-else
-                        :class="`check blue ${objective.blueState}${objective.isBonus ? ' bonus' : ''}`"
+                        :class="`check blue ${objective.blueState} ${objective.isBonus ? 'bonus' : ''}`"
                         :title="objective.blueState"
                         @click.native="togglePending('blue', index)"
                     />
-                    <div class="description" :class="objective.isBonus ? 'bonus' : ''">{{ objective.description }}</div>
+                    <div :class="`description ${objective.isBonus ? 'bonus' : ''}`">{{ objective.description }}</div>
                     <CloseIcon
                         v-if="objective.redState === 'dropped'"
-                        :class="`check red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                        :class="`check red ${objective.redState} ${objective.isBonus ? 'bonus' : ''}`"
                         :title="objective.redState"
                     />
                     <LockOutlineIcon
                         v-else-if="objective.isBonus && redBonusLocked"
-                        :class="`lock red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                        :class="`lock red ${objective.redState} ${objective.isBonus ? 'bonus' : ''}`"
                         :title="objective.redState"
                     />
                     <CheckIcon
                         v-else
-                        :class="`check red ${objective.redState}${objective.isBonus ? ' bonus' : ''}`"
+                        :class="`check red ${objective.redState} ${objective.isBonus ? 'bonus' : ''}`"
                         :title="objective.redState"
                         @click.native="togglePending('red', index)"
                     />
@@ -66,11 +66,11 @@
 
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex';
 import CheckIcon from 'vue-material-design-icons/check';
 import CloseIcon from 'vue-material-design-icons/close';
 import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
-import socket from "../services/socket";
+import socket from '../services/socket';
 import CountdownTimer from './CountdownTimer';
 
 export default {

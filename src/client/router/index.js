@@ -25,6 +25,6 @@ export default new VueRouter({
         {
             path: '/broadcast',
             component: BroadcastPage,
-        }
+        },
     ],
 });

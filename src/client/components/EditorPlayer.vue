@@ -2,13 +2,13 @@
     <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
             <div class="username">{{ currentUser ? (hasControl ? 'You' : currentUser.username) : '' }}</div>
-            <div @click="toggleCollapse" class="language">{{ this.language }}</div>
+            <div class="language" @click="toggleCollapse">{{ language }}</div>
         </div>
         <div ref="mount" class="monaco-mount"></div>
         <div v-if="editable" class="controls">
-            <button v-if="hasControl" @click="release" class="button">Release</button>
-            <button v-else @click="control" class="button">Control</button>
-            <button v-if="hasControl && !readOnly" @click="save" class="button">Save</button>
+            <button v-if="hasControl" @click="release">Release</button>
+            <button v-else @click="control">Control</button>
+            <button v-if="hasControl && !readOnly" @click="save">Save</button>
             <div v-if="locked" class="status">
                 <LockOutlineIcon title="locked"/>
                 <span>Locked</span>
@@ -34,7 +34,7 @@ export default {
         namespace: { type: String, required: true },
         team: { type: String, required: true },
         language: { type: String, required: true },
-        editable: { type: Boolean, defualt: false },
+        editable: { type: Boolean, default: false },
         collapsible: { type: Boolean, default: true },
     },
 
@@ -133,14 +133,15 @@ export default {
             editor.addAction({
                 id: 'save-action',
                 label: 'Save',
+                // eslint-disable-next-line no-bitwise
                 keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
                 run: () => this.save(),
             });
 
             this.editor = preventReactivity(editor);
 
-            editor.onDidFocusEditor(() => this.inFocus = true);
-            editor.onDidBlurEditor(() => this.inFocus = false);
+            editor.onDidFocusEditor(() => { this.inFocus = true; });
+            editor.onDidBlurEditor(() => { this.inFocus = false; });
 
             editor.onDidChangeModelContent(this.onChange);
             editor.onDidChangeCursorSelection(this.onChangeSelection);

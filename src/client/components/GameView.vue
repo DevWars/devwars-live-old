@@ -1,23 +1,23 @@
 <template>
     <div class="game-view">
         <GameViewTeam
-            team="blue"
             :expanded="expandedTeam === 'blue'"
-            @toggleExpanded="toggleExpanded('blue')"
             :class="blueClassModifier"
+            team="blue"
+            @toggleExpanded="toggleExpanded('blue')"
         />
         <GameViewTeam
-            team="red"
             :expanded="expandedTeam === 'red'"
-            @toggleExpanded="toggleExpanded('red')"
             :class="redClassModifier"
+            team="red"
+            @toggleExpanded="toggleExpanded('red')"
         />
     </div>
 </template>
 
 
 <script>
-import GameViewTeam from "./GameViewTeam";
+import GameViewTeam from './GameViewTeam';
 
 export default {
     components: { GameViewTeam },

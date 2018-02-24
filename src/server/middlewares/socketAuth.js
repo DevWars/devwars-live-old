@@ -6,7 +6,7 @@ function socketAuth() {
     return async (socket, next) => {
         const { headers } = socket.handshake;
 
-        const token = cookie.parse(headers.cookie || '').token;
+        const { token } = cookie.parse(headers.cookie || '');
         if (!token) {
             return next();
         }
@@ -19,7 +19,7 @@ function socketAuth() {
         socket.client.user = new User(user);
         socket.emit('user', socket.client.user);
         next();
-    }
+    };
 }
 
 module.exports = socketAuth;

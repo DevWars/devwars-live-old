@@ -1,65 +1,71 @@
 {
-  "name": "devwars-editor",
-  "version": "0.1.0",
-  "description": "Text editor for DevWars",
-  "main": "src/server/index.js",
-  "author": "Kim Simonsen",
-  "license": "MIT",
-  "scripts": {
-    "start": "node src/server/index.js",
-    "build": "npm run build:client",
-    "build:client": "webpack --config webpack.prod.js",
-    "watch": "concurrently -kr \"npm run watch:client\" \"npm run watch:server\"",
-    "watch:client": "webpack -w --config webpack.base.js",
-    "watch:server": "onchange -i \"src/server/**/*\" -- node src/server/index.js"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.0.0-beta.39",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.39",
-    "@babel/polyfill": "^7.0.0-beta.39",
-    "@babel/preset-env": "^7.0.0-beta.39",
-    "autoprefixer": "^7.2.6",
-    "babel-loader": "^8.0.0-beta.0",
-    "concurrently": "^3.5.0",
-    "cookie": "^0.3.1",
-    "copy-webpack-plugin": "^4.4.1",
-    "css-loader": "^0.28.9",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "lodash-es": "^4.17.5",
-    "monaco-editor": "^0.10.0",
-    "node-sass": "^4.5.3",
-    "onchange": "^3.2.1",
-    "sass-loader": "^6.0.6",
-    "uglifyjs-webpack-plugin": "^1.1.8",
-    "vue": "^2.5.13",
-    "vue-loader": "^14.1.1",
-    "vue-material-design-icons": "^1.1.0",
-    "vue-router": "3.0.1",
-    "vue-template-compiler": "^2.5.13",
-    "vuex": "3.0.1",
-    "webpack": "^3.11.0",
-    "webpack-merge": "^4.1.1"
-  },
-  "dependencies": {
-    "ajv": "^6.1.1",
-    "axios": "^0.17.1",
-    "config": "^1.29.4",
-    "dotenv": "^5.0.0",
-    "express": "^4.15.4",
-    "firebase-admin": "^5.8.2",
-    "helmet": "^3.11.0",
-    "lodash": "^4.17.5",
-    "socket.io": "^2.0.3"
-  },
-  "browserslist": [
-    "chrome >= 61",
-    "edge >= 16",
-    "firefox >= 56",
-    "safari >= 11"
-  ],
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
+    "name": "devwars-editor",
+    "version": "0.1.0",
+    "description": "Text editor for DevWars",
+    "main": "src/server/index.js",
+    "author": "Kim Simonsen",
+    "license": "MIT",
+    "scripts": {
+        "start": "node src/server/index.js",
+        "build": "npm run build:client",
+        "build:client": "webpack --config webpack.prod.js",
+        "watch": "concurrently -kr \"npm run watch:client\" \"npm run watch:server\"",
+        "watch:client": "webpack -w --config webpack.base.js",
+        "watch:server": "onchange -i \"src/server/**/*\" -- node src/server/index.js",
+        "lint": "eslint --ignore-path .gitignore --ext js,vue src"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.0.0-beta.39",
+        "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.39",
+        "@babel/polyfill": "^7.0.0-beta.39",
+        "@babel/preset-env": "^7.0.0-beta.39",
+        "autoprefixer": "^7.2.6",
+        "babel-loader": "^8.0.0-beta.0",
+        "concurrently": "^3.5.0",
+        "copy-webpack-plugin": "^4.4.1",
+        "css-loader": "^0.28.9",
+        "eslint": "^4.18.1",
+        "eslint-config-airbnb-base": "^12.1.0",
+        "eslint-loader": "^1.9.0",
+        "eslint-plugin-import": "^2.9.0",
+        "eslint-plugin-vue": "^4.3.0",
+        "extract-text-webpack-plugin": "^3.0.2",
+        "lodash-es": "^4.17.5",
+        "monaco-editor": "^0.10.0",
+        "node-sass": "^4.5.3",
+        "onchange": "^3.2.1",
+        "sass-loader": "^6.0.6",
+        "uglifyjs-webpack-plugin": "^1.1.8",
+        "vue": "^2.5.13",
+        "vue-loader": "^14.1.1",
+        "vue-material-design-icons": "^1.1.0",
+        "vue-router": "3.0.1",
+        "vue-template-compiler": "^2.5.13",
+        "vuex": "3.0.1",
+        "webpack": "^3.11.0",
+        "webpack-merge": "^4.1.1"
+    },
+    "dependencies": {
+        "ajv": "^6.1.1",
+        "axios": "^0.17.1",
+        "config": "^1.29.4",
+        "cookie": "^0.3.1",
+        "dotenv": "^5.0.0",
+        "express": "^4.15.4",
+        "firebase-admin": "^5.8.2",
+        "helmet": "^3.11.0",
+        "lodash": "^4.17.5",
+        "socket.io": "^2.0.3"
+    },
+    "browserslist": [
+        "chrome >= 61",
+        "edge >= 16",
+        "firefox >= 56",
+        "safari >= 11"
+    ],
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
     }
-  }
 }

@@ -1,13 +1,13 @@
 <template>
     <div :class="`game-view-team-menu ${team}`">
-        <button @click="$emit('onViewCode')" :class="`button ${viewSite ? 'fade' : ''}`">
+        <button :class="viewSite ? 'fade' : ''" @click="$emit('onViewCode')">
             <CodeTagsIcon class="icon"/>
         </button>
-        <button @click="$emit('onViewSite')" :class="`button ${viewSite ? '' : 'fade'}`">
+        <button :class="viewSite ? '' : 'fade'" @click="$emit('onViewSite')">
             <ApplicationIcon/>
         </button>
         <div class="fill"></div>
-        <button @click="$emit('onToggleExpanded')" class="button">
+        <button @click="$emit('onToggleExpanded')">
             <ArrowCollapseIcon v-if="expanded"/>
             <ArrowExpandIcon v-else/>
         </button>
@@ -53,7 +53,7 @@ export default {
         color: $red-team-color;
     }
 
-    .button {
+    button {
         display: flex;
         width: 3rem;
         height: 3rem;

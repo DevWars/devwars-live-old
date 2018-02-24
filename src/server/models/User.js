@@ -5,7 +5,7 @@ class User {
         this.role = user.role;
     }
 
-    isAdmin()  {
+    isAdmin() {
         return this.role === 'ADMIN';
     }
 

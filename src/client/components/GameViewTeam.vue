@@ -2,7 +2,7 @@
     <div class="game-view-team">
         <GameViewTeamMenu
             :team="team"
-            :viewSite="viewSite"
+            :view-site="viewSite"
             :expanded="expanded"
             @onViewCode="viewSite = false"
             @onViewSite="viewSite = true"
@@ -16,10 +16,9 @@
 
 <script>
 import { mapState } from 'vuex';
-import GameViewTeamMenu from "./GameViewTeamMenu";
-import EditorGroup from "./EditorGroup";
-import EditorPlayer from "./EditorPlayer";
-import WebViewer from "./WebViewer";
+import GameViewTeamMenu from './GameViewTeamMenu';
+import EditorGroup from './EditorGroup';
+import WebViewer from './WebViewer';
 
 export default {
     components: {

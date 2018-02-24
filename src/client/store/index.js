@@ -47,18 +47,12 @@ const getters = {
             return null;
         }
 
-        for (const player of players) {
-            if (player.id === user.id) {
-                return player.team;
-            }
-        }
-
-        const player = players.find(p => p.id === user.id);
-        return player ? player.team : null;
+        const userPlayer = players.find(player => player.id === user.id);
+        return userPlayer ? userPlayer.team : null;
     },
 
     blueScore: (state, getters) => {
-        let score = state.objectives.reduce((score, objective) => {
+        const score = state.objectives.reduce((score, objective) => {
             if (objective.blueState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
             }
@@ -79,7 +73,7 @@ const getters = {
     },
 
     redScore: (state, getters) => {
-        let score = state.objectives.reduce((score, objective) => {
+        const score = state.objectives.reduce((score, objective) => {
             if (objective.redState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
             }
@@ -107,59 +101,63 @@ const getters = {
         return state.objectives.some(o => o.redState === 'pending');
     },
 
-    blueBonusLocked: (state) => {
+    blueBonusLocked(state) {
         return state.objectives.some((objective) => {
             if (!objective.isBonus) {
                 const state = objective.blueState;
                 return state !== 'complete' && state !== 'dropped';
             }
+
+            return false;
         });
     },
 
-    redBonusLocked: (state) => {
+    redBonusLocked(state) {
         return state.objectives.some((objective) => {
             if (!objective.isBonus) {
                 const state = objective.redState;
                 return state !== 'complete' && state !== 'dropped';
             }
+
+            return false;
         });
     },
 };
 
 const mutations = {
-    'SOCKET_CONNECT': (state) => {
+    SOCKET_CONNECT: (state) => {
         state.connected = true;
     },
 
-    'SOCKET_DISCONNECT': (state) => {
+    SOCKET_DISCONNECT: (state) => {
         state.connected = false;
     },
 
-    'RECEIVE_GAMESTATE': (state, gameState) => {
+    RECEIVE_GAMESTATE: (state, gameState) => {
         state.game = gameState;
     },
 
-    'RECEIVE_OBJECTIVES': (state, objectives) => {
+    RECEIVE_OBJECTIVES: (state, objectives) => {
         state.objectives = objectives;
     },
 
-    'RECEIVE_PLAYERS': (state, players) => {
+    RECEIVE_PLAYERS: (state, players) => {
         state.players = players;
     },
 
-    'RECEIVE_VOTES': (state, votes) => {
+    RECEIVE_VOTES: (state, votes) => {
         state.votes = votes;
     },
 
-    'RECIEVE_USER': (state, user) => {
+    RECIEVE_USER: (state, user) => {
         state.user = user;
     },
 
-    'OPEN_MODAL': (state, { modal }) => {
+    OPEN_MODAL: (state, { modal }) => {
         state.currentModal = modal;
     },
 
-    'CLOSE_MODAL': (state) => {
+    CLOSE_MODAL: (state) => {
         state.currentModal = null;
     },
 };

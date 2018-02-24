@@ -1,3 +1,4 @@
+/* eslint import/no-extraneous-dependencies:0 */
 const config = require('config');
 const path = require('path');
 const webpack = require('webpack');
@@ -14,6 +15,12 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                enforce: 'pre',
+                test: /\.(js|vue)$/,
+                loader: 'eslint-loader',
+                exclude: /node_modules/,
+            },
             {
                 test: /\.js$/,
                 use: 'babel-loader',

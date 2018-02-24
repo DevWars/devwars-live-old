@@ -1,31 +1,32 @@
 <template>
     <div class="app-header-score" @click="openScoreModal">
         <div class="team blue">
-            <span class="notification" :class="blueHasPendingObjective ? 'active' : ''"></span>
+            <span :class="`notification ${blueHasPendingObjective ? 'active' : ''}`"></span>
             <div class="score">{{ blueScore }}</div>
             <div class="strikes">
-                <div class="mark" :class="blueStrikes > 0 ? 'marked' : ''">X</div>
-                <div class="mark" :class="blueStrikes > 1 ? 'marked' : ''">X</div>
-                <div class="mark" :class="blueStrikes > 2 ? 'marked' : ''">X</div>
+                <span :class="`mark ${blueStrikes > 0 ? 'marked' : ''}`">X</span>
+                <span :class="`mark ${blueStrikes > 1 ? 'marked' : ''}`">X</span>
+                <span :class="`mark ${blueStrikes > 2 ? 'marked' : ''}`">X</span>
             </div>
         </div>
-        <CountdownTimer v-if="stage === 'running'" :end="endTime" :warnTime="1000 * 60"/>
+        <CountdownTimer v-if="stage === 'running'" :end="endTime" :warn-time="1000 * 60"/>
         <div v-else class="title">{{ title }}</div>
         <div class="team red">
             <div class="strikes">
-                <div class="mark" :class="redStrikes > 2 ? 'marked' : ''">X</div>
-                <div class="mark" :class="redStrikes > 1 ? 'marked' : ''">X</div>
-                <div class="mark" :class="redStrikes > 0 ? 'marked' : ''">X</div>
+                <span :class="`mark ${redStrikes > 2 ? 'marked' : ''}`">X</span>
+                <span :class="`mark ${redStrikes > 1 ? 'marked' : ''}`">X</span>
+                <span :class="`mark ${redStrikes > 0 ? 'marked' : ''}`">X</span>
             </div>
             <div class="score">{{ redScore }}</div>
-            <span class="notification" :class="redHasPendingObjective ? 'active' : ''"></span>
+            <span :class="`notification ${redHasPendingObjective ? 'active' : ''}`"></span>
+            <span :class="redHasPendingObjective ? ' active' : ''" class="notification"></span>
         </div>
     </div>
 </template>
 
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex';
 import CountdownTimer from './CountdownTimer';
 
 export default {

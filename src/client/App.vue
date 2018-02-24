@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <router-view></router-view>
+        <router-view/>
         <AppModal/>
     </div>
 </template>
@@ -16,10 +16,10 @@ export default {
 
 
 <style lang="scss">
-@import './styles/material-design-icons';
 @import './styles/variables';
 @import './styles/animations';
 @import './styles/base';
+@import './styles/material-design-icons';
 </style>
 
 

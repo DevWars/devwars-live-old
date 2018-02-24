@@ -9,7 +9,7 @@
 export default {
     props: {
         end: { type: Number, required: true },
-        warnTime: Number,
+        warnTime: { type: Number, default: -1 },
     },
 
     data() {
@@ -39,7 +39,7 @@ export default {
         },
 
         warn() {
-            if (typeof this.warnTime === 'number') {
+            if (this.warnTime > 0) {
                 return (this.end - this.now) < this.warnTime;
             }
         },

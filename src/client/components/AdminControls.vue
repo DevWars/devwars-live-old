@@ -8,9 +8,10 @@
             </div>
         </div>
         <div class="controls">
-            <div v-for="(objective, id) in objectives" class="row">
+            <div v-for="(objective, id) in objectives" :key="id" class="row">
                 <select
                     v-for="team in ['blue', 'red']"
+                    :key="team"
                     :class="`${team} ${objective[`${team}State`]}`"
                     :value="objective[`${team}State`]"
                     @input="onObjectiveStateChange($event, team, id)"

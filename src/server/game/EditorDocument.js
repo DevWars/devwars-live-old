@@ -13,7 +13,7 @@ class EditorDocument {
         lines[0] = this.buffer[startRow].slice(0, startCol) + lines[0];
         lines[lines.length - 1] += this.buffer[endRow].slice(endCol);
 
-        this.buffer.splice(startRow, (endRow - startRow + 1), ...lines);
+        this.buffer.splice(startRow, ((endRow - startRow) + 1), ...lines);
         // Expire the cached text on changes.
         this._bufferCache = null;
     }

@@ -32,7 +32,9 @@ class EditorSelection {
     }
 
     toMonacoRanges() {
-        if (!window.monaco) {
+        // eslint-disable-next-line no-undef
+        const monaco = window ? window.monaco : undefined;
+        if (!monaco) {
             throw new Error('You need to load the monaco editor for this operation!');
         }
 
