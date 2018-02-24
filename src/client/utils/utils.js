@@ -14,8 +14,8 @@ export function preventReactivity(object) {
 export function scoreFromVotes(votes, competingVotes) {
     const total = votes + competingVotes;
     const percentage = (votes / total) * 100;
-    if (percentage > 60) {
-        return percentage > 85 ? 2 : 1;
+    if (percentage > 55) {
+        return percentage > 80 ? 2 : 1;
     }
 
     return 0;
