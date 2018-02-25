@@ -5,8 +5,6 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const extractStyles = new ExtractTextPlugin('styles.css');
-
 module.exports = {
     entry: './src/client/index.js',
     output: {
@@ -16,12 +14,6 @@ module.exports = {
     module: {
         rules: [
             {
-                enforce: 'pre',
-                test: /\.(js|vue)$/,
-                loader: 'eslint-loader',
-                exclude: /node_modules/,
-            },
-            {
                 test: /\.js$/,
                 use: 'babel-loader',
                 exclude: /node_modules/,
@@ -29,23 +21,28 @@ module.exports = {
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                options: {
-                    extractCSS: extractStyles,
-                },
+                options: { extractCSS: true },
             },
         ],
     },
     resolve: {
         extensions: ['.vue', '.js', '.json'],
     },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 400 * 1024,
+    },
+    stats: {
+        children: false,
+    },
     plugins: [
-        extractStyles,
+        new webpack.DefinePlugin({
+            'process.env.SOCKET_URL': `"${config.get('socketUrl')}"`,
+        }),
         new CopyWebpackPlugin([{
             from: 'node_modules/monaco-editor/min/vs',
             to: 'vendor/vs',
         }]),
-        new webpack.DefinePlugin({
-            'process.env.SOCKET_URL': config.has('socketUrl') ? `"${config.get('socketUrl')}"` : '',
-        }),
+        new ExtractTextPlugin('styles.css'),
     ],
 };
