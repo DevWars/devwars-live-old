@@ -19,7 +19,6 @@
             </div>
             <div class="score">{{ redScore }}</div>
             <span :class="`notification ${redHasPendingObjective ? 'active' : ''}`"></span>
-            <span :class="redHasPendingObjective ? ' active' : ''" class="notification"></span>
         </div>
     </div>
 </template>
