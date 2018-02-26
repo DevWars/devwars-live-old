@@ -1,7 +1,13 @@
 <template>
     <div class="play-page">
         <div class="panel editor">
-            <AppHeader/>
+            <AppHeader>
+                <PlaylistCheckIcon
+                    slot="left"
+                    :class="`objectives-modal-icon ${team}`"
+                    @click.native="openObjectivesModal"
+                />
+            </AppHeader>
             <EditorPlayer
                 v-if="playerEditor"
                 :key="playerEditor.namespace"
@@ -21,6 +27,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import PlaylistCheckIcon from 'vue-material-design-icons/checkbox-multiple-marked-outline';
 import AppHeader from '../AppHeader';
 import EditorGroup from '../EditorGroup';
 import EditorPlayer from '../EditorPlayer';
@@ -32,6 +39,7 @@ export default {
         EditorGroup,
         EditorPlayer,
         WebViewer,
+        PlaylistCheckIcon,
     },
 
     props: {
@@ -52,6 +60,12 @@ export default {
             return this.editors.filter((editor) => {
                 return (editor.team === this.team && editor.language !== this.language);
             });
+        },
+    },
+
+    methods: {
+        openObjectivesModal() {
+            this.$store.commit('PUSH_MODAL', { name: 'ObjectivesModal', props: { team: this.team } });
         },
     },
 };
@@ -83,6 +97,19 @@ export default {
         .editor-group {
             flex: 1 1 80%;
             border-top: $border;
+        }
+    }
+
+    .objectives-modal-icon {
+        margin: 0 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+
+        &.blue {
+            color: $blue-team-color;
+        }
+        &.red {
+            color: $red-team-color;
         }
     }
 }

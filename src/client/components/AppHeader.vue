@@ -1,6 +1,8 @@
 <template>
     <header class="app-header">
-        <div class="section"></div>
+        <div class="section">
+            <slot name="left"></slot>
+        </div>
         <div class="section center">
             <AppHeaderScore/>
         </div>
@@ -10,6 +12,7 @@
                 class="connection-icon"
                 title="Disconnected"
             />
+            <slot name="right"></slot>
         </div>
     </header>
 </template>
@@ -47,21 +50,15 @@ export default {
         }
 
         &.end {
-            flex-direction: row-reverse;
+            justify-content: flex-end;
         }
     }
 
     .connection-icon {
-        display: flex;
         margin: 0 1rem;
-        justify-content: center;
-        align-items: center;
-
-        font-size: 1.375rem;
+        font-size: 1.5rem;
         color: $warrning-color;
-
         animation: pulse 750ms infinite alternate ease-in-out;
     }
 }
 </style>
-Server connection lost

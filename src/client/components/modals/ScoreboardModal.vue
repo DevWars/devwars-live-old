@@ -23,41 +23,11 @@
         </div>
         <div class="objectives">
             <div class="title">Objectives</div>
-            <ul class="list">
+            <ul>
                 <li v-for="(objective, index) in objectives" :key="index" class="item">
-                    <CloseIcon
-                        v-if="objective.blueState === 'dropped'"
-                        :class="`check blue ${objective.blueState} ${objective.isBonus ? 'bonus' : ''}`"
-                        :title="objective.blueState"
-                    />
-                    <LockOutlineIcon
-                        v-else-if="objective.isBonus && blueBonusLocked"
-                        :class="`lock blue ${objective.blueState} ${objective.isBonus ? 'bonus' : ''}`"
-                        title="locked"
-                    />
-                    <CheckIcon
-                        v-else
-                        :class="`check blue ${objective.blueState} ${objective.isBonus ? 'bonus' : ''}`"
-                        :title="objective.blueState"
-                        @click.native="togglePending('blue', index)"
-                    />
+                    <component :is="objective.blue.icon" :class="objective.blue.classNames"/>
                     <div :class="`description ${objective.isBonus ? 'bonus' : ''}`">{{ objective.description }}</div>
-                    <CloseIcon
-                        v-if="objective.redState === 'dropped'"
-                        :class="`check red ${objective.redState} ${objective.isBonus ? 'bonus' : ''}`"
-                        :title="objective.redState"
-                    />
-                    <LockOutlineIcon
-                        v-else-if="objective.isBonus && redBonusLocked"
-                        :class="`lock red ${objective.redState} ${objective.isBonus ? 'bonus' : ''}`"
-                        :title="objective.redState"
-                    />
-                    <CheckIcon
-                        v-else
-                        :class="`check red ${objective.redState} ${objective.isBonus ? 'bonus' : ''}`"
-                        :title="objective.redState"
-                        @click.native="togglePending('red', index)"
-                    />
+                    <component :is="objective.red.icon" :class="objective.red.classNames"/>
                 </li>
             </ul>
         </div>
@@ -66,25 +36,25 @@
 
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import CheckIcon from 'vue-material-design-icons/check';
 import CloseIcon from 'vue-material-design-icons/close';
 import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
-import socket from '../services/socket';
-import CountdownTimer from './CountdownTimer';
+import socket from '../../services/socket';
+import CountdownTimer from '../CountdownTimer';
+
+const iconMap = {
+    incomplete: 'CheckIcon',
+    pending: 'CheckIcon',
+    complete: 'CheckIcon',
+    dropped: 'CloseIcon',
+};
 
 export default {
     components: { CountdownTimer, CheckIcon, CloseIcon, LockOutlineIcon },
 
     computed: {
-        ...mapState(['objectives', 'votes']),
-        ...mapGetters([
-            'userTeam',
-            'blueScore',
-            'redScore',
-            'blueBonusLocked',
-            'redBonusLocked',
-        ]),
+        ...mapGetters(['blueScore', 'redScore' ]),
 
         endTime() {
             return this.$store.state.game.endTime;
@@ -97,13 +67,27 @@ export default {
         redStrikes() {
             return this.$store.state.game.redStrikes;
         },
-    },
 
-    methods: {
-        togglePending(team, id) {
-            if (this.userTeam === team) {
-                socket.emit('objective-notify', { team, id });
-            }
+        objectives() {
+            return this.$store.state.objectives.map((storeObjective) => {
+                const objective = { ...storeObjective };
+                for (const team of ['blue', 'red']) {
+                    const state = storeObjective[`${team}State`];
+                    let icon = iconMap[state];
+                    let classNames = `${team} ${state}`;
+
+                    if (storeObjective.isBonus) {
+                        classNames += ' bonus';
+                        if (this.$store.getters[`${team}BonusLocked`] && state !== 'dropped') {
+                            icon = 'LockOutlineIcon';
+                        }
+                    }
+
+                    objective[team] = { icon, classNames };
+                }
+
+                return objective;
+            });
         },
     },
 };
@@ -111,18 +95,10 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
+@import '../../styles/variables';
 
 .scoreboard-modal {
     padding: 3.5rem;
-
-    .blue {
-        color: $blue-team-color;
-    }
-
-    .red {
-        color: $red-team-color;
-    }
 }
 
 .scoreboard-modal .score-header {
@@ -133,6 +109,15 @@ export default {
     white-space: nowrap;
     user-select: none;
     line-height: 1;
+
+    .blue {
+        color: $blue-team-color;
+    }
+
+    .red {
+        color: $red-team-color;
+        text-align: right;
+    }
 
     .countdown-timer {
         margin: 0 auto;
@@ -147,10 +132,6 @@ export default {
     .strikes {
         margin: 0 1.5rem;
         margin-top: 5px;
-
-        &.red .title {
-            text-align: right;
-        }
 
         .title {
             font-size: 0.875rem;
@@ -181,7 +162,6 @@ export default {
 
 .scoreboard-modal .objectives {
     margin: auto;
-    max-width: 36rem;
 
     .title {
         margin-bottom: 1.75rem;
@@ -189,12 +169,6 @@ export default {
         text-transform: uppercase;
         font-size: 2rem;
         font-weight: 300;
-    }
-
-    .list {
-        margin: 0;
-        padding: 0;
-        list-style: none;
     }
 
     .item {
@@ -206,12 +180,7 @@ export default {
             margin: 0 1.5rem;
             flex: 1;
             text-align: center;
-            hyphens: auto;
             word-break: break-word;
-
-            &.bonus {
-                color: $bonus-color;
-            }
         }
 
         .material-design-icon {
@@ -219,20 +188,12 @@ export default {
             font-size: 1.75rem;
             user-select: none;
 
-            &.check {
-                cursor: pointer;
-            }
-
             &.blue {
-               color: $blue-team-color;
+                color: $blue-team-color;
             }
 
             &.red {
                 color: $red-team-color;
-            }
-
-            &.bonus {
-                color: $bonus-color !important;
             }
 
             &.pending {
@@ -242,6 +203,10 @@ export default {
             &.complete {
                 opacity: 1;
             }
+        }
+
+        .bonus {
+            color: $bonus-color !important;
         }
     }
 }

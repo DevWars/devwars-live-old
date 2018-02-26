@@ -1,16 +1,18 @@
 <template>
-    <div v-if="currentModal" class="app-modal" @click.self="close">
-        <component :is="currentModal.name" v-bind="currentModal.props" class="container"/>
+    <div v-if="currentModal" class="app-modal">
+        <div class="overlay" @click.self="close"></div>
+        <component :is="currentModal.name" v-bind="currentModal.props" class="content"/>
     </div>
 </template>
 
 
 <script>
 import { mapGetters } from 'vuex';
-import ScoreboardModal from './ScoreboardModal';
+import ScoreboardModal from './modals/ScoreboardModal';
+import ObjectivesModal from './modals/ObjectivesModal';
 
 export default {
-    components: { ScoreboardModal },
+    components: { ScoreboardModal, ObjectivesModal },
 
     computed: mapGetters(['currentModal']),
 
@@ -53,14 +55,22 @@ export default {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    cursor: pointer;
 
-    background-color: rgba($bg-color, 0.75);
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
 
-    .container {
-        width: 40rem;
+        background-color: rgba($bg-color, 0.75);
+    }
+
+    .content {
+        z-index: 1;
+        width: 42rem;
         overflow: hidden;
-        cursor: default;
         border: $border;
         background-color: $bg-color;
     }
