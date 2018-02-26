@@ -61,7 +61,7 @@ export default {
 
     methods: {
         openScoreModal() {
-            this.$store.commit('OPEN_MODAL', { modal: 'ScoreboardModal' });
+            this.$store.commit('PUSH_MODAL', { name: 'ScoreboardModal' });
         },
     },
 };

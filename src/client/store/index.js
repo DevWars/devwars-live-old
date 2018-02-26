@@ -6,8 +6,9 @@ Vue.use(Vuex);
 
 const state = {
     user: null,
-    currentModal: null,
     connected: false,
+
+    modalStack: [],
 
     game: {
         id: 0,
@@ -49,6 +50,10 @@ const getters = {
 
         const userPlayer = players.find(player => player.id === user.id);
         return userPlayer ? userPlayer.team : null;
+    },
+
+    currentModal(state) {
+        return state.modalStack[state.modalStack.length - 1] || null;
     },
 
     blueScore: (state, getters) => {
@@ -153,12 +158,18 @@ const mutations = {
         state.user = user;
     },
 
-    OPEN_MODAL: (state, { modal }) => {
-        state.currentModal = modal;
+    PUSH_MODAL: (state, modal) => {
+        state.modalStack.push(modal);
     },
 
-    CLOSE_MODAL: (state) => {
+    POP_MODAL: (state) => {
+        state.modalStack.pop();
         state.currentModal = null;
+    },
+
+    REPLACE_MODAL: (state, modal) => {
+        state.modalStack.pop();
+        state.modalStack.push(modal);
     },
 };
 

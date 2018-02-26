@@ -1,18 +1,18 @@
 <template>
     <div v-if="currentModal" class="app-modal" @click.self="close">
-        <component :is="currentModal" class="container"/>
+        <component :is="currentModal.name" v-bind="currentModal.props" class="container"/>
     </div>
 </template>
 
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import ScoreboardModal from './ScoreboardModal';
 
 export default {
     components: { ScoreboardModal },
 
-    computed: mapState(['currentModal']),
+    computed: mapGetters(['currentModal']),
 
     mounted() {
         window.addEventListener('keydown', this.onKeyPress);
@@ -31,7 +31,7 @@ export default {
 
         close() {
             if (this.currentModal) {
-                this.$store.commit('CLOSE_MODAL');
+                this.$store.commit('POP_MODAL');
             }
         },
     },
