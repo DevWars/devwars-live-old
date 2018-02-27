@@ -1,18 +1,16 @@
 <template>
     <div class="objectives-modal">
-        <div class="objectives">
-            <div class="title">Objectives</div>
-            <ul>
-                <li v-for="(objective, index) in objectives" :key="index" class="item">
-                    <component
-                        :is="objective.icon"
-                        :class="objective.iconClassNames"
-                        @click.native="markObjectiveComplete(index)"
-                    />
-                    <div :class="`description ${objective.isBonus ? 'bonus' : ''}`">{{ objective.description }}</div>
-                </li>
-            </ul>
-        </div>
+        <div class="title">Objectives</div>
+        <ul>
+            <li v-for="(objective, index) in objectives" :key="index" class="item">
+                <component
+                    :is="objective.icon"
+                    :class="objective.iconClassNames"
+                    @click.native="markObjectiveComplete(index)"
+                />
+                <div :class="`description ${objective.isBonus ? 'bonus' : ''}`">{{ objective.description }}</div>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -77,7 +75,14 @@ export default {
                 return;
             }
 
-            socket.emit('objective-notify', { team: this.team, id });
+            if (this.$store.getters.userTeam !== this.team) {
+                return;
+            }
+
+            this.$store.commit('PUSH_MODAL', { name: 'ObjectiveConfirmModal', props: {
+                team: this.team,
+                objectiveId: id,
+            }});
         },
     },
 };

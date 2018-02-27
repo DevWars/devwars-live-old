@@ -10,9 +10,10 @@
 import { mapGetters } from 'vuex';
 import ScoreboardModal from './modals/ScoreboardModal';
 import ObjectivesModal from './modals/ObjectivesModal';
+import ObjectiveConfirmModal from './modals/ObjectiveConfirmModal';
 
 export default {
-    components: { ScoreboardModal, ObjectivesModal },
+    components: { ScoreboardModal, ObjectivesModal, ObjectiveConfirmModal },
 
     computed: mapGetters(['currentModal']),
 

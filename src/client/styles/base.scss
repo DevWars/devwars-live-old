@@ -28,7 +28,7 @@ select, button {
     height: 1.875rem;
     font-family: $base-font;
     font-size: 0.875rem;
-    border: 2px solid $border-color;
+    border: $border;
 
     color: $base-color;
     background-color: $bg-color;
@@ -43,7 +43,7 @@ select, button {
 }
 
 button {
-    padding: 0.25rem 0.5rem;
+    padding: 0 0.5rem;
     cursor: pointer;
 
     &:active {
