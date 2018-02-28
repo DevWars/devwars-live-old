@@ -1,8 +1,10 @@
 <template>
-    <div v-if="currentModal" class="app-modal">
-        <div class="overlay" @click.self="close"></div>
-        <component :is="currentModal.name" v-bind="currentModal.props" class="content"/>
-    </div>
+    <transition-group name="bounce" tag="div" class="app-modal">
+        <div v-if="currentModal" key="overlay" class="overlay" @click.self="close"></div>
+        <div v-if="currentModal" :key="currentModal.name" class="modal">
+            <component :is="currentModal.name" v-bind="currentModal.props" class="content"/>
+        </div>
+    </transition-group>
 </template>
 
 
@@ -46,17 +48,6 @@ export default {
 @import '../styles/variables';
 
 .app-modal {
-    z-index: 500;
-    position: absolute;
-    display: flex;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-
     .overlay {
         position: absolute;
         top: 0;
@@ -68,12 +59,43 @@ export default {
         background-color: rgba($bg-color, 0.75);
     }
 
-    .content {
-        z-index: 1;
-        width: 42rem;
+    .modal {
+        z-index: 500;
+        position: absolute;
+        display: flex;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
         overflow: hidden;
-        border: $border;
-        background-color: $bg-color;
+        pointer-events: none;
+
+        .content {
+            z-index: 1;
+            width: 43rem;
+            overflow: hidden;
+            border: $border;
+            background-color: $bg-color;
+            pointer-events: auto;
+        }
+    }
+
+    .bounce-enter-active, .bounce-leave-active {
+        transition: opacity 0.1s linear;
+        &.modal {
+            transition-duration: 0.2s;
+            transition-timing-function: cubic-bezier(0.6, 0, 0.2, 1.65);
+            transition-property: opacity, transform;
+        }
+    }
+
+    .bounce-enter, .bounce-leave-to {
+        opacity: 0;
+        &.modal {
+            transform: scale(0.85);
+        }
     }
 }
 </style>
