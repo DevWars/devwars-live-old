@@ -55,6 +55,7 @@ export default {
         width: 100%;
         height: 100%;
         cursor: pointer;
+        user-select: none;
 
         background-color: rgba($bg-color, 0.75);
     }
