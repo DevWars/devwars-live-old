@@ -6,7 +6,6 @@
             :namespace="editor.namespace"
             :team="editor.team"
             :language="editor.language"
-            :collapsible="true"
         />
     </div>
 </template>

@@ -15,6 +15,7 @@
                 :team="playerEditor.team"
                 :language="playerEditor.language"
                 :editable="true"
+                :collapsible="false"
             />
         </div>
         <div class="panel team">
