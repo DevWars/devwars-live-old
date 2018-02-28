@@ -29,7 +29,7 @@ export default {
 
     methods: {
         onKeyPress(event) {
-            if (event.key === 'Escape') {
+            if (event.key === 'Escape' || event.key === 'Esc') {
                 this.close();
             }
         },
