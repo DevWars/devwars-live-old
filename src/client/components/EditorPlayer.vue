@@ -1,7 +1,8 @@
 <template>
     <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
-            <div class="username">{{ currentUser ? (hasControl ? 'You' : currentUser.username) : '' }}</div>
+            <div v-if="currentUser" class="username">{{ currentUser.username }}</div>
+            <div v-else-if="owner" class="username placeholder">{{ `Waiting on ${owner.username}` }}</div>
             <div class="language" @click="toggleCollapse">{{ language }}</div>
         </div>
         <div ref="mount" class="monaco-mount"></div>
@@ -31,7 +32,7 @@ export default {
     components: { LockOutlineIcon },
 
     props: {
-        namespace: { type: String, required: true },
+        id: { type: Number, required: true },
         team: { type: String, required: true },
         language: { type: String, required: true },
         editable: { type: Boolean, default: false },
@@ -61,6 +62,12 @@ export default {
 
     computed: {
         ...mapState(['user']),
+
+        owner() {
+            return this.$store.state.players.find((player) => {
+                return player.editorId === this.id;
+            });
+        },
 
         hasControl() {
             return this.currentSocketId && this.currentSocketId === this.socketId;
@@ -151,7 +158,7 @@ export default {
 
         initSocket() {
             const socketUrl = process.env.SOCKET_URL || '';
-            const socket = io(`${socketUrl}${this.namespace}`, {
+            const socket = io(`${socketUrl}/${this.id}`, {
                 transport: ['websocket'],
                 upgrade: false,
             });
@@ -365,6 +372,10 @@ export default {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        &.placeholder {
+            opacity: 0.25;
+        }
     }
 
     .controls {

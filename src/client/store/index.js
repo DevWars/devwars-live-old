@@ -33,12 +33,12 @@ const state = {
     },
 
     editors: [
-        { namespace: '/0', team: 'blue', language: 'html', filename: 'index.html' },
-        { namespace: '/1', team: 'blue', language: 'css', filename: 'game.css' },
-        { namespace: '/2', team: 'blue', language: 'js', filename: 'game.js' },
-        { namespace: '/3', team: 'red', language: 'html', filename: 'index.html' },
-        { namespace: '/4', team: 'red', language: 'css', filename: 'game.css' },
-        { namespace: '/5', team: 'red', language: 'js', filename: 'game.js' },
+        { id: 0, team: 'blue', language: 'html', filename: 'index.html' },
+        { id: 1, team: 'blue', language: 'css', filename: 'game.css' },
+        { id: 2, team: 'blue', language: 'js', filename: 'game.js' },
+        { id: 3, team: 'red', language: 'html', filename: 'index.html' },
+        { id: 4, team: 'red', language: 'css', filename: 'game.css' },
+        { id: 5, team: 'red', language: 'js', filename: 'game.js' },
     ],
 };
 

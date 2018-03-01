@@ -2,8 +2,8 @@
     <div class="editor-group">
         <EditorPlayer
             v-for="editor in editors"
-            :key="editor.namespace"
-            :namespace="editor.namespace"
+            :key="editor.id"
+            :id="editor.id"
             :team="editor.team"
             :language="editor.language"
         />

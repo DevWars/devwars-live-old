@@ -10,8 +10,8 @@
             </AppHeader>
             <EditorPlayer
                 v-if="playerEditor"
-                :key="playerEditor.namespace"
-                :namespace="playerEditor.namespace"
+                :key="playerEditor.id"
+                :id="playerEditor.id"
                 :team="playerEditor.team"
                 :language="playerEditor.language"
                 :editable="true"
