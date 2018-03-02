@@ -43,21 +43,18 @@ const state = {
 };
 
 const getters = {
-    userTeam: ({ user, players }) => {
-        if (!user) {
-            return null;
+    userPlayer({ user, players }) {
+        if (user) {
+            return players.find(p => p.id === user.id);
         }
-
-        const userPlayer = players.find(player => player.id === user.id);
-        return userPlayer ? userPlayer.team : null;
     },
 
-    currentModal(state) {
-        return state.modalStack[state.modalStack.length - 1] || null;
+    currentModal({ modalStack }) {
+        return modalStack[modalStack.length - 1];
     },
 
-    blueScore: (state, getters) => {
-        const score = state.objectives.reduce((score, objective) => {
+    blueScore: ({ objectives }, { blueVoteScore }) => {
+        const score = objectives.reduce((score, objective) => {
             if (objective.blueState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
             }
@@ -65,11 +62,10 @@ const getters = {
             return score;
         }, 0);
 
-        return score + getters.blueVoteScore;
+        return score + blueVoteScore;
     },
 
-    blueVoteScore: (state) => {
-        const { votes } = state;
+    blueVoteScore: ({ votes }) => {
         const design = scoreFromVotes(votes.blueDesign, votes.redDesign);
         const func = scoreFromVotes(votes.blueFunc, votes.redFunc);
         const tiebreaker = votes.blueTiebreaker > votes.redTiebreaker ? 1 : 0;
@@ -77,8 +73,8 @@ const getters = {
         return design + func + tiebreaker;
     },
 
-    redScore: (state, getters) => {
-        const score = state.objectives.reduce((score, objective) => {
+    redScore: ({ objectives }, { redVoteScore }) => {
+        const score = objectives.reduce((score, objective) => {
             if (objective.redState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
             }
@@ -86,11 +82,10 @@ const getters = {
             return score;
         }, 0);
 
-        return score + getters.redVoteScore;
+        return score + redVoteScore;
     },
 
-    redVoteScore: (state) => {
-        const { votes } = state;
+    redVoteScore: ({ votes }) => {
         const design = scoreFromVotes(votes.redDesign, votes.blueDesign);
         const func = scoreFromVotes(votes.redFunc, votes.blueFunc);
         const tiebreaker = votes.redTiebreaker > votes.blueTiebreaker ? 1 : 0;
@@ -98,16 +93,16 @@ const getters = {
         return design + func + tiebreaker;
     },
 
-    blueHasPendingObjective(state) {
-        return state.objectives.some(o => o.blueState === 'pending');
+    blueHasPendingObjective({ objectives }) {
+        return objectives.some(o => o.blueState === 'pending');
     },
 
-    redHasPendingObjective(state) {
-        return state.objectives.some(o => o.redState === 'pending');
+    redHasPendingObjective({ objectives }) {
+        return objectives.some(o => o.redState === 'pending');
     },
 
-    blueBonusLocked(state) {
-        return state.objectives.some((objective) => {
+    blueBonusLocked({ objectives }) {
+        return objectives.some((objective) => {
             if (!objective.isBonus) {
                 const state = objective.blueState;
                 return state !== 'complete' && state !== 'dropped';
@@ -117,8 +112,8 @@ const getters = {
         });
     },
 
-    redBonusLocked(state) {
-        return state.objectives.some((objective) => {
+    redBonusLocked({ objectives }) {
+        return objectives.some((objective) => {
             if (!objective.isBonus) {
                 const state = objective.redState;
                 return state !== 'complete' && state !== 'dropped';
@@ -130,44 +125,44 @@ const getters = {
 };
 
 const mutations = {
-    SOCKET_CONNECT: (state) => {
+    SOCKET_CONNECT(state) {
         state.connected = true;
     },
 
-    SOCKET_DISCONNECT: (state) => {
+    SOCKET_DISCONNECT(state) {
         state.connected = false;
     },
 
-    RECEIVE_GAMESTATE: (state, gameState) => {
+    RECEIVE_GAMESTATE(state, gameState) {
         state.game = gameState;
     },
 
-    RECEIVE_OBJECTIVES: (state, objectives) => {
+    RECEIVE_OBJECTIVES(state, objectives) {
         state.objectives = objectives;
     },
 
-    RECEIVE_PLAYERS: (state, players) => {
+    RECEIVE_PLAYERS(state, players) {
         state.players = players;
     },
 
-    RECEIVE_VOTES: (state, votes) => {
+    RECEIVE_VOTES(state, votes) {
         state.votes = votes;
     },
 
-    RECIEVE_USER: (state, user) => {
+    RECIEVE_USER(state, user) {
         state.user = user;
     },
 
-    PUSH_MODAL: (state, modal) => {
+    PUSH_MODAL(state, modal) {
         state.modalStack.push(modal);
     },
 
-    POP_MODAL: (state) => {
+    POP_MODAL(state) {
         state.modalStack.pop();
         state.currentModal = null;
     },
 
-    REPLACE_MODAL: (state, modal) => {
+    REPLACE_MODAL(state, modal) {
         state.modalStack.pop();
         state.modalStack.push(modal);
     },

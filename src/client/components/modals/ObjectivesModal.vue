@@ -69,12 +69,13 @@ export default {
 
     methods: {
         markObjectiveComplete(id) {
-            const objective = this.objectives[id];
-            if (objective.state !== 'incomplete' || (objective.isBonus && this.isBonusLocked)) {
+            const { userPlayer } = this.$store.getters;
+            if (!userPlayer || userPlayer.team !== this.team) {
                 return;
             }
 
-            if (this.$store.getters.userTeam !== this.team) {
+            const objective = this.objectives[id];
+            if (objective.state !== 'incomplete' || (objective.isBonus && this.isBonusLocked)) {
                 return;
             }
 
