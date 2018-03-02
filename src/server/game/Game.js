@@ -145,7 +145,7 @@ class Game {
             .sort((a, b) => a.orderID - b.orderID)
             .map(gameObjective => ({
                 isBonus: false,
-                description: gameObjective.objectiveText,
+                description: gameObjective.description,
                 blueState: 'incomplete',
                 redState: 'incomplete',
             }));
