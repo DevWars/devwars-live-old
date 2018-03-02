@@ -96,7 +96,7 @@ export default {
     padding: 3.5rem;
 
     .title {
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
         text-align: center;
         text-transform: uppercase;
         font-size: 2.5rem;
