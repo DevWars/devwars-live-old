@@ -12,7 +12,7 @@
         "watch": "concurrently -kr \"npm run watch:client\" \"npm run watch:server\"",
         "watch:client": "webpack -w --mode development",
         "watch:server": "onchange -i \"src/(server|shared)/**/*\" -- node src/server",
-        "lint": "eslint --ignore-path .gitignore src"
+        "lint": "eslint --ignore-path .gitignore --ext js,vue src"
     },
     "devDependencies": {
         "@babel/core": "^7.0.0-beta.40",
