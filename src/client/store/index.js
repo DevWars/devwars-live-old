@@ -49,6 +49,12 @@ const getters = {
         }
     },
 
+    userEditor({ editors }, { userPlayer }) {
+        if (userPlayer) {
+            return editors.find(e => e.id === userPlayer.editorId);
+        }
+    },
+
     currentModal({ modalStack }) {
         return modalStack[modalStack.length - 1];
     },

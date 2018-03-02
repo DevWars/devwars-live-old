@@ -13,9 +13,15 @@ import { mapGetters } from 'vuex';
 import ScoreboardModal from './modals/ScoreboardModal';
 import ObjectivesModal from './modals/ObjectivesModal';
 import ObjectiveConfirmModal from './modals/ObjectiveConfirmModal';
+import RedirectPlayerModal from './modals/RedirectPlayerModal';
 
 export default {
-    components: { ScoreboardModal, ObjectivesModal, ObjectiveConfirmModal },
+    components: {
+        ScoreboardModal,
+        ObjectivesModal,
+        ObjectiveConfirmModal,
+        RedirectPlayerModal,
+    },
 
     computed: mapGetters(['currentModal']),
 
