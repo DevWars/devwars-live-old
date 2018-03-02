@@ -2,7 +2,7 @@
     <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
             <div v-if="currentUser" class="username">{{ currentUser.username }}</div>
-            <div v-else-if="owner" class="username placeholder">{{ `Waiting on ${owner.username}` }}</div>
+            <div v-else-if="owner" class="username faded">{{ `Waiting on ${owner.username}` }}</div>
             <div class="language" @click="toggleCollapse">{{ language }}</div>
         </div>
         <div ref="mount" class="monaco-mount"></div>
@@ -317,10 +317,18 @@ export default {
 
     &.blue {
         color: $blue-team-color;
+
+        .faded {
+            color: rgba($blue-team-color, 0.25);
+        }
     }
 
     &.red {
         color: $red-team-color;
+
+        .faded {
+            color: rgba($red-team-color, 0.25);
+        }
     }
 
     &.collapsed {
@@ -377,10 +385,6 @@ export default {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-
-        &.placeholder {
-            opacity: 0.25;
-        }
     }
 
     .controls {

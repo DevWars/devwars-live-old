@@ -4,18 +4,18 @@
             <span :class="`notification ${blueHasPendingObjective ? 'active' : ''}`"></span>
             <div class="score">{{ blueScore }}</div>
             <div class="strikes">
-                <span :class="`mark ${blueStrikes > 0 ? 'marked' : ''}`">X</span>
-                <span :class="`mark ${blueStrikes > 1 ? 'marked' : ''}`">X</span>
-                <span :class="`mark ${blueStrikes > 2 ? 'marked' : ''}`">X</span>
+                <span :class="`mark ${blueStrikes > 0 ? '' : 'faded'}`">X</span>
+                <span :class="`mark ${blueStrikes > 1 ? '' : 'faded'}`">X</span>
+                <span :class="`mark ${blueStrikes > 2 ? '' : 'faded'}`">X</span>
             </div>
         </div>
         <CountdownTimer v-if="stage === 'running'" :end="endTime" :warn-time="1000 * 60"/>
         <div v-else class="title">{{ title }}</div>
         <div class="team red">
             <div class="strikes">
-                <span :class="`mark ${redStrikes > 2 ? 'marked' : ''}`">X</span>
-                <span :class="`mark ${redStrikes > 1 ? 'marked' : ''}`">X</span>
-                <span :class="`mark ${redStrikes > 0 ? 'marked' : ''}`">X</span>
+                <span :class="`mark ${redStrikes > 2 ? '' : 'faded'}`">X</span>
+                <span :class="`mark ${redStrikes > 1 ? '' : 'faded'}`">X</span>
+                <span :class="`mark ${redStrikes > 0 ? '' : 'faded'}`">X</span>
             </div>
             <div class="score">{{ redScore }}</div>
             <span :class="`notification ${redHasPendingObjective ? 'active' : ''}`"></span>
@@ -96,11 +96,19 @@ export default {
         &.blue {
             margin-right: 2rem;
             color: $blue-team-color;
+
+            .faded {
+                color: rgba($blue-team-color, 0.25);
+            }
         }
 
         &.red {
             margin-left: 2rem;
             color: $red-team-color;
+
+            .faded {
+                color: rgba($red-team-color, 0.25);
+            }
         }
     }
 
@@ -113,16 +121,8 @@ export default {
         display: flex;
         font-size: 1.75rem;
 
-        .mark {
-            opacity: 0.25;
-
-            &:not(:first-child):not(:last-child) {
-                margin: 0 0.3rem;
-            }
-
-            &.marked {
-                opacity: 1;
-            }
+        .mark:not(:first-child):not(:last-child) {
+            margin: 0 0.3rem;
         }
     }
 

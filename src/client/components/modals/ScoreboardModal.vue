@@ -5,18 +5,18 @@
             <div class="strikes blue">
                 <div class="title">Strikes</div>
                 <div class="marks">
-                    <span :class="`mark ${blueStrikes > 0 ? 'marked' : ''}`">X</span>
-                    <span :class="`mark ${blueStrikes > 1 ? 'marked' : ''}`">X</span>
-                    <span :class="`mark ${blueStrikes > 2 ? 'marked' : ''}`">X</span>
+                    <span :class="`mark ${blueStrikes > 0 ? '' : 'faded'}`">X</span>
+                    <span :class="`mark ${blueStrikes > 1 ? '' : 'faded'}`">X</span>
+                    <span :class="`mark ${blueStrikes > 2 ? '' : 'faded'}`">X</span>
                 </div>
             </div>
             <CountdownTimer :end="endTime"/>
             <div class="strikes red">
                 <div class="title">Strikes</div>
                 <div class="marks">
-                    <span :class="`mark ${redStrikes > 2 ? 'marked' : ''}`">X</span>
-                    <span :class="`mark ${redStrikes > 1 ? 'marked' : ''}`">X</span>
-                    <span :class="`mark ${redStrikes > 0 ? 'marked' : ''}`">X</span>
+                    <span :class="`mark ${redStrikes > 2 ? '' : 'faded'}`">X</span>
+                    <span :class="`mark ${redStrikes > 1 ? '' : 'faded'}`">X</span>
+                    <span :class="`mark ${redStrikes > 0 ? '' : 'faded'}`">X</span>
                 </div>
             </div>
             <div class="score red">{{ redScore }}</div>
@@ -111,11 +111,19 @@ export default {
 
     .blue {
         color: $blue-team-color;
+
+        .faded {
+            color: rgba($blue-team-color, 0.25);
+        }
     }
 
     .red {
         color: $red-team-color;
         text-align: right;
+
+        .faded {
+            color: rgba($red-team-color, 0.25);
+        }
     }
 
     .countdown-timer {
@@ -145,14 +153,9 @@ export default {
                 font-size: 2rem;
                 font-weight: 300;
                 display: block;
-                opacity: 0.25;
 
                 &:not(:first-child):not(:last-child) {
                     margin: 0 0.5rem;
-                }
-
-                &.marked {
-                    opacity: 1;
                 }
             }
         }
