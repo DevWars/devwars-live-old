@@ -103,15 +103,20 @@ export default {
 
     mounted() {
         monacoLoader((monaco) => {
-            if (monaco) {
+            if (monaco && !this._isDestroyed) {
                 this.initMonaco(monaco);
             }
         });
     },
 
     beforeDestroy() {
-        this.socket.disconnect();
-        this.editor.dispose();
+        if (this.socket) {
+            this.socket.disconnect();
+        }
+
+        if (this.editor) {
+            this.editor.dispose();
+        }
     },
 
     methods: {
