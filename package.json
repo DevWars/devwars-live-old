@@ -1,10 +1,14 @@
 {
-    "name": "devwars-editor",
-    "version": "0.1.0",
-    "description": "Text editor for DevWars",
+    "name": "devwars-live",
+    "version": "0.0.0",
+    "description": "watch.devwars.tv portion of the DevWars site",
     "main": "src/server/index.js",
     "author": "Kim Simonsen",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DevWars/devwars-live"
+    },
     "scripts": {
         "start": "node src/server",
         "prebuild": "npm run lint",
