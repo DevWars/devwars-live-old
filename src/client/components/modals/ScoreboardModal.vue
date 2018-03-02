@@ -40,7 +40,6 @@ import { mapGetters } from 'vuex';
 import CheckIcon from 'vue-material-design-icons/check';
 import CloseIcon from 'vue-material-design-icons/close';
 import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
-import socket from '../../services/socket';
 import CountdownTimer from '../CountdownTimer';
 
 const iconMap = {
@@ -54,7 +53,7 @@ export default {
     components: { CountdownTimer, CheckIcon, CloseIcon, LockOutlineIcon },
 
     computed: {
-        ...mapGetters(['blueScore', 'redScore' ]),
+        ...mapGetters(['blueScore', 'redScore']),
 
         endTime() {
             return this.$store.state.game.endTime;

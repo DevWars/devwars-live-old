@@ -21,7 +21,6 @@ import CloseIcon from 'vue-material-design-icons/close';
 import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
 import CheckboxBlankOutlineIcon from 'vue-material-design-icons/checkbox-blank-outline';
 import CheckboxMarkedOutlineIcon from 'vue-material-design-icons/checkbox-marked-outline';
-import socket from '../../services/socket';
 
 const iconMap = {
     incomplete: 'CheckboxBlankOutlineIcon',
@@ -56,7 +55,7 @@ export default {
                 let iconClassNames = `${this.team} ${state}`;
 
                 if (objective.isBonus) {
-                    iconClassNames += ' bonus'
+                    iconClassNames += ' bonus';
                     if (this.isBonusLocked) {
                         icon = 'LockOutlineIcon';
                         iconClassNames += ' locked';
@@ -79,10 +78,13 @@ export default {
                 return;
             }
 
-            this.$store.commit('PUSH_MODAL', { name: 'ObjectiveConfirmModal', props: {
-                team: this.team,
-                objectiveId: id,
-            }});
+            this.$store.commit('PUSH_MODAL', {
+                name: 'ObjectiveConfirmModal',
+                props: {
+                    team: this.team,
+                    objectiveId: id,
+                },
+            });
         },
     },
 };
