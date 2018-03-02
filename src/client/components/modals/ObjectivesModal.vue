@@ -81,10 +81,7 @@ export default {
 
             this.$store.commit('PUSH_MODAL', {
                 name: 'ObjectiveConfirmModal',
-                props: {
-                    team: this.team,
-                    objectiveId: id,
-                },
+                props: { team: this.team, id },
             });
         },
     },
