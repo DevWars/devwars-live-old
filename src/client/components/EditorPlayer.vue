@@ -5,7 +5,7 @@
             <div v-else-if="owner" class="username faded">{{ `Waiting on ${owner.username}` }}</div>
             <div class="language" @click="toggleCollapse">{{ language }}</div>
         </div>
-        <div ref="mount" class="monaco-mount"></div>
+        <div ref="mount" :class="`monaco-mount ${editable ? '' : 'viewer'}`"></div>
         <div v-if="editable" class="controls">
             <button v-if="hasControl" @click="release">Release</button>
             <button v-else @click="control">Control</button>
@@ -418,6 +418,10 @@ export default {
                 position: absolute;
                 top: 0;
                 left: 0;
+            }
+
+            .minimap {
+                display: none;
             }
 
             .monaco-scrollable-element {
