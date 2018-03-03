@@ -21,10 +21,10 @@ class Game {
         };
 
         this.votes = {
-            blueDesign: 0,
-            redDesign: 0,
-            blueFunc: 0,
-            redFunc: 0,
+            blueUi: 0,
+            redUi: 0,
+            blueUx: 0,
+            redUx: 0,
             blueTiebreaker: 0,
             redTiebreaker: 0,
         };
@@ -157,10 +157,10 @@ class Game {
 
     onFirebaseFrameVotes(votes) {
         this.votes = {
-            blueDesign: votes.design.blue,
-            redDesign: votes.design.red,
-            blueFunc: votes.func.blue,
-            redFunc: votes.func.red,
+            blueUi: votes.ui.blue,
+            redUi: votes.ui.red,
+            blueUx: votes.ux.blue,
+            redUx: votes.ux.red,
             blueTiebreaker: votes.tiebreaker.blue,
             redTiebreaker: votes.tiebreaker.red,
         };

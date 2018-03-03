@@ -24,10 +24,10 @@ const state = {
     players: [],
 
     votes: {
-        blueDesign: 0,
-        redDesign: 0,
-        blueFunc: 0,
-        redFunc: 0,
+        blueUi: 0,
+        redUi: 0,
+        blueUx: 0,
+        redUx: 0,
         blueTiebreaker: 0,
         redTiebreaker: 0,
     },
@@ -72,11 +72,11 @@ const getters = {
     },
 
     blueVoteScore: ({ votes }) => {
-        const design = scoreFromVotes(votes.blueDesign, votes.redDesign);
-        const func = scoreFromVotes(votes.blueFunc, votes.redFunc);
+        const ui = scoreFromVotes(votes.blueUi, votes.redUi);
+        const ux = scoreFromVotes(votes.blueUx, votes.redUx);
         const tiebreaker = votes.blueTiebreaker > votes.redTiebreaker ? 1 : 0;
 
-        return design + func + tiebreaker;
+        return ui + ux + tiebreaker;
     },
 
     redScore: ({ objectives }, { redVoteScore }) => {
@@ -92,11 +92,11 @@ const getters = {
     },
 
     redVoteScore: ({ votes }) => {
-        const design = scoreFromVotes(votes.redDesign, votes.blueDesign);
-        const func = scoreFromVotes(votes.redFunc, votes.blueFunc);
+        const ui = scoreFromVotes(votes.redUi, votes.blueUi);
+        const ux = scoreFromVotes(votes.redUx, votes.blueUx);
         const tiebreaker = votes.redTiebreaker > votes.blueTiebreaker ? 1 : 0;
 
-        return design + func + tiebreaker;
+        return ui + ux + tiebreaker;
     },
 
     blueHasPendingObjective({ objectives }) {
