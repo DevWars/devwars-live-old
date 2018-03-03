@@ -142,7 +142,7 @@ class Game {
 
     onFirebaseGameObjectives(gameObjectives) {
         const objectives = gameObjectives
-            .sort((a, b) => a.orderID - b.orderID)
+            .sort((a, b) => a.number - b.number)
             .map(gameObjective => ({
                 isBonus: false,
                 description: gameObjective.description,
