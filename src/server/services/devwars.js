@@ -17,7 +17,7 @@ async function authenticate(token) {
     }
 
     try {
-        const res = await axios(`${API_URL}/v1/user/`, {
+        const res = await axios(`${API_URL}/user/`, {
             headers: { cookie: `token=${token}` },
         });
 
