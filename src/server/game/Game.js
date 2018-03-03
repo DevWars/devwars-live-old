@@ -329,7 +329,7 @@ class Game {
     }
 
     assignPlayersToEditors() {
-        for (const player of this.players) {
+        for (const player of this.players || []) {
             const editor = this.editors[player.editorId];
             if (editor && editor.ownerId !== player.id) {
                 editor.setOwner(player);
