@@ -2,12 +2,14 @@
     <div class="game-view">
         <GameViewTeam
             :expanded="expandedTeam === 'blue'"
+            :hide-menu="hideMenu"
             :class="blueClassModifier"
             team="blue"
             @toggleExpanded="toggleExpanded('blue')"
         />
         <GameViewTeam
             :expanded="expandedTeam === 'red'"
+            :hide-menu="hideMenu"
             :class="redClassModifier"
             team="red"
             @toggleExpanded="toggleExpanded('red')"
@@ -21,6 +23,10 @@ import GameViewTeam from './GameViewTeam';
 
 export default {
     components: { GameViewTeam },
+
+    props: {
+        hideMenu: { type: Boolean, default: false },
+    },
 
     data() {
         return { expandedTeam: '' };

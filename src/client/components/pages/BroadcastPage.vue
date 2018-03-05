@@ -3,7 +3,7 @@
         <BroadcastPanel/>
         <div class="main">
             <AppHeader/>
-            <GameView/>
+            <GameView :hide-menu="true"/>
         </div>
     </div>
 </template>

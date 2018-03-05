@@ -1,6 +1,7 @@
 <template>
     <div class="game-view-team">
         <GameViewTeamMenu
+            v-if="!hideMenu"
             :team="team"
             :view-site="viewSite"
             :expanded="expanded"
@@ -30,6 +31,7 @@ export default {
     props: {
         team: { type: String, required: true },
         expanded: { type: Boolean, default: false },
+        hideMenu: { type: Boolean, default: false },
     },
 
     data() {
