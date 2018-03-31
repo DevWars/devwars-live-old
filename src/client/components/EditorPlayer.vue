@@ -128,6 +128,7 @@ export default {
                 readOnly: true,
                 automaticLayout: true, // TODO: Handle resize manually.
 
+                folding: false,
                 lineNumbers: this.editable,
                 hideCursorInOverviewRuler: true,
                 renderLineHighlight: 'none',
