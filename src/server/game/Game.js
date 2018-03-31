@@ -141,6 +141,11 @@ class Game {
     }
 
     onFirebaseGameObjectives(gameObjectives) {
+        if (!gameObjectives) {
+            // HACK: Add a dummy objective if no objectives exists.
+            gameObjectives = [{ number: 0, description: '' }];
+        }
+
         const objectives = gameObjectives
             .sort((a, b) => a.number - b.number)
             .map(gameObjective => ({
