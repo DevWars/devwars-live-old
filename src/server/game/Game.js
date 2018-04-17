@@ -105,21 +105,25 @@ class Game {
     }
 
     onFirebaseObjectives(objectives) {
-        this.objectives = objectives;
+        this.objectives = objectives || [];
         this.io.emit('objectives', this.objectives);
     }
 
     onFirebasePlayers(players) {
-        this.players = players;
+        this.players = players || [];
         this.io.emit('players', this.players);
 
         this.assignPlayersToEditors();
     }
 
     onFirebaseGameTeams(gameTeams) {
+        if (!gameTeams) {
+            return this.gameRef.child('players').set(null);
+        }
+
         const players = [];
         for (const team of ['blue', 'red']) {
-            if (!gameTeams[team].players) {
+            if (!gameTeams[team] || !gameTeams[team].players) {
                 continue;
             }
 
@@ -142,8 +146,7 @@ class Game {
 
     onFirebaseGameObjectives(gameObjectives) {
         if (!gameObjectives) {
-            // HACK: Add a dummy objective if no objectives exists.
-            gameObjectives = [{ number: 0, description: '' }];
+            return this.gameRef.child('objectives').set(null);
         }
 
         const objectives = gameObjectives
@@ -157,6 +160,7 @@ class Game {
 
         // The last objective is always the bonus objective.
         objectives[objectives.length - 1].isBonus = true;
+
         this.gameRef.child('objectives').set(objectives);
     }
 
