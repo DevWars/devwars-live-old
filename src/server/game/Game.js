@@ -13,6 +13,7 @@ class Game {
 
         this.state = {
             id: 0,
+            gameMode: 'classic',
             stage: 'setup',
             startTime: 0,
             endTime: 0,
@@ -45,6 +46,10 @@ class Game {
 
         this.gameRef.child('players').on('value', (snap) => {
             this.onFirebasePlayers(snap.val());
+        });
+
+        this.database.ref('game/name').on('value', (snap) => {
+            this.onFirebaseGameName(snap.val());
         });
 
         this.database.ref('game/teams').on('value', (snap) => {
@@ -114,6 +119,11 @@ class Game {
         this.io.emit('players', this.players);
 
         this.assignPlayersToEditors();
+    }
+
+    onFirebaseGameName(name) {
+        const gameMode = name.includes('zen') ? 'zen' : 'classic';
+        this.gameRef.child('state/gameMode').set(gameMode);
     }
 
     onFirebaseGameTeams(gameTeams) {

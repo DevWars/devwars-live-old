@@ -12,6 +12,7 @@ const state = {
 
     game: {
         id: 0,
+        gameMode: 'classic',
         stage: 'setup',
         startTime: 0,
         endTime: 0,
