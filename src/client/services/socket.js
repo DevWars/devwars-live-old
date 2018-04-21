@@ -39,7 +39,7 @@ socket.on('votes', (votes) => {
 });
 
 socket.on('reloadSite', (team) => {
-    eventBus.emit('reload-site', team);
+    eventBus.$emit('reload-site', team);
 });
 
 export default socket;

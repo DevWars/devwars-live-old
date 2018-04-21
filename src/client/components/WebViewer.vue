@@ -15,11 +15,11 @@ export default {
 
     mounted() {
         this.onReload = debounce(this.onReload, this.delay, { maxWait: 10000 });
-        eventBus.on('reload-site', this.onReload);
+        eventBus.$on('reload-site', this.onReload);
     },
 
     beforeDestroy() {
-        eventBus.removeListener('reload-site', this.onReload);
+        eventBus.$off('reload-site', this.onReload);
     },
 
     methods: {

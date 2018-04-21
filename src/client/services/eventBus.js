@@ -1,3 +1,3 @@
-import { EventEmitter } from 'events';
+import Vue from 'vue';
 
-export default new EventEmitter();
+export default new Vue();
