@@ -60,7 +60,7 @@ const getters = {
         return modalStack[modalStack.length - 1];
     },
 
-    blueScore: ({ objectives }, { blueVoteScore }) => {
+    blueScore({ objectives }, { blueVoteScore }) {
         const score = objectives.reduce((score, objective) => {
             if (objective.blueState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
@@ -72,7 +72,7 @@ const getters = {
         return score + blueVoteScore;
     },
 
-    blueVoteScore: ({ votes }) => {
+    blueVoteScore({ votes }) {
         const ui = scoreFromVotes(votes.blueUi, votes.redUi);
         const ux = scoreFromVotes(votes.blueUx, votes.redUx);
         const tiebreaker = votes.blueTiebreaker > votes.redTiebreaker ? 1 : 0;
@@ -80,7 +80,7 @@ const getters = {
         return ui + ux + tiebreaker;
     },
 
-    redScore: ({ objectives }, { redVoteScore }) => {
+    redScore({ objectives }, { redVoteScore }) {
         const score = objectives.reduce((score, objective) => {
             if (objective.redState === 'complete') {
                 score += objective.isBonus ? 2 : 1;
@@ -92,7 +92,7 @@ const getters = {
         return score + redVoteScore;
     },
 
-    redVoteScore: ({ votes }) => {
+    redVoteScore({ votes }) {
         const ui = scoreFromVotes(votes.redUi, votes.blueUi);
         const ux = scoreFromVotes(votes.redUx, votes.blueUx);
         const tiebreaker = votes.redTiebreaker > votes.blueTiebreaker ? 1 : 0;
