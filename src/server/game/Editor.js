@@ -212,6 +212,8 @@ class Editor extends EventEmitter {
 
         this.ioNsp.removeAllListeners();
         delete this.io.nsps[this.ioNsp.name];
+
+        this.editorRef.child('locked').off();
     }
 }
 
