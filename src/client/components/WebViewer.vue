@@ -4,7 +4,7 @@
 
 
 <script>
-import { debounce } from 'lodash-es';
+import { debounce } from 'lodash';
 import eventBus from '../services/eventBus';
 
 export default {
