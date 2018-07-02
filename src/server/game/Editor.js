@@ -200,6 +200,11 @@ class Editor extends EventEmitter {
         this.editorRef.child('locked').set(locked);
     }
 
+    setText(text) {
+        this.document.setText(text);
+        this.ioNsp.emit('text', this.document.getText());
+    }
+
     saveToFirebase() {
         const text = this.document.getSavedText();
         this.editorRef.child('text').set(text);
