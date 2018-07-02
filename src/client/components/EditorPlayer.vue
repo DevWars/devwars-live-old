@@ -312,7 +312,7 @@ export default {
 
     position: relative;
     display: flex;
-    flex: 1;
+    flex: 1 1 100%;
     flex-flow: column nowrap;
     overflow: hidden;
 

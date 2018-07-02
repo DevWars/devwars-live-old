@@ -3,7 +3,7 @@ const config = require('config');
 const path = require('path');
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
     entry: './src/client/index.js',
@@ -19,9 +19,17 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
+                test: /\.s?css$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader',
+                    'postcss-loader',
+                    'sass-loader',
+                ],
+            },
+            {
                 test: /\.vue$/,
-                loader: 'vue-loader',
-                options: { extractCSS: true },
+                use: 'vue-loader',
             },
         ],
     },
@@ -36,6 +44,7 @@ module.exports = {
         children: false,
     },
     plugins: [
+        new VueLoaderPlugin(),
         new webpack.DefinePlugin({
             'process.env.SOCKET_URL': `"${config.get('socketUrl')}"`,
         }),
@@ -43,6 +52,5 @@ module.exports = {
             from: 'node_modules/monaco-editor/min/vs',
             to: 'vendor/vs',
         }]),
-        new ExtractTextPlugin('styles.css'),
     ],
 };

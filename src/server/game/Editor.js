@@ -108,9 +108,9 @@ class Editor extends EventEmitter {
 
         // Prevent users from taking control from moderators and admins.
         if (
-            this.currentUser &&
-            !socket.client.user.isModerator() &&
-            this.currentUser.isModerator()
+            this.currentUser
+            && !socket.client.user.isModerator()
+            && this.currentUser.isModerator()
         ) {
             return;
         }

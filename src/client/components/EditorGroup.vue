@@ -32,7 +32,6 @@ export default {
     flex: 1;
 
     .editor-player {
-        flex: 1 1 100%;
         &:not(:last-child) {
             border-right: $border;
         }
