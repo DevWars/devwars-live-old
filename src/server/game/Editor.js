@@ -25,7 +25,7 @@ class Editor extends EventEmitter {
         this.currentUser = null;
         this.currentSocketId = null;
 
-        this.saveToFirebase = throttle(this.saveToFirebase, 1000 * 30);
+        this.document.on('save', throttle(this.saveToFirebase, 1000 * 15).bind(this));
 
         this.editorRef.child('text').once('value', (snap) => {
             const text = snap.val();
@@ -215,6 +215,8 @@ class Editor extends EventEmitter {
 
     setText(text) {
         this.document.setText(text);
+        this.document.save();
+
         this.ioNsp.emit('text', this.document.getText());
     }
 
@@ -239,7 +241,7 @@ class Editor extends EventEmitter {
         this.ioNsp.removeAllListeners();
         delete this.io.nsps[this.ioNsp.name];
 
-        this.editorRef.child('locked').off();
+        this.document.dispose();
     }
 }
 

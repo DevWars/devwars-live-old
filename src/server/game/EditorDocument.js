@@ -1,5 +1,9 @@
-class EditorDocument {
+const { EventEmitter } = require('events');
+
+class EditorDocument extends EventEmitter {
     constructor() {
+        super();
+
         this.buffer = [''];
         this._bufferCache = null;
 
@@ -20,6 +24,7 @@ class EditorDocument {
 
     save() {
         this.savedText = this.getText();
+        this.emit('save');
     }
 
     getText() {
@@ -37,6 +42,10 @@ class EditorDocument {
 
     getSavedText() {
         return this.savedText;
+    }
+
+    dispose() {
+        this.removeAllListeners();
     }
 }
 
