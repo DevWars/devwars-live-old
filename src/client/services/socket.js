@@ -42,4 +42,8 @@ socket.on('reloadSite', (team) => {
     eventBus.$emit('reload-site', team);
 });
 
+socket.on('editorState', (state) => {
+    store.commit('RECIEVE_EDITOR_STATE', state);
+});
+
 export default socket;

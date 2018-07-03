@@ -35,6 +35,8 @@ export default {
         id: { type: Number, required: true },
         team: { type: String, required: true },
         language: { type: String, required: true },
+        locked: { type: Boolean, default: true },
+        hidden: { type: Boolean, default: false },
         editable: { type: Boolean, default: false },
         collapsible: { type: Boolean, default: true },
     },
@@ -46,7 +48,6 @@ export default {
             currentUser: null,
             currentSocketId: null,
 
-            locked: false,
             inSync: false,
             ignoreChanges: false,
 
@@ -185,7 +186,6 @@ export default {
 
                 this.currentUser = state.currentUser;
                 this.currentSocketId = state.currentSocketId;
-                this.locked = state.locked;
 
                 this.editor.model.setValue(state.text);
 
@@ -205,10 +205,6 @@ export default {
             socket.on('currentUser', ({ user, socketId }) => {
                 this.currentUser = user;
                 this.currentSocketId = socketId;
-            });
-
-            socket.on('locked', (locked) => {
-                this.locked = locked;
             });
 
             socket.on('op', (op) => {

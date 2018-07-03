@@ -14,11 +14,15 @@ import GameView from '../GameView';
 export default {
     components: { AppHeader, GameView },
 
-    computed: mapGetters(['userEditor']),
+    data() {
+        return { modalShown: false };
+    },
+
+    computed: mapGetters(['userEditor', 'currentModal']),
 
     watch: {
         userEditor() {
-            if (!this.userEditor) {
+            if (!this.userEditor || this.modalShown) {
                 return;
             }
 
@@ -27,6 +31,8 @@ export default {
                 name: 'RedirectPlayerModal',
                 props: { team, language },
             });
+
+            this.modalShown = true;
         },
     },
 };

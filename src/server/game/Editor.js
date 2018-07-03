@@ -1,5 +1,5 @@
 const { EventEmitter } = require('events');
-const throttle = require('lodash/throttle');
+const { pick, throttle } = require('lodash');
 const socketValidator = require('../validation/socketValidator');
 const EditorDocument = require('./EditorDocument');
 const TextOperation = require('../../shared/TextOperation');
@@ -19,6 +19,7 @@ class Editor extends EventEmitter {
         this.filename = opt.filename;
 
         this.locked = false;
+        this.hidden = false;
 
         this.ownerId = null;
         this.currentUser = null;
@@ -40,12 +41,21 @@ class Editor extends EventEmitter {
             this.onFirebaseLocked(snap.val());
         });
 
+        editorRef.child('hidden').on('value', (snap) => {
+            this.onFirebaseHidden(snap.val());
+        });
+
         this.ioNsp.on('connection', this.onSocketConnection.bind(this));
     }
 
     onFirebaseLocked(locked) {
-        this.locked = locked;
-        this.ioNsp.emit('locked', locked);
+        this.locked = !!locked;
+        this.emitState();
+    }
+
+    onFirebaseHidden(hidden) {
+        this.hidden = !!hidden;
+        this.emitState();
     }
 
     onSocketConnection(socket) {
@@ -94,7 +104,6 @@ class Editor extends EventEmitter {
             team: this.team,
             language: this.team,
             filename: this.team,
-            locked: this.locked,
             currentUser: this.currentUser,
             currentSocketId: this.currentSocketId,
             text: this.document.getText(),
@@ -200,6 +209,10 @@ class Editor extends EventEmitter {
         this.editorRef.child('locked').set(locked);
     }
 
+    setHidden(hidden) {
+        this.editorRef.child('hidden').set(hidden);
+    }
+
     setText(text) {
         this.document.setText(text);
         this.ioNsp.emit('text', this.document.getText());
@@ -208,6 +221,14 @@ class Editor extends EventEmitter {
     saveToFirebase() {
         const text = this.document.getSavedText();
         this.editorRef.child('text').set(text);
+    }
+
+    getState() {
+        return pick(this, ['id', 'locked', 'hidden']);
+    }
+
+    emitState() {
+        this.emit('state', this.getState());
     }
 
     dispose() {

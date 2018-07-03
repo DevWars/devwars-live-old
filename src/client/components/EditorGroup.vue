@@ -6,6 +6,8 @@
             :id="editor.id"
             :team="editor.team"
             :language="editor.language"
+            :locked="editor.locked"
+            :hidden="editor.hidden"
         />
     </div>
 </template>

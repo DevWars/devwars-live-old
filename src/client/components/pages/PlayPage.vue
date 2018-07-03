@@ -14,6 +14,7 @@
                 :id="playerEditor.id"
                 :team="playerEditor.team"
                 :language="playerEditor.language"
+                :locked="playerEditor.locked"
                 :editable="true"
                 :collapsible="false"
             />

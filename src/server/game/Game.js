@@ -73,11 +73,10 @@ class Game {
             return new Editor(this.io, editorRef, index, opt);
         });
 
-        this.editors.forEach((editor) => {
-            editor.on('save', () => {
-                this.io.emit('reloadSite', editor.team);
-            });
-        });
+        for (const editor of this.editors) {
+            editor.on('state', state => this.io.emit('editorState', state));
+            editor.on('save', () => this.io.emit('reloadSite', editor.team));
+        }
 
         this.assignPlayersToEditors();
     }
@@ -234,6 +233,7 @@ class Game {
         socket.emit('objectives', this.objectives);
         socket.emit('players', this.players);
         socket.emit('votes', this.votes);
+        this.editors.forEach(e => socket.emit('editorState', e.getState()));
     }
 
     static onSocketAuth(socket, token, callback) {

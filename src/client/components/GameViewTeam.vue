@@ -16,7 +16,6 @@
 
 
 <script>
-import { mapState } from 'vuex';
 import GameViewTeamMenu from './GameViewTeamMenu';
 import EditorGroup from './EditorGroup';
 import WebViewer from './WebViewer';
@@ -32,6 +31,7 @@ export default {
         team: { type: String, required: true },
         expanded: { type: Boolean, default: false },
         hideMenu: { type: Boolean, default: false },
+        showHiddenEditors: { type: Boolean, default: false },
     },
 
     data() {
@@ -39,10 +39,9 @@ export default {
     },
 
     computed: {
-        ...mapState(['editors']),
-
         teamEditors() {
-            return this.editors.filter(e => e.team === this.team);
+            return this.$store.getters.visibleEditors
+                .filter(e => e.team === this.team);
         },
     },
 };

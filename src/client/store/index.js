@@ -34,13 +34,13 @@ const state = {
     },
 
     editors: [
-        { id: 0, team: 'blue', language: 'html', filename: 'index.html' },
-        { id: 1, team: 'blue', language: 'css', filename: 'game.css' },
-        { id: 2, team: 'blue', language: 'js', filename: 'game.js' },
-        { id: 3, team: 'red', language: 'html', filename: 'index.html' },
-        { id: 4, team: 'red', language: 'css', filename: 'game.css' },
-        { id: 5, team: 'red', language: 'js', filename: 'game.js' },
-    ],
+        { team: 'blue', language: 'html', filename: 'index.html' },
+        { team: 'blue', language: 'css', filename: 'game.css' },
+        { team: 'blue', language: 'js', filename: 'game.js' },
+        { team: 'red', language: 'html', filename: 'index.html' },
+        { team: 'red', language: 'css', filename: 'game.css' },
+        { team: 'red', language: 'js', filename: 'game.js' },
+    ].map((editor, id) => ({ id, ...editor, locked: true, hidden: false })),
 };
 
 const getters = {
@@ -54,6 +54,10 @@ const getters = {
         if (userPlayer) {
             return editors.find(e => e.id === userPlayer.editorId);
         }
+    },
+
+    visibleEditors({ editors }) {
+        return editors.filter(e => !e.hidden);
     },
 
     currentModal({ modalStack }) {
@@ -158,6 +162,13 @@ const mutations = {
 
     RECIEVE_USER(state, user) {
         state.user = user;
+    },
+
+    RECIEVE_EDITOR_STATE(state, editorState) {
+        const editor = state.editors[editorState.id];
+        if (editor) {
+            Vue.set(state.editors, editorState.id, { ...editor, ...editorState });
+        }
     },
 
     PUSH_MODAL(state, modal) {
