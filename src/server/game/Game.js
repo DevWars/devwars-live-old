@@ -21,6 +21,8 @@ class Game {
             redStrikes: 0,
         };
 
+        this.zenTemplate = '';
+
         this.votes = {
             blueUi: 0,
             redUi: 0,
@@ -58,6 +60,10 @@ class Game {
 
         this.database.ref('game/objectives').on('value', (snap) => {
             this.onFirebaseGameObjectives(snap.val());
+        });
+
+        this.database.ref('game/zenTemplate').on('value', (snap) => {
+            this.onFirebaseZenTemplate(snap.val());
         });
 
         this.database.ref('frame/liveVoting').on('value', (snap) => {
@@ -123,6 +129,16 @@ class Game {
     onFirebaseGameName(name) {
         const gameMode = name.includes('zen') ? 'zen' : 'classic';
         this.gameRef.child('state/gameMode').set(gameMode);
+
+        if (gameMode === 'zen') {
+            this.generateZenDocuments();
+        }
+    }
+
+    onFirebaseZenTemplate(zenTemplate) {
+        this.zenTemplate = zenTemplate;
+        this.io.emit('zenTemplate', zenTemplate);
+        this.generateZenDocuments();
     }
 
     onFirebaseGameTeams(gameTeams) {
@@ -232,6 +248,7 @@ class Game {
         socket.emit('state', this.state);
         socket.emit('objectives', this.objectives);
         socket.emit('players', this.players);
+        socket.emit('zenTemplate', this.zenTemplate);
         socket.emit('votes', this.votes);
         this.editors.forEach(e => socket.emit('editorState', e.getState()));
     }
@@ -354,6 +371,15 @@ class Game {
                 editor.setOwner(player);
             }
         }
+    }
+
+    generateZenDocuments() {
+        if (this.state.gameMode !== 'zen') {
+            return;
+        }
+
+        this.editors[0].setText(this.zenTemplate);
+        this.editors[3].setText(this.zenTemplate);
     }
 
     isUserOnTeam(user, team) {

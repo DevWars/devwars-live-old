@@ -34,6 +34,10 @@ socket.on('players', (players) => {
     store.commit('RECEIVE_PLAYERS', players);
 });
 
+socket.on('zenTemplate', (zenTemplate) => {
+    store.commit('RECIEVE_ZEN_TEMPLATE', zenTemplate);
+});
+
 socket.on('votes', (votes) => {
     store.commit('RECEIVE_VOTES', votes);
 });

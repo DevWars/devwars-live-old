@@ -20,6 +20,8 @@ const state = {
         redStrikes: 0,
     },
 
+    zenTemplate: '',
+
     objectives: [],
 
     players: [],
@@ -154,6 +156,10 @@ const mutations = {
 
     RECEIVE_PLAYERS(state, players) {
         state.players = players;
+    },
+
+    RECIEVE_ZEN_TEMPLATE(state, zenTemplate) {
+        state.zenTemplate = zenTemplate;
     },
 
     RECEIVE_VOTES(state, votes) {
