@@ -242,6 +242,18 @@ class Game {
                 this.onSocketAddStrike(socket, payload);
             }
         });
+
+        socket.on('toggle-editor-locked', (payload) => {
+            if (socketValidator.validateToggleEditorLocked(payload)) {
+                this.onSocketToggleEditorLocked(socket, payload);
+            }
+        });
+
+        socket.on('toggle-editor-hidden', (payload) => {
+            if (socketValidator.validateToggleEditorHidden(payload)) {
+                this.onSocketToggleEditorHidden(socket, payload);
+            }
+        });
     }
 
     onSocketInit(socket) {
@@ -362,6 +374,22 @@ class Game {
 
             return strikes;
         });
+    }
+
+    onSocketToggleEditorLocked(socket, { id, locked }) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
+            return;
+        }
+
+        this.gameRef.child(`editors/${id}/locked`).set(locked);
+    }
+
+    onSocketToggleEditorHidden(socket, { id, hidden }) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
+            return;
+        }
+
+        this.gameRef.child(`editors/${id}/hidden`).set(hidden);
     }
 
     assignPlayersToEditors() {

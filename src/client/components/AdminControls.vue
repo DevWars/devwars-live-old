@@ -30,6 +30,18 @@
                 <button class="red" @click="onAddStrike('red')">Strike Red</button>
             </div>
         </div>
+
+        <div class="controls">
+            <div v-for="editor of $store.state.editors" :key="editor.id" class="row">
+                <button :class="editor.team" @click="onToggleEditorLocked(editor)">
+                    {{ editor.locked ? 'Unlock' : 'Lock' }}
+                </button>
+                <button :class="editor.team" @click="onToggleEditorHidden(editor)">
+                    {{ editor.hidden ? 'Show' : 'Hide' }}
+                </button>
+                <h2>{{ editor.language.toUpperCase() }}</h2>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -65,6 +77,14 @@ export default {
         onAddStrike(team) {
             socket.emit('add-strike', team);
         },
+
+        onToggleEditorLocked(editor) {
+            socket.emit('toggle-editor-locked', { id: editor.id, locked: !editor.locked });
+        },
+
+        onToggleEditorHidden(editor) {
+            socket.emit('toggle-editor-hidden', { id: editor.id, hidden: !editor.hidden });
+        },
     },
 };
 </script>
@@ -92,6 +112,7 @@ export default {
         h2 {
             margin: 0 0.25rem;
             line-height: 1;
+            font-size: 1.25rem;
             font-weight: 400;
 
             &.bonus {

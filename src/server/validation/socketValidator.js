@@ -46,6 +46,32 @@ module.exports = {
         pattern: '^(blue|red)$',
     }),
 
+    validateToggleEditorLocked: ajv.compile({
+        type: 'object',
+        properties: {
+            id: {
+                type: 'number',
+                minimum: 0,
+            },
+            locked: {
+                type: 'boolean',
+            },
+        },
+    }),
+
+    validateToggleEditorHidden: ajv.compile({
+        type: 'object',
+        properties: {
+            id: {
+                type: 'number',
+                minimum: 0,
+            },
+            hidden: {
+                type: 'boolean',
+            },
+        },
+    }),
+
     validateOp: ajv.compile({
         type: 'object',
         properties: {
