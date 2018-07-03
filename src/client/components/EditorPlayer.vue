@@ -1,5 +1,5 @@
 <template>
-    <div :class="`editor-player ${team} ${isCollapsed ? 'collapsed' : ''}`">
+    <div :class="classNames">
         <div class="header">
             <div v-if="currentUser" class="username">{{ currentUser.username }}</div>
             <div v-else-if="owner" class="username faded">{{ `Waiting on ${owner.username}` }}</div>
@@ -38,6 +38,7 @@ export default {
         locked: { type: Boolean, default: true },
         hidden: { type: Boolean, default: false },
         editable: { type: Boolean, default: false },
+        vertical: { type: Boolean, default: false },
         collapsible: { type: Boolean, default: true },
     },
 
@@ -77,6 +78,20 @@ export default {
         readOnly() {
             return !this.hasControl || !this.inSync || this.locked;
         },
+
+        classNames() {
+            let className = `editor-player ${this.team}`;
+
+            if (this.vertical) {
+                className += ' vertical';
+            }
+
+            if (this.isCollapsed) {
+                className += ' collapsed';
+            }
+
+            return className;
+        },
     },
 
     watch: {
@@ -98,6 +113,12 @@ export default {
                     readOnly: this.readOnly,
                     hideCursorInOverviewRuler: this.readOnly,
                 });
+            }
+        },
+
+        collapsible() {
+            if (!this.collapsible && this.isCollapsed) {
+                this.isCollapsed = false;
             }
         },
     },
@@ -331,31 +352,33 @@ export default {
     &.collapsed {
         flex: 0 0 $header-height;
 
-        .header {
-            margin: 1rem 0;
-            width: $header-height;
-            flex: 1 0;
-            flex-flow: column nowrap;
-            align-items: flex-start;
-            line-height: calc(#{$header-height} - 2px);
-        }
+        &:not(.vertical) {
+            .header {
+                margin: 1rem 0;
+                width: $header-height;
+                flex: 1 0;
+                flex-flow: column nowrap;
+                align-items: flex-start;
+                line-height: calc(#{$header-height} - 2px);
+            }
 
-        .username {
-            order: 1;
-            transform: rotate(-90deg) translate(0, 100%);
-            transform-origin: bottom left;
-        }
+            .username {
+                order: 1;
+                transform: rotate(-90deg) translate(0, 100%);
+                transform-origin: bottom left;
+            }
 
-        .language {
-            z-index: 1;
-            margin-bottom: auto;
-            width: 3.5rem;
-            height: 3.5rem;
-            text-align: right;
-            background-color: $bg-color;
+            .language {
+                z-index: 1;
+                margin-bottom: auto;
+                width: 3.5rem;
+                height: 3.5rem;
+                text-align: right;
+                background-color: $bg-color;
 
-            transform: rotate(-90deg) translate(0, -100%);
-            transform-origin: top right;
+                transform: rotate(-90deg) translate(0, -100%);
+                transform-origin: top right;
+            }
         }
 
         .controls,

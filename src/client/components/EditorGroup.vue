@@ -1,5 +1,5 @@
 <template>
-    <div class="editor-group">
+    <div :class="`editor-group${vertical ? ' vertical' : ''}`">
         <EditorPlayer
             v-for="editor in editors"
             :key="editor.id"
@@ -8,6 +8,8 @@
             :language="editor.language"
             :locked="editor.locked"
             :hidden="editor.hidden"
+            :vertical="vertical"
+            :collapsible="editors.length > 1"
         />
     </div>
 </template>
@@ -21,6 +23,7 @@ export default {
 
     props: {
         editors: { type: Array, required: true },
+        vertical: { type: Boolean, default: false },
     },
 };
 </script>
@@ -33,10 +36,17 @@ export default {
     display: flex;
     flex: 1;
 
-    .editor-player {
-        &:not(:last-child) {
-            border-right: $border;
+    &.vertical {
+        flex-flow: column nowrap;
+
+        .editor-player:not(:last-child) {
+            border-bottom: $border;
+            border-right: none;
         }
+    }
+
+    .editor-player:not(:last-child) {
+        border-right: $border;
     }
 }
 </style>

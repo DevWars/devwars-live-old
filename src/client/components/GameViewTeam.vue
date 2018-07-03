@@ -9,7 +9,11 @@
             @onViewSite="viewSite = true"
             @onToggleExpanded="$emit('toggleExpanded')"
         />
-        <EditorGroup :editors="teamEditors" :class="`editor-group ${viewSite ? 'hidden' : ''}`"/>
+        <EditorGroup
+            :editors="teamEditors"
+            :vertical="vertical"
+            :class="`editor-group ${viewSite ? 'hidden' : ''}`"
+        />
         <WebViewer v-if="viewSite" :team="team" :delay="5000"/>
     </div>
 </template>
@@ -29,8 +33,9 @@ export default {
 
     props: {
         team: { type: String, required: true },
-        expanded: { type: Boolean, default: false },
+        vertical: { type: Boolean, default: false },
         hideMenu: { type: Boolean, default: false },
+        expanded: { type: Boolean, default: false },
         showHiddenEditors: { type: Boolean, default: false },
     },
 

@@ -1,15 +1,17 @@
 <template>
-    <div class="game-view">
+    <div :class="`game-view${vertical ? ' vertical' : ''}`">
         <GameViewTeam
-            :expanded="expandedTeam === 'blue'"
+            :vertical="vertical"
             :hide-menu="hideMenu"
+            :expanded="expandedTeam === 'blue'"
             :class="blueClassModifier"
             team="blue"
             @toggleExpanded="toggleExpanded('blue')"
         />
         <GameViewTeam
-            :expanded="expandedTeam === 'red'"
+            :vertical="vertical"
             :hide-menu="hideMenu"
+            :expanded="expandedTeam === 'red'"
             :class="redClassModifier"
             team="red"
             @toggleExpanded="toggleExpanded('red')"
@@ -33,6 +35,10 @@ export default {
     },
 
     computed: {
+        vertical() {
+            return this.$store.state.game.gameMode === 'zen';
+        },
+
         blueClassModifier() {
             if (this.expandedTeam) {
                 return this.expandedTeam === 'blue' ? 'expanded' : 'collapsed';
@@ -66,6 +72,23 @@ export default {
     display: flex;
     flex: 1;
     flex-flow: column nowrap;
+
+    &.vertical {
+        flex-flow: row nowrap;
+
+        .game-view-team:not(:last-child):not(.expanded) {
+            border-right: $border;
+            border-bottom: none;
+        }
+
+        .game-view-team:not(:first-child) {
+            /deep/ .game-view-team-menu {
+                order: 2;
+                border-left: $border;
+                border-right: none;
+            }
+        }
+    }
 
     .game-view-team {
         &:not(:last-child):not(.expanded) {
