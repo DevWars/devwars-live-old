@@ -1,16 +1,16 @@
 <template>
-    <div :class="`game-view${vertical ? ' vertical' : ''}`">
+    <div :class="`game-view${isZenGameMode ? ' vertical' : ''}`">
         <GameViewTeam
-            :vertical="vertical"
+            :vertical="isZenGameMode"
             :hide-menu="hideMenu"
             :expanded="expandedTeam === 'blue'"
             :class="blueClassModifier"
             team="blue"
             @toggleExpanded="toggleExpanded('blue')"
         />
-        <ZenTemplateViewer/>
+        <ZenTemplateViewer v-if="isZenGameMode"/>
         <GameViewTeam
-            :vertical="vertical"
+            :vertical="isZenGameMode"
             :hide-menu="hideMenu"
             :expanded="expandedTeam === 'red'"
             :class="redClassModifier"
@@ -37,7 +37,7 @@ export default {
     },
 
     computed: {
-        vertical() {
+        isZenGameMode() {
             return this.$store.state.game.gameMode === 'zen';
         },
 
