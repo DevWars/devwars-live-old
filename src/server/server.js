@@ -20,6 +20,8 @@ function init() {
 
     const game = new Game(io);
 
+    app.set('views', path.join(__dirname, './views'));
+    app.set('view engine', 'ejs');
     app.use(helmet({ frameguard: false }));
     app.use(express.static(path.resolve(__dirname, '../../public')));
     app.use(routes);

@@ -3,10 +3,15 @@
 *-debug.log*
 
 # OS Generated Files
+*~
+.fuse_hidden*
+.nfs*
 .DS_Store
-.DS_Store?
-desktop.ini
+.AppleDouble
+.LSOverride
+Desktop.ini
 Thumbs.db
+ehthumbs.db
 
 # Editors
 .vscode/

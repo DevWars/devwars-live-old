@@ -2,8 +2,7 @@ import io from 'socket.io-client';
 import eventBus from './eventBus';
 import store from '../store';
 
-const socketUrl = process.env.SOCKET_URL || undefined;
-const socket = io(socketUrl, {
+const socket = io(window.SOCKET_URL, {
     transports: ['websocket'],
     upgrade: false,
 });

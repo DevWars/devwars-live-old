@@ -1,7 +1,5 @@
 /* eslint import/no-extraneous-dependencies:0 */
-const config = require('config');
 const path = require('path');
-const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
@@ -45,9 +43,6 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
-        new webpack.DefinePlugin({
-            'process.env.SOCKET_URL': `"${config.get('socketUrl')}"`,
-        }),
         new CopyWebpackPlugin([{
             from: 'node_modules/monaco-editor/min/vs',
             to: 'vendor/vs',

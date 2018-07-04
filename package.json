@@ -46,7 +46,7 @@
         "vue-router": "3.0.1",
         "vue-template-compiler": "^2.5.16",
         "vuex": "3.0.1",
-        "webpack": "^4.14.0",
+        "webpack": "^4.15.0",
         "webpack-cli": "^3.0.8"
     },
     "dependencies": {
@@ -55,6 +55,7 @@
         "config": "^1.30.0",
         "cookie": "^0.3.1",
         "dotenv": "^6.0.0",
+        "ejs": "^2.6.1",
         "express": "^4.16.3",
         "firebase-admin": "^5.12.1",
         "helmet": "^3.12.1",
