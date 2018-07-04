@@ -24,7 +24,7 @@
 
 <script>
 import GameViewTeam from './GameViewTeam';
-import CodeViewer from './CodeViewer'
+import CodeViewer from './CodeViewer';
 
 export default {
     components: { GameViewTeam, CodeViewer },

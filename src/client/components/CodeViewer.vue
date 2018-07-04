@@ -9,11 +9,10 @@
 
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 import monacoLoader from '../utils/monacoLoader';
 
 export default {
-
     props: {
         language: { type: String, required: true },
         hidden: { type: Boolean, default: true },
@@ -28,7 +27,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(['getZenTemplate']),
+        ...mapState(['zenTemplate']),
 
         readOnly() {
             return true;
@@ -36,27 +35,23 @@ export default {
     },
 
     watch: {
-        getZenTemplate() {
+        zenTemplate() {
             if (this.editor) {
-                this.editor.setValue(this.$store.state.zenTemplate)
+                this.editor.setValue(this.zenTemplate);
             }
-        }
+        },
     },
 
     mounted() {
         monacoLoader((monaco) => {
             if (monaco) {
                 this.initMonaco(monaco);
-                this.setTemplateText();
+                this.editor.setValue(this.zenTemplate);
             }
         });
     },
 
     methods: {
-        setTemplateText() {
-            return this.editor.setValue(this.$store.state.zenTemplate);
-        },
-
         initMonaco(monaco) {
             const editor = monaco.editor.create(this.$refs.mount, {
                 theme: 'devwars',

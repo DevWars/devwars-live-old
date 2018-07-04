@@ -58,8 +58,6 @@ const getters = {
         }
     },
 
-    getZenTemplate: state => state.zenTemplate,
-
     visibleEditors({ editors }) {
         return editors.filter(e => !e.hidden);
     },
