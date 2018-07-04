@@ -78,9 +78,13 @@ export default {
     &.vertical {
         flex-flow: row nowrap;
 
-        .game-view-team:not(:last-child):not(.expanded) {
-            border-right: $border;
-            border-bottom: none;
+        .game-view-team:not(:last-child) {
+            border-right: $border !important;
+            border-bottom: none !important;
+        }
+
+        .game-view-team:last-child {
+            border-left: $border;
         }
 
         .game-view-team:not(:first-child) {

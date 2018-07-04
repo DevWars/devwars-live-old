@@ -58,7 +58,7 @@ export default {
 
 .game-view-team {
     display: flex;
-    flex: 1;
+    flex: 1 1;
     flex-flow: row nowrap;
 
     .game-view-team-menu {

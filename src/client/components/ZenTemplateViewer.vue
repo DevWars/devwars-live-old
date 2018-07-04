@@ -1,7 +1,7 @@
 <template>
-    <div :class="`editor-player ${isCollapsed ? 'collapsed' : ''}`">
+    <div :class="`zen-template-viewer ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
-            <div class="username">ZEN TEMPLATE</div>
+            <div class="title">ZEN TEMPLATE</div>
             <div class="language" @click="toggleCollapse">HTML</div>
         </div>
         <div ref="mount" class="monaco-mount viewer"></div>
@@ -12,6 +12,7 @@
 <script>
 import { mapState } from 'vuex';
 import monacoLoader from '../utils/monacoLoader';
+import { preventReactivity } from '../utils/utils';
 
 export default {
     data() {
@@ -23,10 +24,6 @@ export default {
 
     computed: {
         ...mapState(['zenTemplate']),
-
-        readOnly() {
-            return true;
-        },
     },
 
     watch: {
@@ -44,6 +41,12 @@ export default {
                 this.editor.setValue(this.zenTemplate);
             }
         });
+    },
+
+    beforeDestroy() {
+        if (this.editor) {
+            this.editor.dispose();
+        }
     },
 
     methods: {
@@ -70,7 +73,7 @@ export default {
                 minimap: { enabled: false },
             });
 
-            this.editor = editor;
+            this.editor = preventReactivity(editor);
         },
 
         toggleCollapse() {
@@ -84,30 +87,14 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/variables';
 
-.editor-player {
+.zen-template-viewer {
     $header-height: 2.25rem;
 
     position: relative;
     display: flex;
-    flex:  auto;
+    flex: 1 1;
     flex-flow: column nowrap;
     overflow: hidden;
-
-    &.blue {
-        color: $blue-team-color;
-
-        .faded {
-            color: rgba($blue-team-color, 0.25);
-        }
-    }
-
-    &.red {
-        color: $red-team-color;
-
-        .faded {
-            color: rgba($red-team-color, 0.25);
-        }
-    }
 
     &.collapsed {
         flex: 0 0 $header-height;
@@ -121,7 +108,7 @@ export default {
             line-height: calc(#{$header-height} - 2px);
         }
 
-        .username {
+        .title {
             order: 1;
             transform: rotate(-90deg) translate(0, 100%);
             transform-origin: bottom left;
@@ -139,7 +126,6 @@ export default {
             transform-origin: top right;
         }
 
-        .controls,
         .monaco-mount {
             display: none;
         }
@@ -159,31 +145,10 @@ export default {
         user-select: none;
     }
 
-    .username {
+    .title {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-    }
-
-    .controls {
-        display: flex;
-        margin: .5rem;
-        flex-flow: row nowrap;
-
-        button {
-            margin-right: 0.5rem;
-        }
-
-        .status {
-            display: flex;
-            margin-right: 0.5rem;
-            align-items: center;
-
-            .material-design-icon {
-                font-size: 1.5rem;
-                margin-right: 0.25rem;
-            }
-        }
     }
 
     .monaco-mount {
@@ -218,34 +183,6 @@ export default {
                 > .invisible.fade {
                     transition: opacity 150ms linear !important;
                 }
-            }
-
-            .cur-blue,
-            .cur-red {
-                &:after {
-                    content: "";
-                    position: absolute;
-                    width: 2px;
-                    height: 100%;
-                }
-            }
-
-            .cur-blue:after {
-                background-color: $blue-team-color;
-            }
-
-            .cur-red:after {
-                background-color: $red-team-color;
-            }
-
-            .sel-blue {
-                opacity: 0.15;
-                background-color: $blue-team-color;
-            }
-
-            .sel-red {
-                opacity: 0.15;
-                background-color: $red-team-color;
             }
         }
     }
