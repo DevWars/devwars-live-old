@@ -1,7 +1,8 @@
 <template>
     <div :class="`editor-player ${isCollapsed ? 'collapsed' : ''}`">
         <div class="header">
-            <div class="language" @click="toggleCollapse">{{ language }}</div>
+            <div class="username">ZEN TEMPLATE</div>
+            <div class="language" @click="toggleCollapse">HTML</div>
         </div>
         <div ref="mount" class="monaco-mount viewer"></div>
     </div>
@@ -13,12 +14,6 @@ import { mapState } from 'vuex';
 import monacoLoader from '../utils/monacoLoader';
 
 export default {
-    props: {
-        language: { type: String, required: true },
-        hidden: { type: Boolean, default: true },
-        collapsible: { type: Boolean, default: true },
-    },
-
     data() {
         return {
             isCollapsed: false,
@@ -55,7 +50,7 @@ export default {
         initMonaco(monaco) {
             const editor = monaco.editor.create(this.$refs.mount, {
                 theme: 'devwars',
-                language: this.language === 'js' ? 'javascript' : this.language,
+                language: 'html',
 
                 readOnly: true,
                 automaticLayout: true, // TODO: Handle resize manually.
@@ -79,9 +74,7 @@ export default {
         },
 
         toggleCollapse() {
-            if (this.collapsible) {
-                this.isCollapsed = !this.isCollapsed;
-            }
+            this.isCollapsed = !this.isCollapsed;
         },
     },
 };

@@ -8,8 +8,7 @@
             team="blue"
             @toggleExpanded="toggleExpanded('blue')"
         />
-        <!--CodeViewer Language needs to be dynamic later.-->
-        <CodeViewer language="html"/>
+        <ZenTemplateViewer/>
         <GameViewTeam
             :vertical="vertical"
             :hide-menu="hideMenu"
@@ -24,10 +23,10 @@
 
 <script>
 import GameViewTeam from './GameViewTeam';
-import CodeViewer from './CodeViewer';
+import ZenTemplateViewer from './ZenTemplateViewer';
 
 export default {
-    components: { GameViewTeam, CodeViewer },
+    components: { GameViewTeam, ZenTemplateViewer },
 
     props: {
         hideMenu: { type: Boolean, default: false },
