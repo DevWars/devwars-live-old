@@ -22,13 +22,7 @@ export default {
 
     data() {
         return {
-
-            inSync: false,
-            ignoreChanges: true,
-
-            inFocus: false,
             isCollapsed: false,
-
             editor: null,
         };
     },
@@ -107,7 +101,7 @@ export default {
 
     position: relative;
     display: flex;
-    flex: 1 1 100%;
+    flex:  auto;
     flex-flow: column nowrap;
     overflow: hidden;
 
