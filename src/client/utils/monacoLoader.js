@@ -1,4 +1,5 @@
 const BG = '0b0c11';
+const BORDER = '303745';
 const COMMENT = '546178';
 const BLUE = '00c9ff';
 const RED = 'ff007d';
@@ -50,6 +51,13 @@ const devwarsTheme = {
 
         'editorBracketMatch.border': `#${COMMENT}`,
         'editorIndentGuide.background': `#${COMMENT}80`,
+
+        'editorWidget.background': '#101118',
+        'editorWidget.border': `#${BORDER}`,
+
+        'input.background': `#${BG}`,
+        'input.border': `#${BORDER}`,
+        'pickerGroup.border': '#ff0000',
     },
 };
 
