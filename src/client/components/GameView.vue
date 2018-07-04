@@ -8,6 +8,8 @@
             team="blue"
             @toggleExpanded="toggleExpanded('blue')"
         />
+        <!--CodeViewer Language needs to be dynamic later.-->
+        <CodeViewer language="html"/>
         <GameViewTeam
             :vertical="vertical"
             :hide-menu="hideMenu"
@@ -22,9 +24,10 @@
 
 <script>
 import GameViewTeam from './GameViewTeam';
+import CodeViewer from './CodeViewer'
 
 export default {
-    components: { GameViewTeam },
+    components: { GameViewTeam, CodeViewer },
 
     props: {
         hideMenu: { type: Boolean, default: false },
