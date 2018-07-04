@@ -22,7 +22,6 @@ export default {
 
     data() {
         return {
-            templateCode: '',
 
             inSync: false,
             ignoreChanges: true,
@@ -207,7 +206,7 @@ export default {
 
     .monaco-mount {
         position: relative;
-        flex: 1 1 100%;
+        flex: auto;
         overflow: hidden;
 
         /deep/ {
