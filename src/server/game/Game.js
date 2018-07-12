@@ -136,7 +136,7 @@ class Game {
     }
 
     onFirebaseZenTemplate(zenTemplate) {
-        this.zenTemplate = zenTemplate;
+        this.zenTemplate = zenTemplate || '';
         this.io.emit('zenTemplate', zenTemplate);
         this.generateZenDocuments();
     }
