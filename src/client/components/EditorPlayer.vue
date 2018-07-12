@@ -185,7 +185,7 @@ export default {
         },
 
         initSocket() {
-            const socketUrl = process.env.SOCKET_URL || '';
+            const socketUrl = window.SOCKET_URL || '';
             const socket = io(`${socketUrl}/${this.id}`, {
                 transport: ['websocket'],
                 upgrade: false,
