@@ -62,7 +62,7 @@ class Game {
             this.onFirebaseGameObjectives(snap.val());
         });
 
-        this.database.ref('game/zenTemplate').on('value', (snap) => {
+        this.database.ref('game/template/html').on('value', (snap) => {
             this.onFirebaseZenTemplate(snap.val());
         });
 
