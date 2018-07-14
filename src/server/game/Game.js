@@ -62,7 +62,7 @@ class Game {
             this.onFirebaseGameObjectives(snap.val());
         });
 
-        this.database.ref('game/template/html').on('value', (snap) => {
+        this.database.ref('game/templates/html').on('value', (snap) => {
             this.onFirebaseZenTemplate(snap.val());
         });
 
@@ -127,7 +127,7 @@ class Game {
     }
 
     onFirebaseGameName(name) {
-        const gameMode = name.includes('zen') ? 'zen' : 'classic';
+        const gameMode = name.toLowerCase().includes('zen') ? 'zen' : 'classic';
         this.gameRef.child('state/gameMode').set(gameMode);
 
         if (gameMode === 'zen') {
@@ -253,6 +253,14 @@ class Game {
             if (socketValidator.validateToggleEditorHidden(payload)) {
                 this.onSocketToggleEditorHidden(socket, payload);
             }
+        });
+
+        socket.on('RELOAD', () => {
+            if (!socket.client.user || !socket.client.user.isModerator()) {
+                return;
+            }
+
+            this.io.emit('RELOAD');
         });
     }
 

@@ -42,6 +42,12 @@
                 <h2>{{ editor.language.toUpperCase() }}</h2>
             </div>
         </div>
+
+        <div class="controls">
+            <div class="row">
+                <button class="blue" @click="RELOAD">NUKE</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -84,6 +90,10 @@ export default {
 
         onToggleEditorHidden(editor) {
             socket.emit('toggle-editor-hidden', { id: editor.id, hidden: !editor.hidden });
+        },
+
+        RELOAD() {
+            socket.emit('RELOAD');
         },
     },
 };

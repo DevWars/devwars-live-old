@@ -49,4 +49,8 @@ socket.on('editorState', (state) => {
     store.commit('RECIEVE_EDITOR_STATE', state);
 });
 
+socket.on('RELOAD', () => {
+    window.location.reload();
+});
+
 export default socket;
