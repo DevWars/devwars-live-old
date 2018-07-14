@@ -1,10 +1,11 @@
-FROM node:8-slim
+FROM node:slim
 
 WORKDIR /app
 
 ADD package.json .
+ADD package-lock.json .
 
-RUN npm install
+RUN npm ci
 
 ADD . /app
 
