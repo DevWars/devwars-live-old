@@ -16,11 +16,11 @@
 
 
 <script>
-import CheckIcon from 'vue-material-design-icons/check';
-import CloseIcon from 'vue-material-design-icons/close';
-import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
-import CheckboxBlankOutlineIcon from 'vue-material-design-icons/checkbox-blank-outline';
-import CheckboxMarkedOutlineIcon from 'vue-material-design-icons/checkbox-marked-outline';
+import CheckIcon from 'vue-material-design-icons/Check';
+import CloseIcon from 'vue-material-design-icons/Close';
+import LockOutlineIcon from 'vue-material-design-icons/LockOutline';
+import CheckboxBlankOutlineIcon from 'vue-material-design-icons/CheckboxBlankOutline';
+import CheckboxMarkedOutlineIcon from 'vue-material-design-icons/CheckboxMarkedOutline';
 
 const iconMap = {
     incomplete: 'CheckboxBlankOutlineIcon',

@@ -5,19 +5,10 @@
                 <PlaylistCheckIcon
                     slot="left"
                     :class="`objectives-modal-icon ${team}`"
+                    title="View Objectives"
                     @click.native="openObjectivesModal"
                 />
             </AppHeader>
-            <!-- <EditorPlayer
-                v-if="playerEditor"
-                :key="playerEditor.id"
-                :id="playerEditor.id"
-                :team="playerEditor.team"
-                :language="playerEditor.language"
-                :locked="playerEditor.locked"
-                :editable="true"
-                :collapsible="false"
-            /> -->
             <LiveEditor
                 v-if="playerEditor"
                 :key="playerEditor.id"
@@ -39,7 +30,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import PlaylistCheckIcon from 'vue-material-design-icons/checkbox-multiple-marked-outline';
+import PlaylistCheckIcon from 'vue-material-design-icons/CheckboxMultipleMarkedOutline';
 import AppHeader from '../AppHeader';
 import EditorGroup from '../EditorGroup';
 import LiveEditor from '../editors/LiveEditor';

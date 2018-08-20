@@ -26,7 +26,7 @@
             <button v-else @click="socket.emit('control')">Control</button>
             <button v-if="hasControl && !readOnly" @click="socket.emit('save')">Save</button>
             <div v-if="locked" class="status">
-                <LockOutlineIcon title="locked"/>
+                <LockOutlineIcon title="Locked"/>
                 <span>Locked</span>
             </div>
         </div>
@@ -37,7 +37,7 @@
 <script>
 import io from 'socket.io-client';
 import { mapState } from 'vuex';
-import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
+import LockOutlineIcon from 'vue-material-design-icons/LockOutline';
 import EditorSelection from '../../../shared/EditorSelection';
 import TextOperation from '../../../shared/TextOperation';
 import { preventReactivity } from '../../utils/utils';

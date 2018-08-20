@@ -1,13 +1,13 @@
 <template>
     <div :class="`game-view-team-menu ${team}`">
-        <button :class="viewSite ? 'fade' : ''" @click="$emit('onViewCode')">
-            <CodeTagsIcon class="icon"/>
+        <button :class="{ dimmed: viewSite }" title="View Code" @click="$emit('onViewCode')">
+            <CodeTagsIcon/>
         </button>
-        <button :class="viewSite ? '' : 'fade'" @click="$emit('onViewSite')">
+        <button :class="{ dimmed: !viewSite }" title="View Site" @click="$emit('onViewSite')">
             <ApplicationIcon/>
         </button>
         <div class="fill"></div>
-        <button @click="$emit('onToggleExpanded')">
+        <button :title="expanded ? 'Exit Fullscreen' : 'Fullscreen Team'" @click="$emit('onToggleExpanded')">
             <ArrowCollapseIcon v-if="expanded"/>
             <ArrowExpandIcon v-else/>
         </button>
@@ -16,10 +16,10 @@
 
 
 <script>
-import ApplicationIcon from 'vue-material-design-icons/application';
-import ArrowCollapseIcon from 'vue-material-design-icons/arrow-collapse';
-import ArrowExpandIcon from 'vue-material-design-icons/arrow-expand';
-import CodeTagsIcon from 'vue-material-design-icons/code-tags';
+import ApplicationIcon from 'vue-material-design-icons/Application';
+import ArrowCollapseIcon from 'vue-material-design-icons/ArrowCollapse';
+import ArrowExpandIcon from 'vue-material-design-icons/ArrowExpand';
+import CodeTagsIcon from 'vue-material-design-icons/CodeTags';
 
 export default {
     components: {
@@ -45,11 +45,11 @@ export default {
     display: flex;
     flex-flow: column nowrap;
 
-    &.blue .material-design-icon {
+    &.blue {
         color: $blue-team-color;
     }
 
-    &.red .material-design-icon {
+    &.red {
         color: $red-team-color;
     }
 
@@ -60,12 +60,13 @@ export default {
         justify-content: center;
         border: none;
         font-size: 1.5rem;
+        color: inherit;
 
         &:active {
             background-color: transparent;
         }
 
-        &.fade .material-design-icon {
+        &.dimmed {
             opacity: 0.25;
         }
     }

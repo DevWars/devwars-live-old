@@ -24,10 +24,10 @@
         <div class="objectives">
             <div class="title">Objectives</div>
             <ul>
-                <li v-for="(objective, index) in objectives" :key="index" class="item">
-                    <component :is="objective.blue.icon" :class="objective.blue.classNames"/>
-                    <div :class="`description ${objective.isBonus ? 'bonus' : ''}`">{{ objective.description }}</div>
-                    <component :is="objective.red.icon" :class="objective.red.classNames"/>
+                <li v-for="(obj, index) in objectives" :key="index" class="item">
+                    <component :is="obj.blue.icon" :class="obj.blue.classNames" :title="obj.blue.title"/>
+                    <div :class="`description ${obj.isBonus ? 'bonus' : ''}`">{{ obj.description }}</div>
+                    <component :is="obj.red.icon" :class="obj.red.classNames" :title="obj.red.title"/>
                 </li>
             </ul>
         </div>
@@ -37,17 +37,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import CheckIcon from 'vue-material-design-icons/check';
-import CloseIcon from 'vue-material-design-icons/close';
-import LockOutlineIcon from 'vue-material-design-icons/lock-outline';
+import CheckIcon from 'vue-material-design-icons/Check';
+import CloseIcon from 'vue-material-design-icons/Close';
+import LockOutlineIcon from 'vue-material-design-icons/LockOutline';
 import CountdownTimer from '../CountdownTimer';
-
-const iconMap = {
-    incomplete: 'CheckIcon',
-    pending: 'CheckIcon',
-    complete: 'CheckIcon',
-    dropped: 'CloseIcon',
-};
 
 export default {
     components: { CountdownTimer, CheckIcon, CloseIcon, LockOutlineIcon },
@@ -68,21 +61,30 @@ export default {
         },
 
         objectives() {
+            const iconMap = {
+                incomplete: { icon: 'CheckIcon', title: 'Incomplete' },
+                pending: { icon: 'CheckIcon', title: 'Pending Review' },
+                complete: { icon: 'CheckIcon', title: 'Complete' },
+                dropped: { icon: 'CloseIcon', title: 'Dropped' },
+                locked: { icon: 'LockOutlineIcon', title: 'Locked' },
+            };
+
             return this.$store.state.objectives.map((storeObjective) => {
                 const objective = { ...storeObjective };
                 for (const team of ['blue', 'red']) {
                     const state = storeObjective[`${team}State`];
-                    let icon = iconMap[state];
-                    let classNames = `${team} ${state}`;
+
+                    const classNames = [team, state];
+                    let { icon, title } = iconMap[state]; // eslint-disable-line prefer-const
 
                     if (storeObjective.isBonus) {
-                        classNames += ' bonus';
+                        classNames.push('bonus');
                         if (this.$store.getters[`${team}BonusLocked`] && state !== 'dropped') {
                             icon = 'LockOutlineIcon';
                         }
                     }
 
-                    objective[team] = { icon, classNames };
+                    objective[team] = { icon, title, classNames };
                 }
 
                 return objective;
