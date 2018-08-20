@@ -37,38 +37,7 @@ class Game {
 
         this._initEditors();
         this._initRoutes();
-
-        this.gameRef.child('state').on('value', (snap) => {
-            this.onFirebaseState(snap.val());
-        });
-
-        this.gameRef.child('objectives').on('value', (snap) => {
-            this.onFirebaseObjectives(snap.val());
-        });
-
-        this.gameRef.child('players').on('value', (snap) => {
-            this.onFirebasePlayers(snap.val());
-        });
-
-        this.database.ref('game/name').on('value', (snap) => {
-            this.onFirebaseGameName(snap.val());
-        });
-
-        this.database.ref('game/teams').on('value', (snap) => {
-            this.onFirebaseGameTeams(snap.val());
-        });
-
-        this.database.ref('game/objectives').on('value', (snap) => {
-            this.onFirebaseGameObjectives(snap.val());
-        });
-
-        this.database.ref('game/templates/html').on('value', (snap) => {
-            this.onFirebaseZenTemplate(snap.val());
-        });
-
-        this.database.ref('frame/liveVoting').on('value', (snap) => {
-            this.onFirebaseFrameVotes(snap.val());
-        });
+        this._initFirebaseListeners();
 
         this.io.on('connection', this.onSocketConnection.bind(this));
     }
@@ -106,6 +75,43 @@ class Game {
 
             res.type(editor.language);
             res.send(editor.document.getSavedText());
+        });
+    }
+
+    _initFirebaseListeners() {
+        // Live game state
+        this.gameRef.child('state').on('value', (snap) => {
+            this.onFirebaseState(snap.val());
+        });
+
+        this.gameRef.child('objectives').on('value', (snap) => {
+            this.onFirebaseObjectives(snap.val());
+        });
+
+        this.gameRef.child('players').on('value', (snap) => {
+            this.onFirebasePlayers(snap.val());
+        });
+
+        // Game state
+        this.database.ref('game/name').on('value', (snap) => {
+            this.onFirebaseGameName(snap.val());
+        });
+
+        this.database.ref('game/teams').on('value', (snap) => {
+            this.onFirebaseGameTeams(snap.val());
+        });
+
+        this.database.ref('game/objectives').on('value', (snap) => {
+            this.onFirebaseGameObjectives(snap.val());
+        });
+
+        this.database.ref('game/templates/html').on('value', (snap) => {
+            this.onFirebaseZenTemplate(snap.val());
+        });
+
+        // Frame state
+        this.database.ref('frame/liveVoting').on('value', (snap) => {
+            this.onFirebaseFrameVotes(snap.val());
         });
     }
 
