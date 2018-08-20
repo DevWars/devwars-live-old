@@ -8,7 +8,7 @@
             team="blue"
             @toggleExpanded="toggleExpanded('blue')"
         />
-        <ZenTemplateViewer v-if="isZenGameMode"/>
+        <ZenEditor v-if="isZenGameMode"/>
         <GameViewTeam
             :vertical="isZenGameMode"
             :hide-menu="hideMenu"
@@ -23,10 +23,10 @@
 
 <script>
 import GameViewTeam from './GameViewTeam';
-import ZenTemplateViewer from './ZenTemplateViewer';
+import ZenEditor from './editors/ZenEditor';
 
 export default {
-    components: { GameViewTeam, ZenTemplateViewer },
+    components: { GameViewTeam, ZenEditor },
 
     props: {
         hideMenu: { type: Boolean, default: false },

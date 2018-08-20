@@ -8,7 +8,17 @@
                     @click.native="openObjectivesModal"
                 />
             </AppHeader>
-            <EditorPlayer
+            <!-- <EditorPlayer
+                v-if="playerEditor"
+                :key="playerEditor.id"
+                :id="playerEditor.id"
+                :team="playerEditor.team"
+                :language="playerEditor.language"
+                :locked="playerEditor.locked"
+                :editable="true"
+                :collapsible="false"
+            /> -->
+            <LiveEditor
                 v-if="playerEditor"
                 :key="playerEditor.id"
                 :id="playerEditor.id"
@@ -32,14 +42,14 @@ import { mapState } from 'vuex';
 import PlaylistCheckIcon from 'vue-material-design-icons/checkbox-multiple-marked-outline';
 import AppHeader from '../AppHeader';
 import EditorGroup from '../EditorGroup';
-import EditorPlayer from '../EditorPlayer';
+import LiveEditor from '../editors/LiveEditor';
 import WebViewer from '../WebViewer';
 
 export default {
     components: {
         AppHeader,
         EditorGroup,
-        EditorPlayer,
+        LiveEditor,
         WebViewer,
         PlaylistCheckIcon,
     },

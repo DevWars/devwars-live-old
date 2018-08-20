@@ -1,13 +1,12 @@
 <template>
     <div :class="`editor-group${vertical ? ' vertical' : ''}`">
-        <EditorPlayer
+        <LiveEditor
             v-for="editor in editors"
             :key="editor.id"
             :id="editor.id"
             :team="editor.team"
             :language="editor.language"
             :locked="editor.locked"
-            :hidden="editor.hidden"
             :vertical="vertical"
             :collapsible="editors.length > 1"
         />
@@ -16,10 +15,10 @@
 
 
 <script>
-import EditorPlayer from './EditorPlayer';
+import LiveEditor from './editors/LiveEditor';
 
 export default {
-    components: { EditorPlayer },
+    components: { LiveEditor },
 
     props: {
         editors: { type: Array, required: true },
@@ -39,13 +38,13 @@ export default {
     &.vertical {
         flex-flow: column nowrap;
 
-        .editor-player:not(:last-child) {
+        .live-editor:not(:last-child) {
             border-bottom: $border;
             border-right: none;
         }
     }
 
-    .editor-player:not(:last-child) {
+    .live-editor:not(:last-child) {
         border-right: $border;
     }
 }
