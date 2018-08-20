@@ -72,7 +72,7 @@ export default {
 
 .countdown-timer {
     .warn {
-        color: $warrning-color;
+        color: $warning-color;
     }
 }
 </style>

@@ -57,7 +57,7 @@ export default {
     .connection-icon {
         margin: 0 1rem;
         font-size: 1.5rem;
-        color: $warrning-color;
+        color: $warning-color;
         animation: pulse 750ms infinite alternate ease-in-out;
     }
 }

@@ -158,7 +158,7 @@ const mutations = {
         state.players = players;
     },
 
-    RECIEVE_ZEN_TEMPLATE(state, zenTemplate) {
+    RECEIVE_ZEN_TEMPLATE(state, zenTemplate) {
         state.zenTemplate = zenTemplate;
     },
 
@@ -166,11 +166,11 @@ const mutations = {
         state.votes = votes;
     },
 
-    RECIEVE_USER(state, user) {
+    RECEIVE_USER(state, user) {
         state.user = user;
     },
 
-    RECIEVE_EDITOR_STATE(state, editorState) {
+    RECEIVE_EDITOR_STATE(state, editorState) {
         const editor = state.editors[editorState.id];
         if (editor) {
             Vue.set(state.editors, editorState.id, { ...editor, ...editorState });

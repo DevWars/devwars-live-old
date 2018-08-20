@@ -17,7 +17,7 @@ socket.on('disconnect', () => {
 });
 
 socket.on('user', (user) => {
-    store.commit('RECIEVE_USER', user);
+    store.commit('RECEIVE_USER', user);
     console.info('%cAUTH:', 'color: #00ff00', { ...user });
 });
 
@@ -34,7 +34,7 @@ socket.on('players', (players) => {
 });
 
 socket.on('zenTemplate', (zenTemplate) => {
-    store.commit('RECIEVE_ZEN_TEMPLATE', zenTemplate);
+    store.commit('RECEIVE_ZEN_TEMPLATE', zenTemplate);
 });
 
 socket.on('votes', (votes) => {
@@ -46,7 +46,7 @@ socket.on('reloadSite', (team) => {
 });
 
 socket.on('editorState', (state) => {
-    store.commit('RECIEVE_EDITOR_STATE', state);
+    store.commit('RECEIVE_EDITOR_STATE', state);
 });
 
 socket.on('RELOAD', () => {
