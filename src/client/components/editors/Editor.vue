@@ -56,7 +56,7 @@ export default {
         onMonacoLoaded(monaco) {
             this.editor = preventReactivity(monaco.editor.create(this.$refs.monaco, {
                 value: this.text,
-                language: this.language,
+                language: this.language === 'js' ? 'javascript' : this.language,
                 readOnly: this.readOnly,
                 lineNumbers: !this.readOnly,
                 automaticLayout: true,
@@ -84,8 +84,8 @@ export default {
                 run: () => this.$emit('save'),
             });
 
-            this.editor.onDidFocusEditor(() => this.$emit('focus'));
-            this.editor.onDidBlurEditor(() => this.$emit('blur'));
+            this.editor.onDidFocusEditorWidget(() => this.$emit('focus'));
+            this.editor.onDidBlurEditorWidget(() => this.$emit('blur'));
             this.editor.onDidChangeModelContent(change => this.$emit('change', change));
             this.editor.onDidChangeCursorSelection(selections => this.$emit('selection', selections));
 
