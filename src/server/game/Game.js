@@ -209,6 +209,12 @@ class Game {
     }
 
     onSocketConnection(socket) {
+        socket.on('disconnect', () => {
+            this.editors
+                .filter(e => e.userSocketId === socket.id)
+                .forEach(e => e.resetUser());
+        });
+
         socket.on('init', () => {
             this.onSocketInit(socket);
         });
@@ -267,6 +273,36 @@ class Game {
             }
 
             this.io.emit('RELOAD');
+        });
+
+        socket.on('e.state', (id) => {
+            const editor = this.editors.find(e => e.id === id);
+            if (editor) editor.onSocketState(socket);
+        });
+
+        socket.on('e.control', (id) => {
+            const editor = this.editors.find(e => e.id === id);
+            if (editor) editor.onSocketControl(socket);
+        });
+
+        socket.on('e.release', (id) => {
+            const editor = this.editors.find(e => e.id === id);
+            if (editor) editor.onSocketRelease(socket);
+        });
+
+        socket.on('e.save', (id) => {
+            const editor = this.editors.find(e => e.id === id);
+            if (editor) editor.onSocketSave(socket);
+        });
+
+        socket.on('e.o', ([id, operation]) => {
+            const editor = this.editors.find(e => e.id === id);
+            if (editor && operation) editor.onSocketOperation(socket, operation);
+        });
+
+        socket.on('e.s', ([id, selections]) => {
+            const editor = this.editors.find(e => e.id === id);
+            if (editor && selections) editor.onSocketSelections(socket, selections);
         });
     }
 

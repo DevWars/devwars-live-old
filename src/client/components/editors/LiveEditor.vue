@@ -1,8 +1,8 @@
 <template>
     <div :class="[team, { collapsed, vertical }]" class="live-editor">
         <EditorHeader
-            :title="(curUser || owner || {}).username"
-            :dimmed="!curUser"
+            :title="user && user.username"
+            :placeholder="owner && owner.username"
             :team="team"
             :language="language"
             :vertical="vertical"
@@ -22,9 +22,9 @@
             @save="onEditorSave"
         />
         <div v-if="editable" class="controls">
-            <button v-if="hasControl" @click="socket.emit('release')">Release</button>
-            <button v-else @click="socket.emit('control')">Control</button>
-            <button v-if="hasControl && !readOnly" @click="socket.emit('save')">Save</button>
+            <button v-if="hasControl" @click="onRelease">Release</button>
+            <button v-else @click="onControl">Control</button>
+            <button v-if="hasControl && !readOnly" @click="onSave">Save</button>
             <div v-if="locked" class="status">
                 <LockOutlineIcon title="Locked"/>
                 <span>Locked</span>
@@ -35,12 +35,12 @@
 
 
 <script>
-import io from 'socket.io-client';
 import { mapState } from 'vuex';
 import LockOutlineIcon from 'vue-material-design-icons/LockOutline';
 import EditorSelection from '../../../shared/EditorSelection';
 import TextOperation from '../../../shared/TextOperation';
-import { preventReactivity } from '../../utils/utils';
+import eventBus from '../../services/eventBus';
+import socket from '../../services/socket';
 import Editor from './Editor';
 import EditorHeader from './EditorHeader';
 
@@ -58,11 +58,8 @@ export default {
     },
 
     data: () => ({
-        socket: null,
-        socketId: null,
-
-        curUser: null,
-        curSocketId: null,
+        user: null,
+        userSocketId: null,
 
         inSync: false,
         ignoreChanges: false,
@@ -71,14 +68,14 @@ export default {
     }),
 
     computed: {
-        ...mapState(['user', 'players']),
+        ...mapState(['socketId', 'players']),
 
         owner() {
             return this.players.find(p => p.editorId === this.id);
         },
 
         hasControl() {
-            return (this.socketId && this.curSocketId === this.socketId);
+            return (this.socketId && this.socketId === this.userSocketId);
         },
 
         readOnly() {
@@ -87,6 +84,12 @@ export default {
     },
 
     watch: {
+        socketId(socketId) {
+            if (socketId) {
+                this.fetchState();
+            }
+        },
+
         hasControl() {
             this.inSync = false;
         },
@@ -98,89 +101,59 @@ export default {
         },
 
         inSync(isInSync) {
-            if (!isInSync && this.socket) {
-                this.socket.emit('init');
+            if (this.socketId && !isInSync) {
+                this.fetchState();
             }
         },
     },
 
     beforeDestroy() {
-        if (this.socket) {
-            this.socket.disconnect();
-        }
+        eventBus.$off(`editor-${this.id}.state`, this.onSocketState);
+        eventBus.$off(`editor-${this.id}.text`, this.onSocketText);
+        eventBus.$off(`editor-${this.id}.user`, this.onSocketUser);
+        eventBus.$off(`editor-${this.id}.o`, this.onSocketOperation);
+        eventBus.$off(`editor-${this.id}.s`, this.onSocketSelections);
     },
 
     methods: {
+        fetchState() {
+            socket.emit('e.state', this.id);
+        },
+
         onToggleCollapse() {
             if (this.collapsible) {
                 this.collapsed = !this.collapsed;
             }
         },
 
+        onRelease() {
+            socket.emit('e.release', this.id);
+        },
+
+        onControl() {
+            socket.emit('e.control', this.id);
+        },
+
+        onSave() {
+            socket.emit('e.save', this.id);
+        },
+
         onEditorInit() {
-            const socket = io(`${window.SOCKET_URL || ''}/${this.id}`, {
-                transport: ['websocket'],
-                upgrade: false,
-            });
+            eventBus.$on(`editor-${this.id}.state`, this.onSocketState);
+            eventBus.$on(`editor-${this.id}.text`, this.onSocketText);
+            eventBus.$on(`editor-${this.id}.user`, this.onSocketUser);
+            eventBus.$on(`editor-${this.id}.o`, this.onSocketOperation);
+            eventBus.$on(`editor-${this.id}.s`, this.onSocketSelections);
 
-            socket.on('connect', () => {
-                this.socketId = socket.id;
-                socket.emit('init');
-            });
-
-            socket.on('disconnect', () => {
-                this.socketId = null;
-            });
-
-            socket.on('state', (state) => {
-                this.ignoreChanges = true;
-
-                // TODO: Change current to cur on socket object.
-                this.curUser = state.currentUser;
-                this.curSocketId = state.currentSocketId;
-
-                this.$refs.editor.setText(state.text);
-
-                this.inSync = true;
-                this.ignoreChanges = false;
-            });
-
-            socket.on('text', (text) => {
-                this.ignoreChanges = true;
-
-                this.$refs.editor.setText(text);
-
-                this.inSync = true;
-                this.ignoreChanges = false;
-            });
-
-            socket.on('currentUser', ({ user, socketId }) => {
-                this.curUser = user;
-                this.curSocketId = socketId;
-            });
-
-            socket.on('op', (op) => {
-                if (this.readOnly && !this.hasControl) {
-                    this.$refs.editor.applyTextOperation(TextOperation.fromObject(op));
-                }
-            });
-
-            socket.on('sel', (selections) => {
-                if (!this.hasControl) {
-                    const editorSelections = selections.map(s => EditorSelection.fromObject(s));
-                    this.$refs.editor.applySelectionDecorators(editorSelections, this.team, !this.focused);
-                }
-            });
-
-            this.socket = preventReactivity(socket);
+            this.fetchState();
         },
 
         onEditorChange(contentChange) {
             if (this.ignoreChanges || this.locked || !this.hasControl) return;
 
             for (const change of contentChange.changes) {
-                const op = TextOperation.fromMonacoChange(change).toObject();
-                this.socket.emit('op', op);
+                const operation = TextOperation.fromMonacoChange(change).toObject();
+                socket.emit('e.o', [this.id, operation]);
             }
         },
 
@@ -192,12 +165,51 @@ export default {
                 editorSelections.push(EditorSelection.fromMonacoChange(secondarySelection).toObject());
             }
 
-            this.socket.emit('sel', editorSelections);
+            socket.emit('e.s', [this.id, editorSelections]);
         },
 
         onEditorSave() {
-            if (this.socket && !this.readOnly) {
-                this.socket.emit('save');
+            if (!this.readOnly) {
+                socket.emit('e.save', this.id);
+            }
+        },
+
+        onSocketState(state) {
+            this.ignoreChanges = true;
+
+            this.user = state.user;
+            this.userSocketId = state.userSocketId;
+
+            this.$refs.editor.setText(state.text);
+
+            this.inSync = true;
+            this.ignoreChanges = false;
+        },
+
+        onSocketText(text) {
+            this.ignoreChanges = true;
+
+            this.$refs.editor.setText(text);
+
+            this.inSync = true;
+            this.ignoreChanges = false;
+        },
+
+        onSocketUser({ user, userSocketId }) {
+            this.user = user;
+            this.userSocketId = userSocketId;
+        },
+
+        onSocketOperation(operation) {
+            if (this.readOnly && !this.hasControl) {
+                this.$refs.editor.applyTextOperation(TextOperation.fromObject(operation));
+            }
+        },
+
+        onSocketSelections(selections) {
+            if (!this.hasControl) {
+                const editorSelections = selections.map(s => EditorSelection.fromObject(s));
+                this.$refs.editor.applySelectionDecorators(editorSelections, this.team, !this.focused);
             }
         },
     },

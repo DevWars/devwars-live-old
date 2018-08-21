@@ -8,7 +8,6 @@ class Editor extends EventEmitter {
     constructor(io, editorRef, id, opt) {
         super();
         this.io = io;
-        this.ioNsp = this.io.of(`/${id}`);
         this.editorRef = editorRef;
 
         this.id = id;
@@ -22,8 +21,8 @@ class Editor extends EventEmitter {
         this.hidden = false;
 
         this.ownerId = null;
-        this.currentUser = null;
-        this.currentSocketId = null;
+        this.user = null;
+        this.userSocketId = null;
 
         this.document.on('save', throttle(this.saveToFirebase, 1000 * 15).bind(this));
 
@@ -33,7 +32,7 @@ class Editor extends EventEmitter {
                 this.document.setText(text);
                 this.document.save();
 
-                this.ioNsp.emit('text', this.document.getText());
+                this.io.emit('e.text', [this.id, this.document.getText()]);
             }
         });
 
@@ -44,8 +43,6 @@ class Editor extends EventEmitter {
         editorRef.child('hidden').on('value', (snap) => {
             this.onFirebaseHidden(snap.val());
         });
-
-        this.ioNsp.on('connection', this.onSocketConnection.bind(this));
     }
 
     onFirebaseLocked(locked) {
@@ -58,56 +55,18 @@ class Editor extends EventEmitter {
         this.emitState();
     }
 
-    onSocketConnection(socket) {
-        socket.on('disconnect', () => {
-            this.onSocketDisconnect(socket);
-        });
-
-        socket.on('init', () => {
-            this.onSocketInit(socket);
-        });
-
-        socket.on('control', () => {
-            this.onSocketControl(socket);
-        });
-
-        socket.on('release', () => {
-            this.onSocketRelease(socket);
-        });
-
-        socket.on('save', () => {
-            this.onSocketSave(socket);
-        });
-
-        socket.on('op', (payload) => {
-            if (socketValidator.validateOp(payload)) {
-                this.onSocketOp(socket, payload);
-            }
-        });
-
-        socket.on('sel', (payload) => {
-            if (socketValidator.validateSel(payload)) {
-                this.onSocketSel(socket, payload);
-            }
-        });
-    }
-
-    onSocketDisconnect(socket) {
-        if (this.isSocketCurrentUser(socket)) {
-            this.resetCurrentUser();
-        }
-    }
-
-    onSocketInit(socket) {
-        socket.emit('state', {
-            namespace: this.ioNsp.name,
-            team: this.team,
-            language: this.team,
-            filename: this.team,
-            currentUser: this.currentUser,
-            currentSocketId: this.currentSocketId,
-            text: this.document.getText(),
-        });
+    onSocketState(socket) {
+        socket.emit('e.state', [
+            this.id,
+            {
+                team: this.team,
+                language: this.team,
+                filename: this.team,
+                user: this.user,
+                userSocketId: this.userSocketId,
+                text: this.document.getText(),
+            },
+        ]);
     }
 
     onSocketControl(socket) {
@@ -116,23 +75,17 @@ class Editor extends EventEmitter {
         }
 
         // Prevent users from taking control from moderators and admins.
-        if (
-            this.currentUser
-            && !socket.client.user.isModerator()
-            && this.currentUser.isModerator()
-        ) {
+        if (this.user && this.user.isModerator() && !socket.client.user.isModerator()) {
             return;
         }
 
-        this.setCurrentUser(socket);
+        this.setUser(socket);
     }
 
     onSocketRelease(socket) {
-        if (!this.isSocketCurrentUser(socket)) {
-            return;
+        if (this.isSocketCurrentUser(socket)) {
+            this.resetUser();
         }
-
-        this.resetCurrentUser();
     }
 
     onSocketSave(socket) {
@@ -146,62 +99,69 @@ class Editor extends EventEmitter {
         this.saveToFirebase();
     }
 
-    onSocketOp(socket, op) {
+    onSocketOperation(socket, operation) {
         if (this.locked || !this.isSocketCurrentUser(socket)) {
             return;
         }
 
-        this.document.applyOperation(TextOperation.fromObject(op));
-        this.ioNsp.emit('op', op);
+        if (!socketValidator.validateOperation(operation)) {
+            return;
+        }
+
+        this.document.applyOperation(TextOperation.fromObject(operation));
+        this.io.emit('e.o', [this.id, operation]);
     }
 
-    onSocketSel(socket, sel) {
+    onSocketSelections(socket, selections) {
         if (!this.isSocketCurrentUser(socket)) {
             return;
         }
 
-        this.ioNsp.emit('sel', sel);
-    }
-
-    isSocketOwner(socket) {
-        const { user } = socket.client;
-        if (!user) {
-            return false;
-        }
-
-        if (user.isModerator()) {
-            return true;
-        }
-
-        return this.ownerId === user.id;
-    }
-
-    isSocketCurrentUser(socket) {
-        return this.currentSocketId && this.currentSocketId === socket.id;
-    }
-
-    setCurrentUser(socket) {
-        const { user } = socket.client;
-        if (!user) {
+        if (!socketValidator.validateSelections(selections)) {
             return;
         }
 
-        this.currentUser = user;
-        this.currentSocketId = socket.id;
-        this.ioNsp.emit('currentUser', { user, socketId: socket.id });
+        this.io.emit('e.s', [this.id, selections]);
     }
 
-    resetCurrentUser() {
-        this.currentUser = null;
-        this.currentSocketId = null;
-        this.ioNsp.emit('currentUser', { user: null, socketId: null });
+    isSocketOwner({ client }) {
+        if (!client.user) {
+            return false;
+        }
+
+        return (client.user.isModerator() || client.user.id === this.ownerId);
+    }
+
+    isSocketCurrentUser({ id }) {
+        return (this.userSocketId && this.userSocketId === id);
+    }
+
+    setUser({ id, client }) {
+        if (!client.user) {
+            return;
+        }
+
+        this.user = client.user;
+        this.userSocketId = id;
+
+        this.io.emit('e.user', [
+            this.id,
+            { user: this.user, userSocketId: this.userSocketId },
+        ]);
+    }
+
+    resetUser() {
+        this.user = null;
+        this.userSocketId = null;
+
+        this.io.emit('e.user', [this.id, { user: null, socketId: null }]);
     }
 
     setOwner(user) {
         this.ownerId = user.id;
 
-        if (this.currentUser) {
-            this.resetCurrentUser();
+        if (this.user) {
+            this.resetUser();
         }
     }
 
@@ -217,7 +177,7 @@ class Editor extends EventEmitter {
         this.document.setText(text);
         this.document.save();
 
-        this.ioNsp.emit('text', this.document.getText());
+        this.io.emit('e.text', [this.id, this.document.getText()]);
     }
 
     saveToFirebase() {
@@ -234,13 +194,6 @@ class Editor extends EventEmitter {
     }
 
     dispose() {
-        for (const key of Object.keys(this.ioNsp.connected)) {
-            this.ioNsp.connected[key].disconnect();
-        }
-
-        this.ioNsp.removeAllListeners();
-        delete this.io.nsps[this.ioNsp.name];
-
         this.document.dispose();
     }
 }

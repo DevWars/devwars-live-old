@@ -72,7 +72,7 @@ module.exports = {
         },
     }),
 
-    validateOp: ajv.compile({
+    validateOperation: ajv.compile({
         type: 'object',
         properties: {
             t: {
@@ -94,7 +94,7 @@ module.exports = {
         additionalProperties: false,
     }),
 
-    validateSel: ajv.compile({
+    validateSelections: ajv.compile({
         type: 'array',
         items: {
             type: 'array',
@@ -102,6 +102,6 @@ module.exports = {
             maxItems: 5,
         },
         minItems: 1,
-        maxItems: 16,
+        maxItems: 32,
     }),
 };

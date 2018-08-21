@@ -8,7 +8,7 @@ const socket = io(window.SOCKET_URL, {
 });
 
 socket.on('connect', () => {
-    store.commit('SOCKET_CONNECT');
+    store.commit('SOCKET_CONNECT', socket.id);
     socket.emit('init');
 });
 
@@ -51,6 +51,26 @@ socket.on('editorState', (state) => {
 
 socket.on('RELOAD', () => {
     window.location.reload();
+});
+
+socket.on('e.state', ([id, state]) => {
+    eventBus.$emit(`editor-${id}.state`, state);
+});
+
+socket.on('e.text', ([id, text]) => {
+    eventBus.$emit(`editor-${id}.text`, text);
+});
+
+socket.on('e.user', ([id, payload]) => {
+    eventBus.$emit(`editor-${id}.user`, payload);
+});
+
+socket.on('e.o', ([id, operation]) => {
+    eventBus.$emit(`editor-${id}.o`, operation);
+});
+
+socket.on('e.s', ([id, selections]) => {
+    eventBus.$emit(`editor-${id}.s`, selections);
 });
 
 export default socket;

@@ -1,6 +1,7 @@
 <template>
     <div :class="[team, { collapsed, vertical }]" class="editor-header" >
-        <div :class="{ dimmed }" class="title">{{ title }}</div>
+        <div v-if="title" class="title">{{ title }}</div>
+        <div v-else class="title placeholder">{{ placeholder }}</div>
         <div class="language" @click="$emit('collapse')">{{ language }}</div>
     </div>
 </template>
@@ -10,6 +11,7 @@
 export default {
     props: {
         title: { type: String, default: '' },
+        placeholder: { type: String, default: '' },
         dimmed: { type: Boolean, default: false },
         language: { type: String, required: true },
         team: { type: String, default: '' },
@@ -30,15 +32,14 @@ export default {
     flex: 0 0 $header-height;
     align-items: center;
 
-
     &.blue {
         color: $blue-team-color;
-        .dimmed { color: rgba($blue-team-color, 0.3); }
+        .placeholder { color: rgba($blue-team-color, 0.3); }
     }
 
     &.red {
         color: $red-team-color;
-        .dimmed { color: rgba($red-team-color, 0.3); }
+        .placeholder { color: rgba($red-team-color, 0.3); }
     }
 
     &.collapsed:not(.vertical) {
