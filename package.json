@@ -65,9 +65,9 @@
         "socket.io": "^2.1.1"
     },
     "browserslist": [
-        "chrome >= 61",
+        "chrome >= 58",
         "edge >= 16",
-        "firefox >= 56",
+        "firefox >= 52",
         "safari >= 11"
     ],
     "postcss": {
