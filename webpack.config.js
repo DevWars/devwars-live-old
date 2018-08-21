@@ -1,6 +1,7 @@
 /* eslint import/no-extraneous-dependencies:0 */
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
@@ -19,7 +20,7 @@ module.exports = {
             {
                 test: /\.s?css$/,
                 use: [
-                    'vue-style-loader',
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                     'postcss-loader',
                     'sass-loader',
@@ -43,6 +44,9 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({
+            filename: 'styles.css',
+        }),
         new CopyWebpackPlugin([{
             from: 'node_modules/monaco-editor/min/vs',
             to: 'vendor/vs',
