@@ -1,5 +1,5 @@
 <template>
-    <div :class="[team, { collapsed, vertical }]" class="editor-header" >
+    <div :class="[team, { collapsed, vertical }]" class="EditorHeader">
         <div v-if="title" class="title">{{ title }}</div>
         <div v-else class="title placeholder">{{ placeholder }}</div>
         <div class="language" @click="$emit('collapse')">{{ language }}</div>
@@ -23,32 +23,32 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-.editor-header {
-    $header-height: 2.25rem;
+@import 'settings.scss';
+.EditorHeader {
+    $headerHeight: 2.25rem;
 
     display: flex;
-    margin: 0 1rem;
-    flex: 0 0 $header-height;
+    padding: 0 1rem;
+    flex: 0 0 $headerHeight;
     align-items: center;
 
     &.blue {
-        color: $blue-team-color;
-        .placeholder { color: rgba($blue-team-color, 0.3); }
+        color: $blue;
+        .placeholder { color: rgba($blue, 0.3); }
     }
 
     &.red {
-        color: $red-team-color;
-        .placeholder { color: rgba($red-team-color, 0.3); }
+        color: $red;
+        .placeholder { color: rgba($red, 0.3); }
     }
 
     &.collapsed:not(.vertical) {
-        margin: 1rem 0;
-        width: $header-height;
+        padding: 1rem 0;
+        width: $headerHeight;
         flex: 1 0;
         flex-flow: column;
         align-items: flex-start;
-        line-height: calc(#{$header-height} - 2px);
+        line-height: calc(#{$headerHeight} - 2px);
 
         .title {
             order: 1;
@@ -62,7 +62,7 @@ export default {
             width: 3.5rem;
             height: 3.5rem;
             text-align: right;
-            background-color: $bg-color;
+            background-color: $bg00;
 
             transform: rotate(-90deg) translate(0, -100%);
             transform-origin: top right;

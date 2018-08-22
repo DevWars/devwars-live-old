@@ -1,14 +1,15 @@
 <template>
-    <transition-group name="bounce" tag="div" class="app-modal">
+    <TransitionGroup name="bounce" tag="div" class="TheModal">
         <div v-if="currentModal" key="overlay" class="overlay" @click.self="close"></div>
         <div v-if="currentModal" :key="currentModal.name" class="modal">
-            <component :is="currentModal.name" v-bind="currentModal.props" class="content"/>
+            <Component :is="currentModal.name" v-bind="currentModal.props" class="content"/>
         </div>
-    </transition-group>
+    </TransitionGroup>
 </template>
 
 
 <script>
+/* eslint-disable vue/no-unused-components */
 import { mapGetters } from 'vuex';
 import ScoreboardModal from './modals/ScoreboardModal';
 import ObjectivesModal from './modals/ObjectivesModal';
@@ -51,9 +52,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.app-modal {
+@import 'settings.scss';
+.TheModal {
     .overlay {
         position: absolute;
         top: 0;
@@ -63,7 +63,7 @@ export default {
         cursor: pointer;
         user-select: none;
 
-        background-color: rgba($bg-color, 0.75);
+        background-color: rgba($bg00, 0.75);
     }
 
     .modal {
@@ -84,7 +84,7 @@ export default {
             width: 43rem;
             overflow: hidden;
             border: $border;
-            background-color: $bg-color;
+            background-color: $bg00;
             pointer-events: auto;
         }
     }

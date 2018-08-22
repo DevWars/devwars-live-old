@@ -1,30 +1,30 @@
 <template>
-    <div class="app">
+    <div class="App">
         <router-view/>
-        <AppModal/>
+        <TheModal/>
     </div>
 </template>
 
 
 <script>
-import AppModal from './components/AppModal';
+import TheModal from './components/TheModal';
 
 export default {
-    components: { AppModal },
+    components: { TheModal },
 };
 </script>
 
 
 <style lang="scss">
-@import './styles/variables';
-@import './styles/animations';
+@import 'settings.scss';
 @import './styles/base';
-@import './styles/material-design-icons';
+@import './styles/animations';
+@import './styles/vendor/materialDesignIcons';
 </style>
 
 
 <style lang="scss" scoped>
-.app {
+.App {
     position: relative;
     height: 100vh;
     overflow: hidden;

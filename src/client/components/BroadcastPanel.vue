@@ -1,5 +1,5 @@
 <template>
-    <div class="broadcast-panel">
+    <div class="BroadcastPanel">
         <AdminControls/>
     </div>
 </template>

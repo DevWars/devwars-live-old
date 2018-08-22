@@ -1,61 +1,49 @@
 <template>
-    <div class="app-header-score" @click="openScoreModal">
+    <div class="TheHeaderScore" @click="openScoreModal">
         <div class="team blue">
-            <span :class="`notification ${blueHasPendingObjective ? 'active' : ''}`"></span>
+            <span :class="['notification', { active: blueHasPendingObjective }]"></span>
             <div class="score">{{ blueScore }}</div>
             <div class="strikes">
-                <span :class="`mark ${blueStrikes > 0 ? '' : 'faded'}`">X</span>
-                <span :class="`mark ${blueStrikes > 1 ? '' : 'faded'}`">X</span>
-                <span :class="`mark ${blueStrikes > 2 ? '' : 'faded'}`">X</span>
+                <span :class="['mark', { dimmed: game.blueStrikes <= 0 }]">X</span>
+                <span :class="['mark', { dimmed: game.blueStrikes <= 1 }]">X</span>
+                <span :class="['mark', { dimmed: game.blueStrikes <= 2 }]">X</span>
             </div>
         </div>
-        <CountdownTimer v-if="stage === 'running'" :end="endTime" :warn-time="1000 * 60"/>
+
+        <CountdownTimer v-if="stage === 'running'" :end="game.endTime" :warnTime="1000 * 60"/>
         <div v-else class="title">{{ title }}</div>
+
         <div class="team red">
             <div class="strikes">
-                <span :class="`mark ${redStrikes > 2 ? '' : 'faded'}`">X</span>
-                <span :class="`mark ${redStrikes > 1 ? '' : 'faded'}`">X</span>
-                <span :class="`mark ${redStrikes > 0 ? '' : 'faded'}`">X</span>
+                <span :class="['mark', { dimmed: game.redStrikes <= 2 }]">X</span>
+                <span :class="['mark', { dimmed: game.redStrikes <= 1 }]">X</span>
+                <span :class="['mark', { dimmed: game.redStrikes <= 0 }]">X</span>
             </div>
             <div class="score">{{ redScore }}</div>
-            <span :class="`notification ${redHasPendingObjective ? 'active' : ''}`"></span>
+            <span :class="['notification', { active: redHasPendingObjective }]"></span>
         </div>
     </div>
 </template>
 
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import CountdownTimer from './CountdownTimer';
 
 export default {
     components: { CountdownTimer },
 
     computed: {
+        ...mapState(['game']),
+
         ...mapGetters(['blueScore', 'redScore', 'blueHasPendingObjective', 'redHasPendingObjective']),
 
         stage() {
-            return this.$store.state.game.stage;
-        },
-
-        endTime() {
-            return this.$store.state.game.endTime;
+            return this.game.stage;
         },
 
         title() {
-            if (this.stage === 'ended') {
-                return 'GAME OVER';
-            }
-
-            return 'DEVWARS';
-        },
-
-        blueStrikes() {
-            return this.$store.state.game.blueStrikes;
-        },
-
-        redStrikes() {
-            return this.$store.state.game.redStrikes;
+            return this.stage === 'ended' ? 'GAME OVER' : 'STARTING';
         },
     },
 
@@ -69,9 +57,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.app-header-score {
+@import 'settings.scss';
+.TheHeaderScore {
     display: flex;
     align-items: baseline;
     white-space: nowrap;
@@ -80,10 +67,6 @@ export default {
 
     line-height: 1;
     font-weight: 300;
-
-    .countdown-timer {
-        font-size: 2.75rem;
-    }
 
     .title {
         font-size: 2.5rem;
@@ -95,19 +78,19 @@ export default {
 
         &.blue {
             margin-right: 2rem;
-            color: $blue-team-color;
+            color: $blue;
 
-            .faded {
-                color: rgba($blue-team-color, 0.25);
+            .dimmed {
+                color: rgba($blue, 0.25);
             }
         }
 
         &.red {
             margin-left: 2rem;
-            color: $red-team-color;
+            color: $red;
 
-            .faded {
-                color: rgba($red-team-color, 0.25);
+            .dimmed {
+                color: rgba($red, 0.25);
             }
         }
     }
@@ -136,6 +119,10 @@ export default {
         &.active {
             background-color: #fff;
         }
+    }
+
+    .CountdownTimer {
+        font-size: 2.75rem;
     }
 }
 </style>

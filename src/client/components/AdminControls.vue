@@ -1,5 +1,5 @@
 <template>
-    <div class="admin-controls">
+    <div class="AdminControls">
         <div class="controls">
             <div class="row">
                 <button @click="onResetGame">Reset Game</button>
@@ -12,7 +12,7 @@
                 <select
                     v-for="team in ['blue', 'red']"
                     :key="team"
-                    :class="`${team} ${objective[`${team}State`]}`"
+                    :class="[team, objective[`${team}State`]]"
                     :value="objective[`${team}State`]"
                     @input="onObjectiveStateChange($event, team, id)"
                 >
@@ -21,7 +21,7 @@
                     <option value="complete">Complete</option>
                     <option value="dropped">Dropped</option>
                 </select>
-                <h2 :class="objective.isBonus ? 'bonus' : ''">{{ id + 1 }}</h2>
+                <h2 :class="{ bonus: objective.isBonus }">{{ id + 1 }}</h2>
             </div>
         </div>
         <div class="controls">
@@ -101,9 +101,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.admin-controls {
+@import 'settings.scss';
+.AdminControls {
     padding: 1rem 0.5rem;
 
     .controls {
@@ -123,10 +122,9 @@ export default {
             margin: 0 0.25rem;
             line-height: 1;
             font-size: 1.25rem;
-            font-weight: 400;
 
             &.bonus {
-                color: $bonus-color;
+                color: $bonusColor;
             }
         }
 
@@ -134,20 +132,17 @@ export default {
         select {
             margin-right: 0.5rem;
             width: 6rem;
-            -moz-appearance: none;
 
             &.blue {
-                color: $blue-team-color;
-                &.pending:not(:hover) {
-                    border-color: $blue-team-color;
-                }
+                color: $blue;
             }
 
             &.red {
-                color: $red-team-color;
-                &.pending:not(:hover) {
-                    border-color: $red-team-color;
-                }
+                color: $red;
+            }
+
+            &.pending:not(:hover) {
+                border-color: currentColor;
             }
         }
     }

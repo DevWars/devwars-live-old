@@ -1,12 +1,12 @@
 <template>
-    <div :class="{ collapsed }" class="zen-editor">
+    <div :class="{ collapsed }" class="ZenEditor">
         <EditorHeader
             :collapsed="collapsed"
             title="Zen Template"
             language="html"
             @collapse="collapsed = !collapsed"
         />
-        <Editor :text="zenTemplate" language="html" class="editor" read-only/>
+        <Editor :text="zenTemplate" language="html" readOnly/>
     </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
 
 
 <style lang="scss" scoped>
-.zen-editor {
+.ZenEditor {
     position: relative;
     display: flex;
     flex: 1 1;
@@ -39,7 +39,7 @@ export default {
     &.collapsed {
         flex: 0 0 2.25rem;
 
-        .editor {
+        .Editor {
             display: none;
         }
     }

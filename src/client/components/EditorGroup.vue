@@ -1,9 +1,9 @@
 <template>
-    <div :class="`editor-group${vertical ? ' vertical' : ''}`">
+    <div :class="['EditorGroup', { vertical }]">
         <LiveEditor
             v-for="editor in editors"
-            :key="editor.id"
             :id="editor.id"
+            :key="editor.id"
             :team="editor.team"
             :language="editor.language"
             :locked="editor.locked"
@@ -29,22 +29,21 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.editor-group {
+@import 'settings.scss';
+.EditorGroup {
     display: flex;
     flex: 1;
 
     &.vertical {
         flex-flow: column nowrap;
 
-        .live-editor:not(:last-child) {
+        .LiveEditor:not(:last-child) {
             border-bottom: $border;
             border-right: none;
         }
     }
 
-    .live-editor:not(:last-child) {
+    .LiveEditor:not(:last-child) {
         border-right: $border;
     }
 }

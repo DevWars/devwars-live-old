@@ -1,5 +1,5 @@
 <template>
-    <iframe ref="iframe" :src="`/game/${team}/index.html`" class="web-viewer" frameborder="0"></iframe>
+    <iframe ref="iframe" :src="`/game/${team}/index.html`" class="WebViewer" frameborder="0"></iframe>
 </template>
 
 
@@ -34,7 +34,7 @@ export default {
 
 
 <style lang="scss" scoped>
-.web-viewer {
+.WebViewer {
     flex: 1;
     overflow: hidden;
 }

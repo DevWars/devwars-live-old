@@ -1,0 +1,62 @@
+*, *:before, *:after {
+	box-sizing: border-box;
+}
+
+html {
+    font-size: $unit;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
+    line-height: $lineHeight;
+    font-family: $fontFamily;
+
+    color: $fg00;
+    background-color: $bg00;
+}
+
+h1, h2 {
+    margin: 0;
+    font-weight: 400;
+}
+
+ul, ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+select,
+button {
+    height: 1.875rem;
+    border: $border;
+    font-family: inherit;
+    font-size: .875rem;
+    color: inherit;
+    background-color: $bg00;
+
+    &:hover {
+        border-color: $fg00;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+select {
+    -moz-appearance: none;
+}
+
+button {
+    padding: 0 .5rem;
+    cursor: pointer;
+
+    &:active {
+        color: $bg00;
+        background-color: $fg00;
+    }
+}

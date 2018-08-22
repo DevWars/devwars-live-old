@@ -1,9 +1,9 @@
 <template>
-    <div class="game-view-team">
+    <div class="GameViewTeam">
         <GameViewTeamMenu
             v-if="!hideMenu"
             :team="team"
-            :view-site="viewSite"
+            :viewSite="viewSite"
             :expanded="expanded"
             @onViewCode="viewSite = false"
             @onViewSite="viewSite = true"
@@ -12,7 +12,7 @@
         <EditorGroup
             :editors="teamEditors"
             :vertical="vertical"
-            :class="`editor-group ${viewSite ? 'hidden' : ''}`"
+            :class="{ hidden: viewSite }"
         />
         <WebViewer v-if="viewSite" :team="team" :delay="5000"/>
     </div>
@@ -54,18 +54,17 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.game-view-team {
+@import 'settings.scss';
+.GameViewTeam {
     display: flex;
     flex: 1 1;
     flex-flow: row nowrap;
 
-    .game-view-team-menu {
+    .GameViewTeamMenu {
         border-right: $border;
     }
 
-    .editor-group.hidden {
+    .EditorGroup.hidden {
         display: none;
     }
 }

@@ -1,6 +1,6 @@
 <template>
-    <div class="watch-page">
-        <AppHeader/>
+    <div class="WatchPage">
+        <TheHeader/>
         <GameView/>
     </div>
 </template>
@@ -8,11 +8,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import AppHeader from '../AppHeader';
+import TheHeader from '../TheHeader';
 import GameView from '../GameView';
 
 export default {
-    components: { AppHeader, GameView },
+    components: { TheHeader, GameView },
 
     data() {
         return { modalShown: false };
@@ -40,7 +40,7 @@ export default {
 
 
 <style lang="scss" scoped>
-.watch-page {
+.WatchPage {
     display: flex;
     height: 100%;
     flex-flow: column nowrap;

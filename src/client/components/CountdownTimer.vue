@@ -1,6 +1,6 @@
 <template>
-    <div class="countdown-timer">
-        <span :class="warn ? 'warn' : ''">{{ timer }}</span>
+    <div class="CountdownTimer">
+        <span :class="{ warn }">{{ timer }}</span>
     </div>
 </template>
 
@@ -68,11 +68,10 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.countdown-timer {
+@import 'settings.scss';
+.CountdownTimer {
     .warn {
-        color: $warning-color;
+        color: $errorColor;
     }
 }
 </style>

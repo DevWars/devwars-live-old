@@ -1,15 +1,15 @@
 <template>
-    <header class="app-header">
+    <header class="TheHeader">
         <div class="section">
             <slot name="left"></slot>
         </div>
         <div class="section center">
-            <AppHeaderScore/>
+            <TheHeaderScore/>
         </div>
         <div class="section end">
             <CloudOffOutlineIcon
                 v-if="!connected"
-                class="connection-icon"
+                class="connectionIcon"
                 title="Disconnected"
             />
             <slot name="right"></slot>
@@ -21,19 +21,18 @@
 <script>
 import { mapState } from 'vuex';
 import CloudOffOutlineIcon from 'vue-material-design-icons/CloudOffOutline';
-import AppHeaderScore from './AppHeaderScore';
+import TheHeaderScore from './TheHeaderScore';
 
 export default {
-    components: { AppHeaderScore, CloudOffOutlineIcon },
+    components: { TheHeaderScore, CloudOffOutlineIcon },
     computed: mapState(['connected']),
 };
 </script>
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.app-header {
+@import 'settings.scss';
+.TheHeader {
     display: flex;
     height: 3.5rem;
     justify-content: space-between;
@@ -44,7 +43,6 @@ export default {
         flex: 1 1 100%;
         align-items: center;
 
-
         &.center {
             flex: 0 0 auto;
         }
@@ -54,10 +52,10 @@ export default {
         }
     }
 
-    .connection-icon {
+    .connectionIcon {
         margin: 0 1rem;
         font-size: 1.5rem;
-        color: $warning-color;
+        color: $errorColor;
         animation: pulse 750ms infinite alternate ease-in-out;
     }
 }

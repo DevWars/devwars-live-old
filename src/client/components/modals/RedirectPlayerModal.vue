@@ -1,5 +1,5 @@
 <template>
-    <ConfirmModal title="Notice" button-text="Open" @confirm="onConfirm">
+    <ConfirmModal title="Notice" buttonText="Open" @confirm="onConfirm">
         <p>You have been assigned to the <strong :class="team">{{ team }}/{{ language }}</strong> editor,
         do you wish to open it now?</p>
     </ConfirmModal>

@@ -1,23 +1,23 @@
 <template>
-    <div class="play-page">
+    <div class="PlayPage">
         <div class="panel editor">
-            <AppHeader>
+            <TheHeader>
                 <PlaylistCheckIcon
                     slot="left"
-                    :class="`objectives-modal-icon ${team}`"
+                    :class="`objectivesModalIcon ${team}`"
                     title="View Objectives"
                     @click.native="openObjectivesModal"
                 />
-            </AppHeader>
+            </TheHeader>
             <LiveEditor
                 v-if="playerEditor"
-                :key="playerEditor.id"
                 :id="playerEditor.id"
+                :key="playerEditor.id"
                 :team="playerEditor.team"
                 :language="playerEditor.language"
                 :locked="playerEditor.locked"
-                :editable="true"
                 :collapsible="false"
+                editable
             />
         </div>
         <div class="panel team">
@@ -31,14 +31,14 @@
 <script>
 import { mapState } from 'vuex';
 import PlaylistCheckIcon from 'vue-material-design-icons/CheckboxMultipleMarkedOutline';
-import AppHeader from '../AppHeader';
+import TheHeader from '../TheHeader';
 import EditorGroup from '../EditorGroup';
 import LiveEditor from '../editors/LiveEditor';
 import WebViewer from '../WebViewer';
 
 export default {
     components: {
-        AppHeader,
+        TheHeader,
         EditorGroup,
         LiveEditor,
         WebViewer,
@@ -76,9 +76,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-
-.play-page {
+@import 'settings.scss';
+.PlayPage {
     display: flex;
     height: 100%;
     flex-flow: row nowrap;
@@ -93,26 +92,27 @@ export default {
             border-right: $border;
         }
 
-        .web-viewer {
+        .WebViewer {
             flex: 1 1 100%;
         }
 
-        .editor-group {
+        .EditorGroup {
             flex: 1 1 80%;
             border-top: $border;
         }
     }
 
-    .objectives-modal-icon {
+    .objectivesModalIcon {
         margin: 0 1rem;
         font-size: 1.5rem;
         cursor: pointer;
 
         &.blue {
-            color: $blue-team-color;
+            color: $blue;
         }
+
         &.red {
-            color: $red-team-color;
+            color: $red;
         }
     }
 }

@@ -1,19 +1,19 @@
 <template>
-    <div :class="`game-view${isZenGameMode ? ' vertical' : ''}`">
+    <div :class="['GameView', { vertical }]">
         <GameViewTeam
-            :vertical="isZenGameMode"
-            :hide-menu="hideMenu"
+            :vertical="vertical"
+            :hideMenu="hideMenu"
             :expanded="expandedTeam === 'blue'"
-            :class="blueClassModifier"
+            :class="blueClasses"
             team="blue"
             @toggleExpanded="toggleExpanded('blue')"
         />
         <ZenEditor v-if="isZenGameMode"/>
         <GameViewTeam
-            :vertical="isZenGameMode"
-            :hide-menu="hideMenu"
+            :vertical="vertical"
+            :hideMenu="hideMenu"
             :expanded="expandedTeam === 'red'"
-            :class="redClassModifier"
+            :class="redClasses"
             team="red"
             @toggleExpanded="toggleExpanded('red')"
         />
@@ -41,20 +41,20 @@ export default {
             return this.$store.state.game.gameMode === 'zen';
         },
 
-        blueClassModifier() {
-            if (this.expandedTeam) {
-                return this.expandedTeam === 'blue' ? 'expanded' : 'collapsed';
-            }
-
-            return '';
+        vertical() {
+            return this.isZenGameMode;
         },
 
-        redClassModifier() {
-            if (this.expandedTeam) {
-                return this.expandedTeam === 'red' ? 'expanded' : 'collapsed';
-            }
+        blueClasses() {
+            if (!this.expandedTeam) return '';
 
-            return '';
+            return this.expandedTeam === 'blue' ? 'expanded' : 'collapsed';
+        },
+
+        redClasses() {
+            if (!this.expandedTeam) return '';
+
+            return this.expandedTeam === 'red' ? 'expanded' : 'collapsed';
         },
     },
 
@@ -68,9 +68,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.game-view {
+@import 'settings.scss';
+.GameView {
     display: flex;
     flex: 1;
     flex-flow: column nowrap;
@@ -78,17 +77,17 @@ export default {
     &.vertical {
         flex-flow: row nowrap;
 
-        .game-view-team:not(:last-child) {
+        .GameViewTeam:not(:last-child) {
             border-right: $border !important;
             border-bottom: none !important;
         }
 
-        .game-view-team:last-child {
+        .GameViewTeam:last-child {
             border-left: $border;
         }
 
-        .game-view-team:not(:first-child) {
-            /deep/ .game-view-team-menu {
+        .GameViewTeam:not(:first-child) {
+            /deep/ .GameViewTeamMenu {
                 order: 2;
                 border-left: $border;
                 border-right: none;
@@ -96,7 +95,7 @@ export default {
         }
     }
 
-    .game-view-team {
+    .GameViewTeam {
         &:not(:last-child):not(.expanded) {
             border-bottom: $border;
         }

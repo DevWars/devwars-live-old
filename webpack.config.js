@@ -33,6 +33,9 @@ module.exports = {
         ],
     },
     resolve: {
+        alias: {
+            'settings.scss$': path.resolve('src/client/styles/_settings.scss'),
+        },
         extensions: ['.vue', '.js', '.json'],
     },
     performance: {

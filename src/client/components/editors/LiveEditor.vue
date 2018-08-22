@@ -1,5 +1,5 @@
 <template>
-    <div :class="[team, { collapsed, vertical }]" class="live-editor">
+    <div :class="[team, { collapsed, vertical }]" class="LiveEditor">
         <EditorHeader
             :title="user && user.username"
             :placeholder="owner && owner.username"
@@ -12,8 +12,7 @@
         <Editor
             ref="editor"
             :language="language"
-            :read-only="readOnly"
-            class="editor"
+            :readOnly="readOnly"
             @init="onEditorInit"
             @focus="focused = true"
             @blur="focused = false"
@@ -218,8 +217,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-.live-editor {
+@import 'settings.scss';
+.LiveEditor {
     position: relative;
     display: flex;
     flex: 1 1 100%;
@@ -227,11 +226,11 @@ export default {
     overflow: hidden;
 
     &.blue {
-        color: $blue-team-color;
+        color: $blue;
     }
 
     &.red {
-        color: $red-team-color;
+        color: $red;
     }
 
     &.collapsed {
@@ -241,7 +240,7 @@ export default {
             flex: 0 0 2.25rem;
         }
 
-        .editor {
+        .Editor {
             display: none;
         }
     }

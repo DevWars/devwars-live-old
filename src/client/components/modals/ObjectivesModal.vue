@@ -1,14 +1,15 @@
 <template>
-    <div class="objectives-modal">
+    <div class="ObjectivesModal">
         <div class="title">Objectives</div>
         <ul>
-            <li v-for="(objective, index) in objectives" :key="index" class="item">
-                <component
-                    :is="objective.icon"
-                    :class="objective.iconClassNames"
+            <li v-for="(obj, index) in objectives" :key="index" class="item">
+                <Component
+                    :is="obj.icon.icon"
+                    :class="obj.icon.classes"
+                    :title="obj.icon.title"
                     @click.native="markObjectiveComplete(index)"
                 />
-                <div :class="`description ${objective.isBonus ? 'bonus' : ''}`">{{ objective.description }}</div>
+                <div :class="{ bonus: obj.isBonus }" class="description">{{ obj.description }}</div>
             </li>
         </ul>
     </div>
@@ -16,53 +17,41 @@
 
 
 <script>
+import CheckboxBlankOutlineIcon from 'vue-material-design-icons/CheckboxBlankOutline';
+import CheckboxMarkedOutlineIcon from 'vue-material-design-icons/CheckboxMarkedOutline';
 import CheckIcon from 'vue-material-design-icons/Check';
 import CloseIcon from 'vue-material-design-icons/Close';
 import LockOutlineIcon from 'vue-material-design-icons/LockOutline';
-import CheckboxBlankOutlineIcon from 'vue-material-design-icons/CheckboxBlankOutline';
-import CheckboxMarkedOutlineIcon from 'vue-material-design-icons/CheckboxMarkedOutline';
-
-const iconMap = {
-    incomplete: 'CheckboxBlankOutlineIcon',
-    pending: 'CheckboxMarkedOutlineIcon',
-    complete: 'CheckIcon',
-    dropped: 'CloseIcon',
-};
 
 export default {
-    components: {
-        CheckboxBlankOutlineIcon,
-        CheckboxMarkedOutlineIcon,
-        CheckIcon,
-        CloseIcon,
-        LockOutlineIcon,
-    },
-
     props: {
         team: { type: String, required: true },
     },
 
     computed: {
-        isBonusLocked() {
-            return this.$store.getters[`${this.team}BonusLocked`];
-        },
-
         objectives() {
+            const iconMap = {
+                incomplete: { icon: CheckboxBlankOutlineIcon, title: 'Mark Complete' },
+                pending: { icon: CheckboxMarkedOutlineIcon, title: 'Pending Review' },
+                complete: { icon: CheckIcon, title: 'Completed' },
+                dropped: { icon: CloseIcon, title: 'Dropped' },
+            };
+
             return this.$store.state.objectives.map((objective) => {
                 const state = objective[`${this.team}State`];
-
-                let icon = iconMap[state];
-                let iconClassNames = `${this.team} ${state}`;
+                const icon = { ...iconMap[state] };
+                icon.classes = [this.team, state];
 
                 if (objective.isBonus) {
-                    iconClassNames += ' bonus';
-                    if (this.isBonusLocked) {
-                        icon = 'LockOutlineIcon';
-                        iconClassNames += ' locked';
+                    icon.classes.push('bonus');
+                    if (this.$store.getters[`${this.team}BonusLocked`] && state !== 'dropped') {
+                        icon.classes.push('locked');
+                        icon.icon = LockOutlineIcon;
+                        icon.title = 'Locked';
                     }
                 }
 
-                return { ...objective, state, icon, iconClassNames };
+                return { ...objective, state, icon };
             });
         },
     },
@@ -90,9 +79,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-
-.objectives-modal {
+@import 'settings.scss';
+.ObjectivesModal {
     padding: 3.5rem;
 
     .title {
@@ -120,11 +108,11 @@ export default {
             user-select: none;
 
             &.blue {
-                color: $blue-team-color;
+                color: $blue;
             }
 
             &.red {
-                color: $red-team-color;
+                color: $red;
             }
 
             &.incomplete:not(.locked) {
@@ -141,7 +129,7 @@ export default {
         }
 
         .bonus {
-            color: $bonus-color !important;
+            color: $bonusColor !important;
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div ref="monaco" class="monaco-mount"></div>
+    <div ref="monaco" class="Editor"></div>
 </template>
 
 
@@ -105,7 +105,7 @@ export default {
             }
         },
 
-        applySelectionDecorators(selections, color = 'blue', scrollToCursor = false) {
+        applySelectionDecorators(selections, color = '', scrollToCursor = false) {
             if (!this.editor) return;
 
             const newDecorations = [];
@@ -121,13 +121,13 @@ export default {
 
                 newDecorations.push({
                     range: ranges.cursor,
-                    options: { className: `cur-${color}` },
+                    options: { className: `myCursor ${color}` },
                 });
 
                 if (selection.hasSelection()) {
                     newDecorations.push({
                         range: ranges.selection,
-                        options: { className: `sel-${color}` },
+                        options: { className: `mySelection ${color}` },
                     });
                 }
             }
@@ -145,8 +145,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-.monaco-mount {
+@import 'settings.scss';
+.Editor {
     position: relative;
     flex: 1 1 100%;
     overflow: hidden;
@@ -180,32 +180,33 @@ export default {
             }
         }
 
-        .cur-blue,
-        .cur-red {
-            &:after {
-                content: "";
-                position: absolute;
-                width: 2px;
-                height: 100%;
+        .myCursor,
+        .mySelection {
+            color: #fff;
+
+            &.blue {
+                color: $blue;
+            }
+
+            &.red {
+                color: $red;
             }
         }
 
-        .cur-blue:after {
-            background-color: $blue-team-color;
+        .myCursor:after {
+            z-index: 100;
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 100%;
+
+            background-color: currentColor;
+            box-shadow: 0 0 4px currentColor;
         }
 
-        .cur-red:after {
-            background-color: $red-team-color;
-        }
-
-        .sel-blue, {
-            opacity: 0.15;
-            background-color: $blue-team-color;
-        }
-
-        .sel-red {
-            opacity: 0.15;
-            background-color: $red-team-color;
+        .mySelection {
+            opacity: .2;
+            background-color: currentColor;
         }
     }
 }

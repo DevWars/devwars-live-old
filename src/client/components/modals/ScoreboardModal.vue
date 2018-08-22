@@ -1,22 +1,22 @@
 <template>
-    <div class="scoreboard-modal">
-        <div class="score-header">
+    <div class="ScoreboardModal">
+        <div class="header">
             <div class="score blue">{{ blueScore }}</div>
             <div class="strikes blue">
                 <div class="title">Strikes</div>
                 <div class="marks">
-                    <span :class="`mark ${blueStrikes > 0 ? '' : 'faded'}`">X</span>
-                    <span :class="`mark ${blueStrikes > 1 ? '' : 'faded'}`">X</span>
-                    <span :class="`mark ${blueStrikes > 2 ? '' : 'faded'}`">X</span>
+                    <span :class="['mark', { dimmed: blueStrikes <= 0 }]">X</span>
+                    <span :class="['mark', { dimmed: blueStrikes <= 1 }]">X</span>
+                    <span :class="['mark', { dimmed: blueStrikes <= 2 }]">X</span>
                 </div>
             </div>
-            <CountdownTimer :end="endTime"/>
+            <CountdownTimer :end="game.endTime"/>
             <div class="strikes red">
                 <div class="title">Strikes</div>
                 <div class="marks">
-                    <span :class="`mark ${redStrikes > 2 ? '' : 'faded'}`">X</span>
-                    <span :class="`mark ${redStrikes > 1 ? '' : 'faded'}`">X</span>
-                    <span :class="`mark ${redStrikes > 0 ? '' : 'faded'}`">X</span>
+                    <span :class="['mark', { dimmed: redStrikes <= 2 }]">X</span>
+                    <span :class="['mark', { dimmed: redStrikes <= 1 }]">X</span>
+                    <span :class="['mark', { dimmed: redStrikes <= 0 }]">X</span>
                 </div>
             </div>
             <div class="score red">{{ redScore }}</div>
@@ -25,9 +25,9 @@
             <div class="title">Objectives</div>
             <ul>
                 <li v-for="(obj, index) in objectives" :key="index" class="item">
-                    <component :is="obj.blue.icon" :class="obj.blue.classNames" :title="obj.blue.title"/>
+                    <Component :is="obj.blue.icon" :class="obj.blue.classes" :title="obj.blue.title"/>
                     <div :class="`description ${obj.isBonus ? 'bonus' : ''}`">{{ obj.description }}</div>
-                    <component :is="obj.red.icon" :class="obj.red.classNames" :title="obj.red.title"/>
+                    <Component :is="obj.red.icon" :class="obj.red.classes" :title="obj.red.title"/>
                 </li>
             </ul>
         </div>
@@ -36,58 +36,52 @@
 
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import CheckIcon from 'vue-material-design-icons/Check';
 import CloseIcon from 'vue-material-design-icons/Close';
 import LockOutlineIcon from 'vue-material-design-icons/LockOutline';
 import CountdownTimer from '../CountdownTimer';
 
 export default {
-    components: { CountdownTimer, CheckIcon, CloseIcon, LockOutlineIcon },
+    components: { CountdownTimer },
 
     computed: {
+        ...mapState(['game']),
+
         ...mapGetters(['blueScore', 'redScore']),
 
-        endTime() {
-            return this.$store.state.game.endTime;
-        },
-
         blueStrikes() {
-            return this.$store.state.game.blueStrikes;
+            return this.game.blueStrikes;
         },
 
         redStrikes() {
-            return this.$store.state.game.redStrikes;
+            return this.game.redStrikes;
         },
 
         objectives() {
             const iconMap = {
-                incomplete: { icon: 'CheckIcon', title: 'Incomplete' },
-                pending: { icon: 'CheckIcon', title: 'Pending Review' },
-                complete: { icon: 'CheckIcon', title: 'Complete' },
-                dropped: { icon: 'CloseIcon', title: 'Dropped' },
-                locked: { icon: 'LockOutlineIcon', title: 'Locked' },
+                incomplete: { icon: CheckIcon, title: 'Incomplete' },
+                pending: { icon: CheckIcon, title: 'Pending Review' },
+                complete: { icon: CheckIcon, title: 'Completed' },
+                dropped: { icon: CloseIcon, title: 'Dropped' },
             };
 
             return this.$store.state.objectives.map((storeObjective) => {
-                const objective = { ...storeObjective };
-                for (const team of ['blue', 'red']) {
+                return ['blue', 'red'].reduce((objective, team) => {
                     const state = storeObjective[`${team}State`];
-
-                    const classNames = [team, state];
+                    const classes = [team, state];
                     let { icon, title } = iconMap[state]; // eslint-disable-line prefer-const
 
                     if (storeObjective.isBonus) {
-                        classNames.push('bonus');
+                        classes.push('bonus');
                         if (this.$store.getters[`${team}BonusLocked`] && state !== 'dropped') {
-                            icon = 'LockOutlineIcon';
+                            icon = LockOutlineIcon;
+                            title = 'Locked';
                         }
                     }
 
-                    objective[team] = { icon, title, classNames };
-                }
-
-                return objective;
+                    return { ...objective, [team]: { icon, title, classes } };
+                }, { ...storeObjective });
             });
         },
     },
@@ -96,13 +90,12 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-
-.scoreboard-modal {
+@import 'settings.scss';
+.ScoreboardModal {
     padding: 3.5rem;
 }
 
-.scoreboard-modal .score-header {
+.ScoreboardModal .header {
     display: flex;
     margin: auto;
     margin-bottom: 3rem;
@@ -112,26 +105,14 @@ export default {
     line-height: 1;
 
     .blue {
-        color: $blue-team-color;
-
-        .faded {
-            color: rgba($blue-team-color, 0.25);
-        }
+        color: $blue;
+        .dimmed { color: rgba($blue, 0.25); }
     }
 
     .red {
-        color: $red-team-color;
         text-align: right;
-
-        .faded {
-            color: rgba($red-team-color, 0.25);
-        }
-    }
-
-    .countdown-timer {
-        margin: 0 auto;
-        font-size: 3.5rem;
-        font-weight: 300;
+        color: $red;
+        .dimmed { color: rgba($red, 0.25); }
     }
 
     .score {
@@ -162,9 +143,15 @@ export default {
             }
         }
     }
+
+    .CountdownTimer {
+        margin: 0 auto;
+        font-size: 3.5rem;
+        font-weight: 300;
+    }
 }
 
-.scoreboard-modal .objectives {
+.ScoreboardModal .objectives {
     margin: auto;
 
     .title {
@@ -193,11 +180,11 @@ export default {
             user-select: none;
 
             &.blue {
-                color: $blue-team-color;
+                color: $blue;
             }
 
             &.red {
-                color: $red-team-color;
+                color: $red;
             }
 
             &.pending {
@@ -210,7 +197,7 @@ export default {
         }
 
         .bonus {
-            color: $bonus-color !important;
+            color: $bonusColor !important;
         }
     }
 }

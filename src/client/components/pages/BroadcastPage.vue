@@ -1,28 +1,28 @@
 <template>
-    <div class="broadcast-page">
+    <div class="BroadcastPage">
         <BroadcastPanel/>
         <div class="main">
-            <AppHeader/>
-            <GameView :hide-menu="true"/>
+            <TheHeader/>
+            <GameView hideMenu/>
         </div>
     </div>
 </template>
 
 
 <script>
-import AppHeader from '../AppHeader';
+import TheHeader from '../TheHeader';
 import BroadcastPanel from '../BroadcastPanel';
 import GameView from '../GameView';
 
 export default {
-    components: { AppHeader, BroadcastPanel, GameView },
+    components: { TheHeader, BroadcastPanel, GameView },
 };
 </script>
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-.broadcast-page {
+@import 'settings.scss';
+.BroadcastPage {
     display: flex;
     height: 100%;
     flex-flow: row nowrap;
@@ -34,9 +34,8 @@ export default {
         flex-flow: column nowrap;
     }
 
-    .broadcast-panel {
+    .BroadcastPanel {
         width: 350px;
-        // flex: 0 0 auto;
         border-right: $border;
         overflow: hidden;
     }

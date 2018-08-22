@@ -1,0 +1,19 @@
+// NOTE: This files gets included multiple times, so be sure
+// not to add anything that would output actual CSS in here.
+
+$unit: 16px;
+
+$bg00: #0b0c11;
+$fg00: #fff;
+
+$blue: #00c9ff;
+$red: #ff007d;
+
+$borderColor: #303745;
+$errorColor: #ff2b2b;
+$bonusColor: #ffb04a;
+
+$lineHeight: 1.35;
+$fontFamily: 'Roboto', sans-serif;
+
+$border: 2px solid $borderColor;

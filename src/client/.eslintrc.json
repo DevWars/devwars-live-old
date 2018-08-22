@@ -19,6 +19,15 @@
             "vue": "never",
             "js": "never"
         }],
+        "vue/attribute-hyphenation": ["error", "never"],
+        "vue/html-closing-bracket-spacing": ["error", {
+            "startTag": "never",
+            "endTag": "never",
+            "selfClosingTag": "never"
+        }],
+        "vue/component-name-in-template-casing": ["error", "PascalCase", {
+            "ignores": ["router-view"]
+        }],
         "vue/html-indent": ["error", 4],
         "vue/html-self-closing": ["error", {
             "html": {

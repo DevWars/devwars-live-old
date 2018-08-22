@@ -1,5 +1,5 @@
 <template>
-    <div :class="`game-view-team-menu ${team}`">
+    <div :class="`GameViewTeamMenu ${team}`">
         <button :class="{ dimmed: viewSite }" title="View Code" @click="$emit('onViewCode')">
             <CodeTagsIcon/>
         </button>
@@ -39,18 +39,17 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../styles/variables';
-
-.game-view-team-menu {
+@import 'settings.scss';
+.GameViewTeamMenu {
     display: flex;
     flex-flow: column nowrap;
 
     &.blue {
-        color: $blue-team-color;
+        color: $blue;
     }
 
     &.red {
-        color: $red-team-color;
+        color: $red;
     }
 
     button {

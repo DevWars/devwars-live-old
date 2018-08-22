@@ -1,5 +1,5 @@
 <template>
-    <div class="confirm-modal">
+    <div class="ConfirmModal">
         <h1 class="title">{{ title }}</h1>
         <slot></slot>
         <div class="actions">
@@ -32,9 +32,8 @@ export default {
 
 
 <style lang="scss" scoped>
-@import '../../styles/variables';
-
-.confirm-modal {
+@import 'settings.scss';
+.ConfirmModal {
     padding: 3.5rem;
     text-align: center;
     line-height: 1.4;
@@ -48,11 +47,11 @@ export default {
     }
 
     .blue {
-        color: $blue-team-color;
+        color: $blue;
     }
 
     .red {
-        color: $red-team-color;
+        color: $red;
     }
 
     .actions {
