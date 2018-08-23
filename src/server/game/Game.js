@@ -49,11 +49,11 @@ class Game {
         });
 
         for (const editor of this.editors) {
-            editor.on('state', state => this.io.emit('editorState', state));
             editor.on('save', () => this.io.emit('reloadSite', editor.team));
         }
 
         this.assignPlayersToEditors();
+        this.io.emit('editors', this.editors.map(e => e.getState()));
     }
 
     _initRoutes() {
@@ -310,9 +310,9 @@ class Game {
         socket.emit('state', this.state);
         socket.emit('objectives', this.objectives);
         socket.emit('players', this.players);
+        socket.emit('editors', this.editors.map(e => e.getState()));
         socket.emit('zenTemplate', this.zenTemplate);
         socket.emit('votes', this.votes);
-        this.editors.forEach(e => socket.emit('editorState', e.getState()));
     }
 
     static onSocketAuth(socket, token, callback) {

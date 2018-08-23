@@ -47,12 +47,12 @@ class Editor extends EventEmitter {
 
     onFirebaseLocked(locked) {
         this.locked = !!locked;
-        this.emitState();
+        this.io.emit('editor', this.getState());
     }
 
     onFirebaseHidden(hidden) {
         this.hidden = !!hidden;
-        this.emitState();
+        this.io.emit('editor', this.getState());
     }
 
     onSocketState(socket) {
@@ -186,11 +186,7 @@ class Editor extends EventEmitter {
     }
 
     getState() {
-        return pick(this, ['id', 'locked', 'hidden']);
-    }
-
-    emitState() {
-        this.emit('state', this.getState());
+        return pick(this, ['id', 'team', 'language', 'filename', 'locked', 'hidden']);
     }
 
     dispose() {

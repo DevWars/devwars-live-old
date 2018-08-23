@@ -45,8 +45,12 @@ socket.on('reloadSite', (team) => {
     eventBus.$emit('reload-site', team);
 });
 
-socket.on('editorState', (state) => {
-    store.commit('RECEIVE_EDITOR_STATE', state);
+socket.on('editors', (editors) => {
+    store.commit('RECEIVE_EDITORS', editors);
+});
+
+socket.on('editor', (editor) => {
+    store.commit('RECEIVE_EDITOR', editor);
 });
 
 socket.on('RELOAD', () => {

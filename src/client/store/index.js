@@ -36,14 +36,7 @@ const state = {
         redTiebreaker: 0,
     },
 
-    editors: [
-        { team: 'blue', language: 'html', filename: 'index.html' },
-        { team: 'blue', language: 'css', filename: 'game.css' },
-        { team: 'blue', language: 'js', filename: 'game.js' },
-        { team: 'red', language: 'html', filename: 'index.html' },
-        { team: 'red', language: 'css', filename: 'game.css' },
-        { team: 'red', language: 'js', filename: 'game.js' },
-    ].map((editor, id) => ({ id, ...editor, locked: true, hidden: false })),
+    editors: [],
 };
 
 const getters = {
@@ -173,11 +166,12 @@ const mutations = {
         state.user = user;
     },
 
-    RECEIVE_EDITOR_STATE(state, editorState) {
-        const editor = state.editors[editorState.id];
-        if (editor) {
-            Vue.set(state.editors, editorState.id, { ...editor, ...editorState });
-        }
+    RECEIVE_EDITORS(state, editors) {
+        state.editors = editors;
+    },
+
+    RECEIVE_EDITOR(state, editor) {
+        state.editors = state.editors.map(e => (e.id === editor.id ? editor : e));
     },
 
     PUSH_MODAL(state, modal) {
