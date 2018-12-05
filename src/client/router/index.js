@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import BriefingPage from '../components/pages/BriefingPage';
 import BroadcastPage from '../components/pages/BroadcastPage';
 import PlayPage from '../components/pages/PlayPage';
 import WatchPage from '../components/pages/WatchPage';
@@ -25,6 +26,10 @@ export default new VueRouter({
         {
             path: '/broadcast',
             component: BroadcastPage,
+        },
+        {
+            path: '/briefing',
+            component: BriefingPage,
         },
     ],
 });

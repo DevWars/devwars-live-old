@@ -10,5 +10,6 @@ function serveApp(req, res) {
 router.get('/', serveApp);
 router.get('/play/:team(blue|red)/*', serveApp);
 router.get('/broadcast', serveApp);
+router.get('/briefing', serveApp);
 
 module.exports = router;
