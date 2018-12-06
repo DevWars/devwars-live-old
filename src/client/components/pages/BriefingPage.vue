@@ -3,7 +3,7 @@
         <div class="view">
             <div class="header">
                 <div class="trapezoid">
-                    <img class="logo" src="/img/logo.png" />
+                    <img class="logo" src="/img/logo.png">
                 </div>
             </div>
 
@@ -14,9 +14,9 @@
 
             <div class="main">
                 <div class="team">
-                    <TeamViewHeader team="blue" />
-                    <TeamView />
-                    <TeamViewStatus team="blue" />
+                    <TeamViewHeader team="blue"/>
+                    <TeamView/>
+                    <TeamViewStatus team="blue"/>
                 </div>
 
                 <div class="center">
@@ -24,9 +24,9 @@
                 </div>
 
                 <div class="team">
-                    <TeamViewHeader team="red" />
-                    <TeamView />
-                    <TeamViewStatus team="red" />
+                    <TeamViewHeader team="red"/>
+                    <TeamView/>
+                    <TeamViewStatus team="red"/>
                 </div>
             </div>
 
@@ -41,7 +41,6 @@
 
 
 <script>
-import Vue from 'vue';
 import TeamView from '../TeamView';
 import TeamViewHeader from '../TeamViewHeader';
 import TeamViewStatus from '../TeamViewStatus';

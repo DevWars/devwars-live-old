@@ -5,7 +5,7 @@
             <i class="team">{{ team }} Team</i>
         </div>
 
-        <div v-if="score" class="score">{{ score}}</div>
+        <div v-if="score" class="score">{{ score }}</div>
     </div>
 </template>
 
@@ -14,9 +14,9 @@
 export default {
     props: {
         team: { type: String, required: true },
-        score: { type: Number, required: false },
-    }
-}
+        score: { type: Number, required: false, default: 0 },
+    },
+};
 </script>
 
 <style lang="scss" scoped>

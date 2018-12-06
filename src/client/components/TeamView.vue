@@ -1,8 +1,8 @@
 <template>
     <div class="TeamView">
-        <TeamViewPlayer />
-        <TeamViewPlayer />
-        <TeamViewPlayer />
+        <TeamViewPlayer/>
+        <TeamViewPlayer/>
+        <TeamViewPlayer/>
     </div>
 </template>
 

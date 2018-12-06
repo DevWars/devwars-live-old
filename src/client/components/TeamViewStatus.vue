@@ -10,8 +10,8 @@
 export default {
     props: {
         team: { type: String, required: true },
-    }
-}
+    },
+};
 </script>
 
 
