@@ -15,6 +15,7 @@ import ScoreboardModal from './modals/ScoreboardModal';
 import ObjectivesModal from './modals/ObjectivesModal';
 import ObjectiveConfirmModal from './modals/ObjectiveConfirmModal';
 import RedirectPlayerModal from './modals/RedirectPlayerModal';
+import ResetGameModal from './modals/ResetGameModal';
 
 export default {
     components: {
@@ -22,6 +23,7 @@ export default {
         ObjectivesModal,
         ObjectiveConfirmModal,
         RedirectPlayerModal,
+        ResetGameModal,
     },
 
     computed: mapGetters(['currentModal']),

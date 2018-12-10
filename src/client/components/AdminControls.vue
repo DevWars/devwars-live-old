@@ -55,7 +55,8 @@ export default {
 
     methods: {
         onResetGame() {
-            socket.emit('reset-game');
+            // socket.emit('reset-game');
+            this.$store.commit('PUSH_MODAL', { name: 'ResetGameModal' });
         },
 
         onStartGame() {

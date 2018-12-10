@@ -354,7 +354,22 @@ class Game {
             redStrikes: 0,
         });
 
-        this.editors.forEach(editor => editor.setLocked(true));
+        this.gameRef.child('objectives').transaction((objectives) => {
+            if (objectives) {
+                for (const objective of Object.values(objectives)) {
+                    objective.blueState = 'incomplete';
+                    objective.redState = 'incomplete';
+                }
+            }
+
+            return objectives;
+        });
+
+        this.editors.forEach((editor) => {
+            editor.resetUser();
+            editor.setLocked(true);
+            editor.setText('');
+        });
     }
 
     onSocketStartGame(socket) {
