@@ -22,7 +22,7 @@ export default {
     watch: {
         text(newText) {
             if (this.editor) {
-                this.editor.model.setValue(newText);
+                this.editor.getModel().setValue(newText);
             }
         },
 
@@ -94,14 +94,14 @@ export default {
 
         setText(text) {
             if (this.editor) {
-                this.editor.model.setValue(text);
+                this.editor.getModel().setValue(text);
             }
         },
 
         applyTextOperation(op) {
             if (this.editor) {
                 const edit = op.toMonacoEdit();
-                this.editor.model.applyEdits([edit]);
+                this.editor.getModel().applyEdits([edit]);
             }
         },
 

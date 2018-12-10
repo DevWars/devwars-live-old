@@ -42,6 +42,8 @@ export default {
             if (this.warnTime > 0) {
                 return (this.end - this.now) < this.warnTime;
             }
+
+            return false;
         },
     },
 
