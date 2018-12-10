@@ -53,10 +53,6 @@ socket.on('editor', (editor) => {
     store.commit('RECEIVE_EDITOR', editor);
 });
 
-socket.on('RELOAD', () => {
-    window.location.reload();
-});
-
 socket.on('e.state', ([id, state]) => {
     eventBus.$emit(`editor-${id}.state`, state);
 });

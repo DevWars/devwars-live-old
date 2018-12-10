@@ -267,14 +267,6 @@ class Game {
             }
         });
 
-        socket.on('RELOAD', () => {
-            if (!socket.client.user || !socket.client.user.isModerator()) {
-                return;
-            }
-
-            this.io.emit('RELOAD');
-        });
-
         socket.on('e.state', (id) => {
             const editor = this.editors.find(e => e.id === id);
             if (editor) editor.onSocketState(socket);
