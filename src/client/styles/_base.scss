@@ -29,8 +29,9 @@ ul, ol {
     list-style: none;
 }
 
-select,
-button {
+button,
+input,
+select {
     height: 1.875rem;
     border: $border;
     font-family: inherit;
@@ -44,6 +45,13 @@ button {
 
     &:focus {
         outline: none;
+    }
+}
+
+input {
+    padding: 0 .5rem;
+    &:hover {
+        border-color: $borderColor;
     }
 }
 

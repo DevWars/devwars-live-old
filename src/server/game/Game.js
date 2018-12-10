@@ -243,6 +243,10 @@ class Game {
             this.onSocketEndGame(socket);
         });
 
+        socket.on('set-end-time', (payload) => {
+            this.onSocketSetEndTime(socket, payload);
+        });
+
         socket.on('set-objective-state', (payload) => {
             if (socketValidator.validateSetObjectiveState(payload)) {
                 this.onSocketSetObjectiveState(socket, payload);
@@ -398,6 +402,14 @@ class Game {
         });
 
         this.editors.forEach(editor => editor.setLocked(true));
+    }
+
+    onSocketSetEndTime(socket, endTime) {
+        if (!socket.client.user || !socket.client.user.isModerator()) {
+            return;
+        }
+
+        this.gameRef.child('state').update({ endTime });
     }
 
     onSocketSetObjectiveState(socket, { team, id, state }) {

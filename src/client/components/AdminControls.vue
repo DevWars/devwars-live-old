@@ -7,6 +7,15 @@
                 <button @click="onEndGame">End Game</button>
             </div>
         </div>
+
+        <div class="controls">
+            <div class="row">
+                <button @click="onSetEndTime">Set Time:</button>
+                <input ref="timeInput" type="number" value="60">
+                <h2>Minutes</h2>
+            </div>
+        </div>
+
         <div class="controls">
             <div v-for="(objective, id) in objectives" :key="id" class="row">
                 <select
@@ -24,6 +33,7 @@
                 <h2 :class="{ bonus: objective.isBonus }">{{ id + 1 }}</h2>
             </div>
         </div>
+
         <div class="controls">
             <div class="row">
                 <button class="blue" @click="onAddStrike('blue')">Strike Blue</button>
@@ -55,7 +65,6 @@ export default {
 
     methods: {
         onResetGame() {
-            // socket.emit('reset-game');
             this.$store.commit('PUSH_MODAL', { name: 'ResetGameModal' });
         },
 
@@ -65,6 +74,12 @@ export default {
 
         onEndGame() {
             socket.emit('end-game');
+        },
+
+        onSetEndTime() {
+            const minutes = Number.parseInt(this.$refs.timeInput.value, 10);
+            const endTime = Date.now() + (minutes * 60 * 1000);
+            socket.emit('set-end-time', endTime);
         },
 
         onObjectiveStateChange(event, team, id) {
@@ -120,6 +135,7 @@ export default {
         }
 
         button,
+        input,
         select {
             margin-right: 0.5rem;
             width: 6rem;
