@@ -1,12 +1,7 @@
 require('dotenv').config();
 const serviceAccountKey = require('./serviceAccountKey.json');
 
-const {
-    PORT = 8000,
-    SOCKET_URL = '',
-    DEVWARS_URL,
-    FIREBASE_DATABASE_URL,
-} = process.env;
+const { PORT = 8000, SOCKET_URL = '', DEVWARS_URL, FIREBASE_DATABASE_URL } = process.env;
 
 module.exports = {
     port: PORT,

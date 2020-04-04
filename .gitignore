@@ -1,31 +1,19 @@
-# Logs
+node_modules
 *.log
-*-debug.log*
+dist
 
-# OS Generated Files
-*~
-.fuse_hidden*
-.nfs*
-.DS_Store
-.AppleDouble
-.LSOverride
-Desktop.ini
-Thumbs.db
-ehthumbs.db
+.nyc_output
+coverage/
 
-# Editors
-.vscode/
-.idea/
+.idea
 
-# Dependencies
-node_modules/
+*.sqlite
 
-# Build Output
-public/vendor/*
-!public/vendor/.gitkeep
-public/app.js
-public/styles.css
+docs
 
-# Secrets
+*.iml
+
 .env
-serviceAccountKey.json
+firebase.json
+
+.vscode
