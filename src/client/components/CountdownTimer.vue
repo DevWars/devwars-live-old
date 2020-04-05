@@ -4,7 +4,6 @@
     </div>
 </template>
 
-
 <script>
 export default {
     props: {
@@ -40,7 +39,7 @@ export default {
 
         warn() {
             if (this.warnTime > 0) {
-                return (this.end - this.now) < this.warnTime;
+                return this.end - this.now < this.warnTime;
             }
 
             return false;
@@ -67,7 +66,6 @@ export default {
     },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import 'settings.scss';

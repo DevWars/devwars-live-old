@@ -1,9 +1,16 @@
 {
-    "presets": [
-        ["@babel/preset-env", { "useBuiltIns": "entry" }]
-    ],
-    "plugins": [
-        "@babel/plugin-proposal-object-rest-spread",
-        "lodash"
-    ]
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    }
+  }
 }

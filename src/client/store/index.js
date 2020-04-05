@@ -42,18 +42,18 @@ const state = {
 const getters = {
     userPlayer({ user, players }) {
         if (user) {
-            return players.find(p => p.id === user.id);
+            return players.find((p) => p.id === user.id);
         }
     },
 
     userEditor({ editors }, { userPlayer }) {
         if (userPlayer) {
-            return editors.find(e => e.id === userPlayer.editorId);
+            return editors.find((e) => e.id === userPlayer.editorId);
         }
     },
 
     visibleEditors({ editors }) {
-        return editors.filter(e => !e.hidden);
+        return editors.filter((e) => !e.hidden);
     },
 
     currentModal({ modalStack }) {
@@ -101,11 +101,11 @@ const getters = {
     },
 
     blueHasPendingObjective({ objectives }) {
-        return objectives.some(o => o.blueState === 'pending');
+        return objectives.some((o) => o.blueState === 'pending');
     },
 
     redHasPendingObjective({ objectives }) {
-        return objectives.some(o => o.redState === 'pending');
+        return objectives.some((o) => o.redState === 'pending');
     },
 
     blueBonusLocked({ objectives }) {
@@ -171,7 +171,7 @@ const mutations = {
     },
 
     RECEIVE_EDITOR(state, editor) {
-        state.editors = state.editors.map(e => (e.id === editor.id ? editor : e));
+        state.editors = state.editors.map((e) => (e.id === editor.id ? editor : e));
     },
 
     PUSH_MODAL(state, modal) {

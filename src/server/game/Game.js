@@ -53,7 +53,10 @@ class Game {
         }
 
         this.assignPlayersToEditors();
-        this.io.emit('editors', this.editors.map(e => e.getState()));
+        this.io.emit(
+            'editors',
+            this.editors.map((e) => e.getState())
+        );
     }
 
     _initRoutes() {
@@ -66,7 +69,7 @@ class Game {
         this.router.get('/:team(blue|red)/:filename', (req, res) => {
             const { team, filename } = req.params;
             const editor = this.editors.find((editor) => {
-                return (editor.team === team && editor.filename === filename);
+                return editor.team === team && editor.filename === filename;
             });
 
             if (!editor) {
@@ -182,7 +185,7 @@ class Game {
 
         const objectives = gameObjectives
             .sort((a, b) => a.number - b.number)
-            .map(gameObjective => ({
+            .map((gameObjective) => ({
                 isBonus: false,
                 description: gameObjective.description,
                 blueState: 'incomplete',
@@ -210,9 +213,7 @@ class Game {
 
     onSocketConnection(socket) {
         socket.on('disconnect', () => {
-            this.editors
-                .filter(e => e.userSocketId === socket.id)
-                .forEach(e => e.resetUser());
+            this.editors.filter((e) => e.userSocketId === socket.id).forEach((e) => e.resetUser());
         });
 
         socket.on('init', () => {
@@ -272,32 +273,32 @@ class Game {
         });
 
         socket.on('e.state', (id) => {
-            const editor = this.editors.find(e => e.id === id);
+            const editor = this.editors.find((e) => e.id === id);
             if (editor) editor.onSocketState(socket);
         });
 
         socket.on('e.control', (id) => {
-            const editor = this.editors.find(e => e.id === id);
+            const editor = this.editors.find((e) => e.id === id);
             if (editor) editor.onSocketControl(socket);
         });
 
         socket.on('e.release', (id) => {
-            const editor = this.editors.find(e => e.id === id);
+            const editor = this.editors.find((e) => e.id === id);
             if (editor) editor.onSocketRelease(socket);
         });
 
         socket.on('e.save', (id) => {
-            const editor = this.editors.find(e => e.id === id);
+            const editor = this.editors.find((e) => e.id === id);
             if (editor) editor.onSocketSave(socket);
         });
 
         socket.on('e.o', ([id, operation]) => {
-            const editor = this.editors.find(e => e.id === id);
+            const editor = this.editors.find((e) => e.id === id);
             if (editor && operation) editor.onSocketOperation(socket, operation);
         });
 
         socket.on('e.s', ([id, selections]) => {
-            const editor = this.editors.find(e => e.id === id);
+            const editor = this.editors.find((e) => e.id === id);
             if (editor && selections) editor.onSocketSelections(socket, selections);
         });
     }
@@ -306,7 +307,10 @@ class Game {
         socket.emit('state', this.state);
         socket.emit('objectives', this.objectives);
         socket.emit('players', this.players);
-        socket.emit('editors', this.editors.map(e => e.getState()));
+        socket.emit(
+            'editors',
+            this.editors.map((e) => e.getState())
+        );
         socket.emit('zenTemplate', this.zenTemplate);
         socket.emit('votes', this.votes);
     }
@@ -385,10 +389,10 @@ class Game {
         this.gameRef.child('state').update({
             stage: 'running',
             startTime,
-            endTime: startTime + (1000 * 60 * 60),
+            endTime: startTime + 1000 * 60 * 60,
         });
 
-        this.editors.forEach(editor => editor.setLocked(false));
+        this.editors.forEach((editor) => editor.setLocked(false));
     }
 
     onSocketEndGame(socket) {
@@ -401,7 +405,7 @@ class Game {
             endTime: Date.now(),
         });
 
-        this.editors.forEach(editor => editor.setLocked(true));
+        this.editors.forEach((editor) => editor.setLocked(true));
     }
 
     onSocketSetEndTime(socket, endTime) {
@@ -481,7 +485,7 @@ class Game {
 
     isUserOnTeam(user, team) {
         return this.players.some((player) => {
-            return (player.id === user.id && player.team === team);
+            return player.id === user.id && player.team === team;
         });
     }
 }
