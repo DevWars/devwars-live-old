@@ -23,6 +23,11 @@ class Game {
 
         this.zenTemplate = '';
 
+        // the templates being used on the current game per language per user
+        // and per team. These should be set during the start of the game but
+        // not after the game has already begun.
+        this.templates = { html: '', css: '', js: '' };
+
         this.votes = {
             blueUi: 0,
             redUi: 0,
@@ -55,7 +60,7 @@ class Game {
         this.assignPlayersToEditors();
         this.io.emit(
             'editors',
-            this.editors.map((e) => e.getState())
+            this.editors.map((e) => e.getState()),
         );
     }
 
@@ -112,6 +117,15 @@ class Game {
             this.onFirebaseZenTemplate(snap.val());
         });
 
+        /**
+         * When the templates are updated for the given game, ensure to update
+         * any clients and the server with the new game templates. These will be
+         * used for the preparing of the current game state.
+         */
+        this.database.ref('/game/templates').on('value', (snap) => {
+            this.onFirebaseGameTemplates(snap.val());
+        });
+
         // Frame state
         this.database.ref('frame/liveVoting').on('value', (snap) => {
             this.onFirebaseFrameVotes(snap.val());
@@ -142,6 +156,15 @@ class Game {
         if (gameMode === 'zen') {
             this.generateZenDocuments();
         }
+    }
+
+    /**
+     * The templates that are going to be used on the following game.
+     * @param {object} templates The object containing our games templates.
+     */
+    onFirebaseGameTemplates(templates) {
+        this.templates = templates || this.templates;
+        this.io.emit('templates', this.templates);
     }
 
     onFirebaseZenTemplate(zenTemplate) {
@@ -213,7 +236,9 @@ class Game {
 
     onSocketConnection(socket) {
         socket.on('disconnect', () => {
-            this.editors.filter((e) => e.userSocketId === socket.id).forEach((e) => e.resetUser());
+            this.editors
+                .filter((e) => e.userSocketId === socket.id)
+                .forEach((e) => e.resetUser());
         });
 
         socket.on('init', () => {
@@ -294,12 +319,14 @@ class Game {
 
         socket.on('e.o', ([id, operation]) => {
             const editor = this.editors.find((e) => e.id === id);
-            if (editor && operation) editor.onSocketOperation(socket, operation);
+            if (editor && operation)
+                editor.onSocketOperation(socket, operation);
         });
 
         socket.on('e.s', ([id, selections]) => {
             const editor = this.editors.find((e) => e.id === id);
-            if (editor && selections) editor.onSocketSelections(socket, selections);
+            if (editor && selections)
+                editor.onSocketSelections(socket, selections);
         });
     }
 
@@ -309,7 +336,7 @@ class Game {
         socket.emit('players', this.players);
         socket.emit(
             'editors',
-            this.editors.map((e) => e.getState())
+            this.editors.map((e) => e.getState()),
         );
         socket.emit('zenTemplate', this.zenTemplate);
         socket.emit('votes', this.votes);
@@ -327,7 +354,10 @@ class Game {
     }
 
     onSocketObjectiveNotify(socket, { team, id }) {
-        if (!socket.client.user || !this.isUserOnTeam(socket.client.user, team)) {
+        if (
+            !socket.client.user ||
+            !this.isUserOnTeam(socket.client.user, team)
+        ) {
             return;
         }
 
@@ -473,6 +503,12 @@ class Game {
             }
         }
     }
+
+    /**
+     * If the game has not yet started, update all the editors with all the
+     * related templates that are currently set.
+     */
+    generateGameTemplatesForTeams() {}
 
     generateZenDocuments() {
         if (this.state.gameMode !== 'zen') {

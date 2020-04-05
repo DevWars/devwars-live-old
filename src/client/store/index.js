@@ -158,6 +158,15 @@ const mutations = {
         state.zenTemplate = zenTemplate;
     },
 
+    /**
+     * Updates the games related templates for html, js, and css.
+     * @param {object} state The current of the tore.
+     * @param {object} templates The list of templates that are going used during the game.
+     */
+    RECEIVE_TEMPLATE(state, templates) {
+        state.templates = templates;
+    },
+
     RECEIVE_VOTES(state, votes) {
         state.votes = votes;
     },
@@ -171,7 +180,9 @@ const mutations = {
     },
 
     RECEIVE_EDITOR(state, editor) {
-        state.editors = state.editors.map((e) => (e.id === editor.id ? editor : e));
+        state.editors = state.editors.map((e) =>
+            e.id === editor.id ? editor : e,
+        );
     },
 
     PUSH_MODAL(state, modal) {
