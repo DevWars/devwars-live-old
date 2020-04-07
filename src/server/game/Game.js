@@ -5,6 +5,8 @@ const firebase = require('../services/firebase');
 const socketValidator = require('../validation/socketValidator');
 const Editor = require('./Editor');
 
+const _ = require('lodash');
+
 class Game {
     constructor(io) {
         this.io = io;
@@ -20,8 +22,6 @@ class Game {
             blueStrikes: 0,
             redStrikes: 0,
         };
-
-        this.zenTemplate = '';
 
         // the templates being used on the current game per language per user
         // and per team. These should be set during the start of the game but
@@ -68,6 +68,7 @@ class Game {
         this.router = new Router();
 
         this.router.get('/:team(blue|red)', (req, res) => {
+            debugger;
             res.redirect(`/game/${req.params.team}/index.html`);
         });
 
@@ -113,10 +114,6 @@ class Game {
             this.onFirebaseGameObjectives(snap.val());
         });
 
-        this.database.ref('game/templates/html').on('value', (snap) => {
-            this.onFirebaseZenTemplate(snap.val());
-        });
-
         /**
          * When the templates are updated for the given game, ensure to update
          * any clients and the server with the new game templates. These will be
@@ -150,12 +147,10 @@ class Game {
     }
 
     onFirebaseGameName(name) {
-        const gameMode = name.toLowerCase().includes('zen') ? 'zen' : 'classic';
-        this.gameRef.child('state/gameMode').set(gameMode);
-
-        if (gameMode === 'zen') {
-            this.generateZenDocuments();
-        }
+        if (_.isNil(name) || !_.isString(name)) return;
+        this.gameRef
+            .child('state/gameMode')
+            .set(name.split(' ')[0].toLowerCase());
     }
 
     /**
@@ -163,14 +158,14 @@ class Game {
      * @param {object} templates The object containing our games templates.
      */
     onFirebaseGameTemplates(templates) {
-        this.templates = templates || this.templates;
-        this.io.emit('templates', this.templates);
-    }
+        console.log(templates);
+        if (_.isNil(templates) || !_.isObject(templates)) return;
+        console.log(templates);
 
-    onFirebaseZenTemplate(zenTemplate) {
-        this.zenTemplate = zenTemplate || '';
-        this.io.emit('zenTemplate', zenTemplate);
-        this.generateZenDocuments();
+        this.templates = templates;
+        this.io.emit('templates', this.templates);
+
+        this.generateGameTemplatesForTeams();
     }
 
     onFirebaseGameTeams(gameTeams) {
@@ -338,7 +333,7 @@ class Game {
             'editors',
             this.editors.map((e) => e.getState()),
         );
-        socket.emit('zenTemplate', this.zenTemplate);
+        socket.emit('templates', this.templates);
         socket.emit('votes', this.votes);
     }
 
@@ -508,15 +503,14 @@ class Game {
      * If the game has not yet started, update all the editors with all the
      * related templates that are currently set.
      */
-    generateGameTemplatesForTeams() {}
+    generateGameTemplatesForTeams() {
+        this.editors[0].setText(this.templates.html || '');
+        this.editors[1].setText(this.templates.css || '');
+        this.editors[2].setText(this.templates.js || '');
 
-    generateZenDocuments() {
-        if (this.state.gameMode !== 'zen') {
-            return;
-        }
-
-        this.editors[0].setText(this.zenTemplate);
-        this.editors[3].setText(this.zenTemplate);
+        this.editors[3].setText(this.templates.html || '');
+        this.editors[4].setText(this.templates.css || '');
+        this.editors[5].setText(this.templates.js || '');
     }
 
     isUserOnTeam(user, team) {
