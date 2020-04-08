@@ -158,9 +158,7 @@ class Game {
      * @param {object} templates The object containing our games templates.
      */
     onFirebaseGameTemplates(templates) {
-        console.log(templates);
         if (_.isNil(templates) || !_.isObject(templates)) return;
-        console.log(templates);
 
         this.templates = templates;
         this.io.emit('templates', this.templates);
@@ -254,6 +252,10 @@ class Game {
 
         socket.on('reset-game', () => {
             this.onSocketResetGame(socket);
+        });
+
+        socket.on('reapply-game-templates', () => {
+            this.onSocketReapplyGameTemplates(socket);
         });
 
         socket.on('start-game', () => {
@@ -373,26 +375,39 @@ class Game {
         });
     }
 
-    onSocketResetGame(socket) {
-        if (!socket.client.user || !socket.client.user.isModerator()) {
+    /**
+     * When triggered from a moderator or above, the server will force apply the
+     * game templates again, this allows broadcaster control to update the
+     * editors if the game was not reset before being activated (which would
+     * normally apply the templates).
+     * @param {socket} socket The socket used for communicating with the
+     * clients.
+     */
+    onSocketReapplyGameTemplates(socket) {
+        if (_.isNil(socket.client.user) || !socket.client.user.isModerator())
             return;
-        }
+
+        this.generateGameTemplatesForTeams(true);
+    }
+
+    onSocketResetGame(socket) {
+        if (_.isNil(socket.client.user) || !socket.client.user.isModerator())
+            return;
 
         this.gameRef.child('state').update({
             stage: 'setup',
             startTime: 0,
             endTime: 0,
-
             blueStrikes: 0,
             redStrikes: 0,
         });
 
         this.gameRef.child('objectives').transaction((objectives) => {
-            if (objectives) {
-                for (const objective of Object.values(objectives)) {
-                    objective.blueState = 'incomplete';
-                    objective.redState = 'incomplete';
-                }
+            if (_.isNil(objectives)) return objectives;
+
+            for (const objective of Object.values(objectives)) {
+                objective.blueState = 'incomplete';
+                objective.redState = 'incomplete';
             }
 
             return objectives;
@@ -400,9 +415,16 @@ class Game {
 
         this.editors.forEach((editor) => {
             editor.resetUser();
-            editor.setLocked(true);
             editor.setText('');
+            editor.setLocked(true);
+            editor.setHidden(false);
         });
+
+        this.gameRef
+            .child('state/gameMode')
+            .set(_.defaultTo(this.state.gameMode, 'classic'));
+
+        this.generateGameTemplatesForTeams();
     }
 
     onSocketStartGame(socket) {
@@ -502,8 +524,16 @@ class Game {
     /**
      * If the game has not yet started, update all the editors with all the
      * related templates that are currently set.
+     *
+     * @param {boolean} forceApply Force apply the templates regardless of state.
      */
-    generateGameTemplatesForTeams() {
+    generateGameTemplatesForTeams(forceApply = false) {
+        // if the game is not in the setup stage, don't allow the applying of
+        // the templates, this would have to be left up to the broadcaster to
+        // reset the templates otherwise. Stopping any chance of overriding the
+        // current users work by applying templates.
+        if (this.state.stage !== 'setup' && !forceApply) return;
+
         this.editors[0].setText(this.templates.html || '');
         this.editors[1].setText(this.templates.css || '');
         this.editors[2].setText(this.templates.js || '');
