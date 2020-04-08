@@ -12,6 +12,7 @@ class Game {
         this.io = io;
         this.database = firebase.database();
         this.gameRef = this.database.ref('liveGame');
+        this.frameRef = this.database.ref('frame');
 
         this.state = {
             id: 0,
@@ -412,6 +413,14 @@ class Game {
 
             return objectives;
         });
+
+        // reset the current live voting for ui and ux and live betting
+        this.frameRef.child('betting').update({ blue: 0, red: 0 });
+        this.frameRef.child('liveVoting/ui').update({ blue: 0, red: 0 });
+        this.frameRef.child('liveVoting/ux').update({ blue: 0, red: 0 });
+        this.frameRef
+            .child('liveVoting/tiebreaker')
+            .update({ blue: 0, red: 0 });
 
         this.editors.forEach((editor) => {
             editor.resetUser();
