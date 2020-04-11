@@ -384,14 +384,15 @@ class Game {
      * @param {socket} socket The socket used for communicating with the
      * clients.
      */
-    onSocketReapplyGameTemplates(socket) {
+    async onSocketReapplyGameTemplates(socket) {
         if (_.isNil(socket.client.user) || !socket.client.user.isModerator())
             return;
 
+        await this.resetTemplates();
         this.generateGameTemplatesForTeams(true);
     }
 
-    onSocketResetGame(socket) {
+    async onSocketResetGame(socket) {
         if (_.isNil(socket.client.user) || !socket.client.user.isModerator())
             return;
 
@@ -433,6 +434,7 @@ class Game {
             .child('state/gameMode')
             .set(_.defaultTo(this.state.gameMode, 'classic'));
 
+        await this.resetTemplates();
         this.generateGameTemplatesForTeams();
     }
 
@@ -456,10 +458,9 @@ class Game {
             return;
         }
 
-        this.gameRef.child('state').update({
-            stage: 'ended',
-            endTime: Date.now(),
-        });
+        this.gameRef
+            .child('state')
+            .update({ stage: 'ended', endTime: Date.now() });
 
         this.editors.forEach((editor) => editor.setLocked(true));
     }
@@ -527,6 +528,25 @@ class Game {
             if (editor && editor.ownerId !== player.id) {
                 editor.setOwner(player);
             }
+        }
+    }
+
+    /**
+     * Resets the templates directly by ensuring the latest version is gathered
+     * from the database. since the templates could of been removed (since they
+     * are not being used) but this does not trigger a firebase update.
+     */
+    async resetTemplates() {
+        const templatesSnap = await this.database
+            .ref('game/templates')
+            .once('value');
+
+        const templatesValue = templatesSnap.val();
+
+        if (_.isNil(templatesValue)) {
+            this.templates = { html: '', js: '', css: '' };
+        } else {
+            this.templates = templatesValue;
         }
     }
 
