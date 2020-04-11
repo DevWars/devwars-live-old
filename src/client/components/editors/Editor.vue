@@ -2,7 +2,6 @@
     <div ref="monaco" class="Editor"></div>
 </template>
 
-
 <script>
 import monacoLoader from '../../utils/monacoLoader';
 import { preventReactivity } from '../../utils/utils';
@@ -27,13 +26,16 @@ export default {
         },
 
         language() {
-            throw new Error('Editor language cannot be changed after instantiation');
+            throw new Error(
+                'Editor language cannot be changed after instantiation',
+            );
         },
 
         readOnly(newValue) {
             if (this.editor) {
                 this.editor.updateOptions({
                     readOnly: newValue,
+                    lineNumbers: newValue ? 'off' : 'on',
                     HideCursorInOverviewRuler: newValue,
                 });
             }
@@ -49,63 +51,80 @@ export default {
     },
 
     beforeDestroy() {
-        if (this.editor) { this.editor.dispose(); }
+        if (this.editor) {
+            this.editor.dispose();
+        }
     },
 
     methods: {
         onMonacoLoaded(monaco) {
-            this.editor = preventReactivity(monaco.editor.create(this.$refs.monaco, {
-                value: this.text,
-                language: this.language === 'js' ? 'javascript' : this.language,
-                readOnly: this.readOnly,
-                lineNumbers: !this.readOnly,
-                automaticLayout: true,
-
-                theme: 'devwars',
-                contextmenu: false,
-                dragAndDrop: false,
-                folding: false,
-                hideCursorInOverviewRuler: true,
-                lineNumbersMinChars: 3,
-                minimap: { enabled: false },
-                occurrencesHighlight: false,
-                renderIndentGuides: false,
-                renderLineHighlight: 'none',
-                roundedSelection: false,
-                scrollbar: { useShadows: false },
-                selectionHighlight: false,
-            }));
+            this.editor = preventReactivity(
+                monaco.editor.create(this.$refs.monaco, {
+                    value: this.text,
+                    automaticLayout: true,
+                    language:
+                        this.language === 'js' ? 'javascript' : this.language,
+                    readOnly: this.readOnly,
+                    lineNumbers: this.readOnly ? 'off' : 'on',
+                    theme: 'devwars',
+                    contextmenu: false,
+                    folding: false,
+                    hideCursorInOverviewRuler: true,
+                    minimap: { enabled: false },
+                    renderIndentGuides: false,
+                    renderLineHighlight: 'none',
+                    roundedSelection: false,
+                    scrollbar: { useShadows: false },
+                    selectionHighlight: false,
+                }),
+            );
 
             this.editor.addAction({
                 id: 'save-action',
                 label: 'Save',
                 // eslint-disable-next-line no-bitwise
                 keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
-                run: () => this.$emit('save'),
+                run: () => {
+                    this.formatDocument();
+                    this.$emit('save');
+                },
             });
 
             this.editor.onDidFocusEditorWidget(() => this.$emit('focus'));
             this.editor.onDidBlurEditorWidget(() => this.$emit('blur'));
-            this.editor.onDidChangeModelContent(change => this.$emit('change', change));
-            this.editor.onDidChangeCursorSelection(selections => this.$emit('selection', selections));
+            this.editor.onDidChangeModelContent((change) =>
+                this.$emit('change', change),
+            );
+
+            this.editor.onDidChangeCursorSelection((selections) =>
+                this.$emit('selection', selections),
+            );
 
             this.$emit('init');
         },
 
         setText(text) {
-            if (this.editor) {
-                this.editor.getModel().setValue(text);
-            }
+            if (_.isNil(this.editor)) return;
+            this.editor.getModel().setValue(text);
+        },
+
+        formatDocument() {
+            if (_.isNil(this.editor)) return;
+            this.editor.getAction('editor.action.formatDocument').run();
         },
 
         applyTextOperation(op) {
-            if (this.editor) {
-                const edit = op.toMonacoEdit();
-                this.editor.getModel().applyEdits([edit]);
-            }
+            if (_.isNil(this.editor)) return;
+
+            const edit = op.toMonacoEdit();
+            this.editor.getModel().applyEdits([edit]);
         },
 
-        applySelectionDecorators(selections, color = '', scrollToCursor = false) {
+        applySelectionDecorators(
+            selections,
+            color = '',
+            scrollToCursor = false,
+        ) {
             if (!this.editor) return;
 
             const newDecorations = [];
@@ -132,17 +151,21 @@ export default {
                 }
             }
 
-            this.decorations = this.editor.deltaDecorations(this.decorations, newDecorations);
+            this.decorations = this.editor.deltaDecorations(
+                this.decorations,
+                newDecorations,
+            );
 
             if (scrollToCursor) {
                 const { cursorRow, cursorCol } = primarySelection;
-                this.editor.revealPositionInCenterIfOutsideViewport(new monaco.Position(cursorRow, cursorCol));
+                this.editor.revealPositionInCenterIfOutsideViewport(
+                    new monaco.Position(cursorRow, cursorCol),
+                );
             }
         },
     },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import 'settings.scss';
@@ -158,9 +181,9 @@ export default {
             left: 0;
         }
 
-        .minimap {
-            display: none;
-        }
+        // .minimap {
+        //     display: none;
+        // }
 
         .monaco-scrollable-element {
             > .scrollbar > .slider {
@@ -195,7 +218,7 @@ export default {
 
         .myCursor:after {
             z-index: 100;
-            content: "";
+            content: '';
             position: absolute;
             width: 2px;
             height: 100%;
@@ -205,7 +228,7 @@ export default {
         }
 
         .mySelection {
-            opacity: .2;
+            opacity: 0.2;
             background-color: currentColor;
         }
     }
