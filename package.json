@@ -11,7 +11,6 @@
     },
     "scripts": {
         "start": "node src/server",
-        "prebuild": "npm run lint",
         "build": "cross-env NODE_ENV=production webpack --mode production",
         "watch": "concurrently -kr \"npm run watch:client\" \"npm run watch:server\"",
         "watch:client": "webpack -w --mode development",
