@@ -18,7 +18,6 @@ socket.on('disconnect', () => {
 
 socket.on('user', (user) => {
     store.commit('RECEIVE_USER', user);
-    console.info('%cAUTH:', 'color: #00ff00', { ...user });
 });
 
 socket.on('state', (state) => {
@@ -33,8 +32,8 @@ socket.on('players', (players) => {
     store.commit('RECEIVE_PLAYERS', players);
 });
 
-socket.on('zenTemplate', (zenTemplate) => {
-    store.commit('RECEIVE_ZEN_TEMPLATE', zenTemplate);
+socket.on('templates', (templates) => {
+    store.commit('RECEIVE_TEMPLATES', templates);
 });
 
 socket.on('votes', (votes) => {

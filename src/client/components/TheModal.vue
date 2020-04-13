@@ -1,12 +1,20 @@
 <template>
     <TransitionGroup name="bounce" tag="div" class="TheModal">
-        <div v-if="currentModal" key="overlay" class="overlay" @click.self="close"></div>
+        <div
+            v-if="currentModal"
+            key="overlay"
+            class="overlay"
+            @click.self="close"
+        ></div>
         <div v-if="currentModal" :key="currentModal.name" class="modal">
-            <Component :is="currentModal.name" v-bind="currentModal.props" class="content"/>
+            <Component
+                :is="currentModal.name"
+                v-bind="currentModal.props"
+                class="content"
+            />
         </div>
     </TransitionGroup>
 </template>
-
 
 <script>
 /* eslint-disable vue/no-unused-components */
@@ -16,6 +24,7 @@ import ObjectivesModal from './modals/ObjectivesModal';
 import ObjectiveConfirmModal from './modals/ObjectiveConfirmModal';
 import RedirectPlayerModal from './modals/RedirectPlayerModal';
 import ResetGameModal from './modals/ResetGameModal';
+import ReapplyGameTemplatesModal from './modals/ReapplyGameTemplatesModal';
 
 export default {
     components: {
@@ -24,6 +33,7 @@ export default {
         ObjectiveConfirmModal,
         RedirectPlayerModal,
         ResetGameModal,
+        ReapplyGameTemplatesModal,
     },
 
     computed: mapGetters(['currentModal']),
@@ -51,7 +61,6 @@ export default {
     },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import 'settings.scss';
@@ -91,7 +100,8 @@ export default {
         }
     }
 
-    .bounce-enter-active, .bounce-leave-active {
+    .bounce-enter-active,
+    .bounce-leave-active {
         transition: opacity 0.1s linear;
         &.modal {
             transition-duration: 0.2s;
@@ -100,7 +110,8 @@ export default {
         }
     }
 
-    .bounce-enter, .bounce-leave-to {
+    .bounce-enter,
+    .bounce-leave-to {
         opacity: 0;
         &.modal {
             transform: scale(0.85);

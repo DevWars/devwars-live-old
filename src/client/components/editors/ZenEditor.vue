@@ -6,10 +6,9 @@
             language="html"
             @collapse="collapsed = !collapsed"
         />
-        <Editor :text="zenTemplate" language="html" readOnly/>
+        <Editor :text="templates.html" language="html" readOnly />
     </div>
 </template>
-
 
 <script>
 import { mapState } from 'vuex';
@@ -23,10 +22,9 @@ export default {
         collapsed: false,
     }),
 
-    computed: mapState(['zenTemplate']),
+    computed: mapState(['templates']),
 };
 </script>
-
 
 <style lang="scss" scoped>
 .ZenEditor {

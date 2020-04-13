@@ -5,11 +5,14 @@ const firebase = require('../services/firebase');
 const socketValidator = require('../validation/socketValidator');
 const Editor = require('./Editor');
 
+const _ = require('lodash');
+
 class Game {
     constructor(io) {
         this.io = io;
         this.database = firebase.database();
         this.gameRef = this.database.ref('liveGame');
+        this.frameRef = this.database.ref('frame');
 
         this.state = {
             id: 0,
@@ -21,7 +24,10 @@ class Game {
             redStrikes: 0,
         };
 
-        this.zenTemplate = '';
+        // the templates being used on the current game per language per user
+        // and per team. These should be set during the start of the game but
+        // not after the game has already begun.
+        this.templates = { html: '', css: '', js: '' };
 
         this.votes = {
             blueUi: 0,
@@ -55,7 +61,7 @@ class Game {
         this.assignPlayersToEditors();
         this.io.emit(
             'editors',
-            this.editors.map((e) => e.getState())
+            this.editors.map((e) => e.getState()),
         );
     }
 
@@ -63,6 +69,7 @@ class Game {
         this.router = new Router();
 
         this.router.get('/:team(blue|red)', (req, res) => {
+            debugger;
             res.redirect(`/game/${req.params.team}/index.html`);
         });
 
@@ -108,8 +115,13 @@ class Game {
             this.onFirebaseGameObjectives(snap.val());
         });
 
-        this.database.ref('game/templates/html').on('value', (snap) => {
-            this.onFirebaseZenTemplate(snap.val());
+        /**
+         * When the templates are updated for the given game, ensure to update
+         * any clients and the server with the new game templates. These will be
+         * used for the preparing of the current game state.
+         */
+        this.database.ref('/game/templates').on('value', (snap) => {
+            this.onFirebaseGameTemplates(snap.val());
         });
 
         // Frame state
@@ -136,18 +148,23 @@ class Game {
     }
 
     onFirebaseGameName(name) {
-        const gameMode = name.toLowerCase().includes('zen') ? 'zen' : 'classic';
-        this.gameRef.child('state/gameMode').set(gameMode);
-
-        if (gameMode === 'zen') {
-            this.generateZenDocuments();
-        }
+        if (_.isNil(name) || !_.isString(name)) return;
+        this.gameRef
+            .child('state/gameMode')
+            .set(name.split(' ')[0].toLowerCase());
     }
 
-    onFirebaseZenTemplate(zenTemplate) {
-        this.zenTemplate = zenTemplate || '';
-        this.io.emit('zenTemplate', zenTemplate);
-        this.generateZenDocuments();
+    /**
+     * The templates that are going to be used on the following game.
+     * @param {object} templates The object containing our games templates.
+     */
+    onFirebaseGameTemplates(templates) {
+        if (_.isNil(templates) || !_.isObject(templates)) return;
+
+        this.templates = templates;
+        this.io.emit('templates', this.templates);
+
+        this.generateGameTemplatesForTeams();
     }
 
     onFirebaseGameTeams(gameTeams) {
@@ -213,7 +230,9 @@ class Game {
 
     onSocketConnection(socket) {
         socket.on('disconnect', () => {
-            this.editors.filter((e) => e.userSocketId === socket.id).forEach((e) => e.resetUser());
+            this.editors
+                .filter((e) => e.userSocketId === socket.id)
+                .forEach((e) => e.resetUser());
         });
 
         socket.on('init', () => {
@@ -234,6 +253,10 @@ class Game {
 
         socket.on('reset-game', () => {
             this.onSocketResetGame(socket);
+        });
+
+        socket.on('reapply-game-templates', () => {
+            this.onSocketReapplyGameTemplates(socket);
         });
 
         socket.on('start-game', () => {
@@ -294,12 +317,14 @@ class Game {
 
         socket.on('e.o', ([id, operation]) => {
             const editor = this.editors.find((e) => e.id === id);
-            if (editor && operation) editor.onSocketOperation(socket, operation);
+            if (editor && operation)
+                editor.onSocketOperation(socket, operation);
         });
 
         socket.on('e.s', ([id, selections]) => {
             const editor = this.editors.find((e) => e.id === id);
-            if (editor && selections) editor.onSocketSelections(socket, selections);
+            if (editor && selections)
+                editor.onSocketSelections(socket, selections);
         });
     }
 
@@ -309,9 +334,9 @@ class Game {
         socket.emit('players', this.players);
         socket.emit(
             'editors',
-            this.editors.map((e) => e.getState())
+            this.editors.map((e) => e.getState()),
         );
-        socket.emit('zenTemplate', this.zenTemplate);
+        socket.emit('templates', this.templates);
         socket.emit('votes', this.votes);
     }
 
@@ -327,7 +352,10 @@ class Game {
     }
 
     onSocketObjectiveNotify(socket, { team, id }) {
-        if (!socket.client.user || !this.isUserOnTeam(socket.client.user, team)) {
+        if (
+            !socket.client.user ||
+            !this.isUserOnTeam(socket.client.user, team)
+        ) {
             return;
         }
 
@@ -348,36 +376,66 @@ class Game {
         });
     }
 
-    onSocketResetGame(socket) {
-        if (!socket.client.user || !socket.client.user.isModerator()) {
+    /**
+     * When triggered from a moderator or above, the server will force apply the
+     * game templates again, this allows broadcaster control to update the
+     * editors if the game was not reset before being activated (which would
+     * normally apply the templates).
+     * @param {socket} socket The socket used for communicating with the
+     * clients.
+     */
+    async onSocketReapplyGameTemplates(socket) {
+        if (_.isNil(socket.client.user) || !socket.client.user.isModerator())
             return;
-        }
+
+        await this.resetTemplates();
+        this.generateGameTemplatesForTeams(true);
+    }
+
+    async onSocketResetGame(socket) {
+        if (_.isNil(socket.client.user) || !socket.client.user.isModerator())
+            return;
 
         this.gameRef.child('state').update({
             stage: 'setup',
             startTime: 0,
             endTime: 0,
-
             blueStrikes: 0,
             redStrikes: 0,
         });
 
         this.gameRef.child('objectives').transaction((objectives) => {
-            if (objectives) {
-                for (const objective of Object.values(objectives)) {
-                    objective.blueState = 'incomplete';
-                    objective.redState = 'incomplete';
-                }
+            if (_.isNil(objectives)) return objectives;
+
+            for (const objective of Object.values(objectives)) {
+                objective.blueState = 'incomplete';
+                objective.redState = 'incomplete';
             }
 
             return objectives;
         });
 
+        // reset the current live voting for ui and ux and live betting
+        this.frameRef.child('betting').update({ blue: 0, red: 0 });
+        this.frameRef.child('liveVoting/ui').update({ blue: 0, red: 0 });
+        this.frameRef.child('liveVoting/ux').update({ blue: 0, red: 0 });
+        this.frameRef
+            .child('liveVoting/tiebreaker')
+            .update({ blue: 0, red: 0 });
+
         this.editors.forEach((editor) => {
             editor.resetUser();
-            editor.setLocked(true);
             editor.setText('');
+            editor.setLocked(true);
+            editor.setHidden(false);
         });
+
+        this.gameRef
+            .child('state/gameMode')
+            .set(_.defaultTo(this.state.gameMode, 'classic'));
+
+        await this.resetTemplates();
+        this.generateGameTemplatesForTeams();
     }
 
     onSocketStartGame(socket) {
@@ -400,10 +458,9 @@ class Game {
             return;
         }
 
-        this.gameRef.child('state').update({
-            stage: 'ended',
-            endTime: Date.now(),
-        });
+        this.gameRef
+            .child('state')
+            .update({ stage: 'ended', endTime: Date.now() });
 
         this.editors.forEach((editor) => editor.setLocked(true));
     }
@@ -474,13 +531,45 @@ class Game {
         }
     }
 
-    generateZenDocuments() {
-        if (this.state.gameMode !== 'zen') {
-            return;
-        }
+    /**
+     * Resets the templates directly by ensuring the latest version is gathered
+     * from the database. since the templates could of been removed (since they
+     * are not being used) but this does not trigger a firebase update.
+     */
+    async resetTemplates() {
+        const templatesSnap = await this.database
+            .ref('game/templates')
+            .once('value');
 
-        this.editors[0].setText(this.zenTemplate);
-        this.editors[3].setText(this.zenTemplate);
+        const templatesValue = templatesSnap.val();
+
+        if (_.isNil(templatesValue)) {
+            this.templates = { html: '', js: '', css: '' };
+        } else {
+            this.templates = templatesValue;
+        }
+    }
+
+    /**
+     * If the game has not yet started, update all the editors with all the
+     * related templates that are currently set.
+     *
+     * @param {boolean} forceApply Force apply the templates regardless of state.
+     */
+    generateGameTemplatesForTeams(forceApply = false) {
+        // if the game is not in the setup stage, don't allow the applying of
+        // the templates, this would have to be left up to the broadcaster to
+        // reset the templates otherwise. Stopping any chance of overriding the
+        // current users work by applying templates.
+        if (this.state.stage !== 'setup' && !forceApply) return;
+
+        this.editors[0].setText(this.templates.html || '');
+        this.editors[1].setText(this.templates.css || '');
+        this.editors[2].setText(this.templates.js || '');
+
+        this.editors[3].setText(this.templates.html || '');
+        this.editors[4].setText(this.templates.css || '');
+        this.editors[5].setText(this.templates.js || '');
     }
 
     isUserOnTeam(user, team) {

@@ -1,10 +1,7 @@
 <template>
     <ConfirmModal title="Warning" buttonText="Reset" @confirm="onConfirm">
-        <p>Are you sure you want to reset the game?</p>
-        <p>
-            If the game has finished, ensure to complete it within the
-            moderation panel first to store the results!
-        </p>
+        <p>Are you sure you want to reapply the editor templates?</p>
+        <p>This will remove all existing editor text.</p>
     </ConfirmModal>
 </template>
 
@@ -17,7 +14,7 @@ export default {
 
     methods: {
         onConfirm() {
-            socket.emit('reset-game');
+            socket.emit('reapply-game-templates');
         },
     },
 };

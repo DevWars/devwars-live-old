@@ -25,13 +25,12 @@
             <button v-else @click="onControl">Control</button>
             <button v-if="hasControl && !readOnly" @click="onSave">Save</button>
             <div v-if="locked" class="status">
-                <LockOutlineIcon title="Locked"/>
+                <LockOutlineIcon title="Locked" />
                 <span>Locked</span>
             </div>
         </div>
     </div>
 </template>
-
 
 <script>
 import { mapState } from 'vuex';
@@ -70,15 +69,15 @@ export default {
         ...mapState(['socketId', 'players']),
 
         owner() {
-            return this.players.find(p => p.editorId === this.id);
+            return this.players.find((p) => p.editorId === this.id);
         },
 
         hasControl() {
-            return (this.socketId && this.socketId === this.userSocketId);
+            return this.socketId && this.socketId === this.userSocketId;
         },
 
         readOnly() {
-            return (!this.hasControl || !this.inSync || this.locked);
+            return !this.hasControl || !this.inSync || this.locked;
         },
     },
 
@@ -134,6 +133,7 @@ export default {
         },
 
         onSave() {
+            this.$refs.editor.formatDocument();
             socket.emit('e.save', this.id);
         },
 
@@ -151,7 +151,9 @@ export default {
             if (this.ignoreChanges || this.locked || !this.hasControl) return;
 
             for (const change of contentChange.changes) {
-                const operation = TextOperation.fromMonacoChange(change).toObject();
+                const operation = TextOperation.fromMonacoChange(
+                    change,
+                ).toObject();
                 socket.emit('e.o', [this.id, operation]);
             }
         },
@@ -159,9 +161,15 @@ export default {
         onEditorSelection({ selection, secondarySelections }) {
             if (!this.hasControl) return;
 
-            const editorSelections = [EditorSelection.fromMonacoChange(selection).toObject()];
+            const editorSelections = [
+                EditorSelection.fromMonacoChange(selection).toObject(),
+            ];
             for (const secondarySelection of secondarySelections) {
-                editorSelections.push(EditorSelection.fromMonacoChange(secondarySelection).toObject());
+                editorSelections.push(
+                    EditorSelection.fromMonacoChange(
+                        secondarySelection,
+                    ).toObject(),
+                );
             }
 
             socket.emit('e.s', [this.id, editorSelections]);
@@ -201,20 +209,27 @@ export default {
 
         onSocketOperation(operation) {
             if (this.readOnly && !this.hasControl) {
-                this.$refs.editor.applyTextOperation(TextOperation.fromObject(operation));
+                this.$refs.editor.applyTextOperation(
+                    TextOperation.fromObject(operation),
+                );
             }
         },
 
         onSocketSelections(selections) {
             if (!this.hasControl) {
-                const editorSelections = selections.map(s => EditorSelection.fromObject(s));
-                this.$refs.editor.applySelectionDecorators(editorSelections, this.team, !this.focused);
+                const editorSelections = selections.map((s) =>
+                    EditorSelection.fromObject(s),
+                );
+                this.$refs.editor.applySelectionDecorators(
+                    editorSelections,
+                    this.team,
+                    !this.focused,
+                );
             }
         },
     },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import 'settings.scss';
@@ -247,11 +262,11 @@ export default {
 
     .controls {
         display: flex;
-        margin: .5rem;
+        margin: 0.5rem;
         flex-flow: row;
 
         button {
-            margin-right: .5rem;
+            margin-right: 0.5rem;
         }
 
         .status {

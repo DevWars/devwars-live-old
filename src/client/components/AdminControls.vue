@@ -6,12 +6,17 @@
                 <button @click="onStartGame">Start Game</button>
                 <button @click="onEndGame">End Game</button>
             </div>
+            <div class="row">
+                <button class="button-large" @click="onResetGameTemplates">
+                    Reset Game Templates
+                </button>
+            </div>
         </div>
 
         <div class="controls">
             <div class="row">
                 <button @click="onSetEndTime">Set Time:</button>
-                <input ref="timeInput" type="number" value="60">
+                <input ref="timeInput" type="number" value="60" />
                 <h2>Minutes</h2>
             </div>
         </div>
@@ -36,17 +41,31 @@
 
         <div class="controls">
             <div class="row">
-                <button class="blue" @click="onAddStrike('blue')">Strike Blue</button>
-                <button class="red" @click="onAddStrike('red')">Strike Red</button>
+                <button class="blue" @click="onAddStrike('blue')">
+                    Strike Blue
+                </button>
+                <button class="red" @click="onAddStrike('red')">
+                    Strike Red
+                </button>
             </div>
         </div>
 
         <div class="controls">
-            <div v-for="editor of $store.state.editors" :key="editor.id" class="row">
-                <button :class="editor.team" @click="onToggleEditorLocked(editor)">
+            <div
+                v-for="editor of $store.state.editors"
+                :key="editor.id"
+                class="row"
+            >
+                <button
+                    :class="editor.team"
+                    @click="onToggleEditorLocked(editor)"
+                >
                     {{ editor.locked ? 'Unlock' : 'Lock' }}
                 </button>
-                <button :class="editor.team" @click="onToggleEditorHidden(editor)">
+                <button
+                    :class="editor.team"
+                    @click="onToggleEditorHidden(editor)"
+                >
                     {{ editor.hidden ? 'Show' : 'Hide' }}
                 </button>
                 <h2>{{ editor.language.toUpperCase() }}</h2>
@@ -54,7 +73,6 @@
         </div>
     </div>
 </template>
-
 
 <script>
 import { mapState } from 'vuex';
@@ -68,6 +86,16 @@ export default {
             this.$store.commit('PUSH_MODAL', { name: 'ResetGameModal' });
         },
 
+        /**
+         * Tells the server to reset the editors templates with force, ensuring to
+         * over-right anything that already exists.
+         */
+        onResetGameTemplates() {
+            this.$store.commit('PUSH_MODAL', {
+                name: 'ReapplyGameTemplatesModal',
+            });
+        },
+
         onStartGame() {
             socket.emit('start-game');
         },
@@ -78,7 +106,7 @@ export default {
 
         onSetEndTime() {
             const minutes = Number.parseInt(this.$refs.timeInput.value, 10);
-            const endTime = Date.now() + (minutes * 60 * 1000);
+            const endTime = Date.now() + minutes * 60 * 1000;
             socket.emit('set-end-time', endTime);
         },
 
@@ -95,16 +123,21 @@ export default {
         },
 
         onToggleEditorLocked(editor) {
-            socket.emit('toggle-editor-locked', { id: editor.id, locked: !editor.locked });
+            socket.emit('toggle-editor-locked', {
+                id: editor.id,
+                locked: !editor.locked,
+            });
         },
 
         onToggleEditorHidden(editor) {
-            socket.emit('toggle-editor-hidden', { id: editor.id, hidden: !editor.hidden });
+            socket.emit('toggle-editor-hidden', {
+                id: editor.id,
+                hidden: !editor.hidden,
+            });
         },
     },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import 'settings.scss';
@@ -151,6 +184,10 @@ export default {
             &.pending:not(:hover) {
                 border-color: currentColor;
             }
+        }
+
+        .button-large {
+            width: 14.5em;
         }
     }
 }
